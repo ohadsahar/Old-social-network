@@ -35,6 +35,21 @@ button.mat-menu-item {
   width: 350px;
   height: 200px;
 }
+
+img, .img-thumbnail{
+
+  width: 200px;
+  height: 300px;
+}
+
+p {
+  word-wrap: break-word;
+  width: 50%;
+  margin: auto;
+  font-size: 21px;
+  margin-bottom: 5%;
+  text-align: center;
+}
 .mat-menu-content {
 
   background-color: #E7DFE8;
@@ -42,4 +57,31 @@ button.mat-menu-item {
 .fa-ellipsis-v:before {
 
   padding: 3px;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+
+  p {
+    word-wrap: break-word;
+    width: 100%;
+    margin: auto;
+    font-size: 21px;
+    margin-bottom: 5%;
+    text-align: center;
+  }
+
+  img {
+
+    margin-bottom: 5%;
+  }
+
+  .OhadSaharMenu {
+
+    height: 100%;
+
+
+  }
+
 }

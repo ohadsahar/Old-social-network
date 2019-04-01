@@ -1,0 +1,29 @@
+<div class="OhadSaharMenu">
+  <button mat-button [matMenuTriggerFor]="menu">
+    <i class="fas fa-ellipsis-v"></i>Menu
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item ><i class="fas fa-sign-in-alt"></i> Login</button>
+    <button mat-menu-item (click)="SignUp()"><i class="fas fa-user-plus"></i> Sign up</button>
+  </mat-menu>
+  <p>
+    This social network is intended for every person to use his details with
+    those around him and not revolve around him, you are invited to register and
+    enjoy this social network.
+    <span>The goal of this social network is to connect all comics enthusiasts</span>
+  </p>
+  <div class="row">
+    <div class="col-sm-6 col-md-3 col-lg-3">
+      <img src="../../../assets/antmanComic.jpg" class="img-thumbnail" />
+    </div>
+    <div class="col-sm-6 col-md-3 col-lg-3">
+      <img src="../../../assets/deadPoolcomics.webp" class="img-thumbnail" />
+    </div>
+    <div class="col-sm-6 col-md-3 col-lg-3">
+      <img src="../../../assets/teenagemutant.jpg" class="img-thumbnail" />
+    </div>
+    <div class="col-sm-6 col-md-3 col-lg-3">
+      <img src="../../../assets/wolverinComic.jpg" class="img-thumbnail" />
+    </div>
+  </div>
+</div>

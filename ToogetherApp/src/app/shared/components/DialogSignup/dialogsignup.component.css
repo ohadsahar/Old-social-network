@@ -1,0 +1,58 @@
+.mat-dialog-container {
+
+  background-image: linear-gradient(#1D3557,#457B9D,#A8DADC) !important;
+  border-radius: 5px 10px 5px 10px;
+}
+
+.mat-dialog-title {
+
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > * {
+  width: 100%;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+.mat-dialog-content {
+
+  overflow: hidden !important;
+}
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-button {
+
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  font-family: 'Shadows Into Light', cursive;
+
+}
