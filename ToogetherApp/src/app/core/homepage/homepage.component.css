@@ -1,0 +1,45 @@
+.OhadSaharMenu {
+
+  padding: 50px;
+  text-align: center;
+  background-image:linear-gradient(#031D44, #04395E);
+  height: 100vh;
+  color: white;
+  font-family: 'Shadows Into Light', cursive !important;
+
+}
+
+.OhadSaharMenu .mat-button {
+  font-family: 'Shadows Into Light', cursive !important;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+pre {
+  font-family: 'Shadows Into Light', cursive !important;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+}
+
+button.mat-menu-item {
+
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.example-card {
+
+  width: 350px;
+  height: 200px;
+}
+.mat-menu-content {
+
+  background-color: #E7DFE8;
+}
+.fa-ellipsis-v:before {
+
+  padding: 3px;
+}
