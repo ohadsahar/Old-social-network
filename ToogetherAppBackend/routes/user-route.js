@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+
 /* Utils */
 
 const userUtil = require("../utils/userUtil.util");
@@ -30,8 +31,77 @@ async function RegisterUser(req,res) {
         
     }
 }
+async function FetchAllUsers(req, res) {
 
+    try {
 
-router.post('', RegisterUser);
+        const FetchedUsers = await userUtil.GetAllUsers();
+        if (FetchedUsers.success) {
+            res.status(200).json({
+                Users: FetchedUsers.Users,
+                message: FetchedUsers.message,
+                success: FetchedUsers.success
+            })
+        }  
+    } catch (error) {
+            res.status(400).json({
+                Users: FetchedUsers.Users,
+                message: FetchedUsers.message,
+                success: FetchedUsers.success
+            })
+    }
+}
+async function LoginToSystem(req, res) {
+
+    try {
+        const validateUserInput = await userUtil.ValidateUserInput(req.body);
+        const Login = await userUtil.LoginValidate(validateUserInput.User);
+     
+        res.status(200).json({
+            UserObject: Login.User,
+            id: Login.id,
+            token: Login.token,
+            message: Login.message,
+            success: Login.success
+        })
+    } catch (error) {
+        res.status(200).json({
+            message: Login.message,
+            success: Login.success
+        })
+    }
+}
+
+async function UpdateLoggedUser(req, res) 
+{
+    try {
+   
+        const UpdateUser = await userUtil.UpdateUserLogStatus(req.params.id, req.body.action);
+        if (UpdateUser.success) 
+        {
+            res.status(200).json({
+                message: UpdateUser.message,
+                success: UpdateUser.success
+            })
+        } else {
+            res.status(403).json({
+                message: UpdateUser.message,
+                success: UpdateUser.success
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: UpdateUser.message,
+            success: UpdateUser.success
+        })
+    }
+ 
+
+}
+
+router.post('/login', LoginToSystem);
+router.post('/register', RegisterUser);
+router.get('', FetchAllUsers);
+router.put('/:id', UpdateLoggedUser)
 module.exports = router;
 

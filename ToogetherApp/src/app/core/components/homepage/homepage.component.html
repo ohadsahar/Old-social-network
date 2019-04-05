@@ -3,7 +3,7 @@
     <i class="fas fa-ellipsis-v"></i>Menu
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item ><i class="fas fa-sign-in-alt"></i> Login</button>
+    <button mat-menu-item (click)="Login()"><i class="fas fa-sign-in-alt"></i> Login</button>
     <button mat-menu-item (click)="SignUp()"><i class="fas fa-user-plus"></i> Sign up</button>
   </mat-menu>
   <p>

@@ -19,9 +19,11 @@ import { HomePageComponent } from './core/components/homepage/homepage.component
 import { DialogSignUpComponent } from './shared/components/DialogSignup/dialogsignup.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { DialogLoginComponent } from './shared/components/DialogLogin/dialoglogin.component';
+import { WallPageComponent } from './core/components/wall/wall.component';
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent, DialogSignUpComponent],
+  declarations: [AppComponent, HomePageComponent, DialogSignUpComponent, DialogLoginComponent, WallPageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -38,7 +40,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatSnackBarModule
   ],
-  entryComponents: [DialogSignUpComponent],
+  entryComponents: [DialogSignUpComponent, DialogLoginComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

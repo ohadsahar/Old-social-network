@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import {MatDialog} from '@angular/material';
 import { DialogSignUpComponent } from 'src/app/shared/components/DialogSignup/dialogsignup.component';
+import { DialogLoginComponent } from 'src/app/shared/components/DialogLogin/dialoglogin.component';
 
 
 @Component({
@@ -18,6 +19,15 @@ export class HomePageComponent {
   SignUp() {
 
     const dialogRef = this.dialog.open(DialogSignUpComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  Login() {
+
+    const dialogRef = this.dialog.open(DialogLoginComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
