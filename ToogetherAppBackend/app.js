@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const path = require("path");
 const Connection = require("./dev/dev");
-//returing us an express app
+
+/* Routes */
+
+const userRoute = require('./routes/user-route');
 const app = express();
+
+
 
 Connection.ConnectMongoose();
 
@@ -26,4 +30,5 @@ app.use((req, res, next) => {
 
 app.use("/images", express.static(path.join("assets/images")));
 
+app.use('/admin/users', userRoute);
 module.exports = app;

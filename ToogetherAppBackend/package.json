@@ -9,5 +9,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.22",
+    "nodemon": "^1.18.10",
+    "validator": "^10.11.0"
+  }
 }

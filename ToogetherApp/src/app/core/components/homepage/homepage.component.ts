@@ -15,11 +15,8 @@ export class HomePageComponent {
 
   constructor(public dialog: MatDialog) {}
 
-
-
-
   SignUp() {
-    console.log('Hi');
+
     const dialogRef = this.dialog.open(DialogSignUpComponent);
 
     dialogRef.afterClosed().subscribe(result => {

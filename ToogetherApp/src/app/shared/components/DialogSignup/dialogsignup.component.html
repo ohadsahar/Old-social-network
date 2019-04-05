@@ -1,4 +1,4 @@
-<div class="DialogSignUp">
+<div class="dialog-sign-up">
 
 <h2 mat-dialog-title>Signup</h2>
 <mat-dialog-content class="mat-typography">
@@ -6,22 +6,32 @@
 
   <form class="example-form" id="SignUpForm" (submit)="DoneSignup(SignUpForm)" #SignUpForm="ngForm">
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Your email" type="email" name="email" #email="ngModel" ngModel  value="" required>
+      <input matInput  type="email" name="email" #email="ngModel" ngModel  value="" required>
+      <mat-placeholder class="placeholder">Your email</mat-placeholder>
+      <mat-error *ngIf="email.invalid">Your email is not in the right format</mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Your password"  name="password" #password="ngModel" ngModel  [type]="hide ? 'password' : 'text'" required>
+      <input matInput  minlength="8" name="password" #password="ngModel" ngModel  [type]="hide ? 'password' : 'text'" required>
       <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
+      <mat-placeholder class="placeholder">Your password</mat-placeholder>
+      <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-        <input matInput placeholder="Your Firstname" type="text" name="firstname" #firstname="ngModel" ngModel required>
+        <input matInput minlength="2" type="text" name="firstname" #firstname="ngModel" ngModel required>
+        <mat-placeholder  class="placeholder">Your firstname</mat-placeholder>
+        <mat-error *ngIf="firstname.invalid">Your firstname is not in the right format</mat-error>
       </mat-form-field>
       <mat-form-field class="example-full-width">
-          <input matInput placeholder="Your Lastname" type="text" name="lastname" #lastname="ngModel" ngModel required>
+          <input matInput minlength="2" type="text" name="lastname" #lastname="ngModel" ngModel required>
+          <mat-placeholder class="placeholder">Your Lastname</mat-placeholder>
+          <mat-error *ngIf="lastname.invalid">Your lastname is not in the right format</mat-error>
         </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Your superhero" type="text" name="userhero" #userhero="ngModel" ngModel required>
+      <input matInput  type="text" minlength="1" name="userhero" #userhero="ngModel" ngModel required>
+      <mat-placeholder class="placeholder">Your superhero</mat-placeholder>
+      <mat-error *ngIf="userhero.invalid">Your superhero is not in the right format</mat-error>
     </mat-form-field>
     <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
