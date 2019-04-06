@@ -16,16 +16,18 @@ export class DialogLoginComponent {
 
   constructor(private userService: UserService, private snackBar: MatSnackBar, private router: Router) {
     this.hide = true;
+    console.log('Cons');
+
   }
 
   DoneLogin(form: NgForm) {
-
-
+    console.log('Comci comca');
+    console.log(form);
     if (form.invalid) {
       return;
     } else {
       this.userService.LoginUser(form.value).subscribe(
-        response => {
+        (response) => {
           if (response.token) {
             this.id = response.id;
             this.userService
@@ -36,12 +38,11 @@ export class DialogLoginComponent {
                   setTimeout(() => {
                   this.router.navigate(['Wall/' + this.id]);
                   }, 3000);
-
                 }
               });
           }
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );

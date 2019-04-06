@@ -1,0 +1,145 @@
+<div class="wall-style">
+  <div class="row">
+    <div class="col-sm-2 col-md-2 col-lg-2 left-nav">
+      <h5 (click)="ShowProfile()">Your profile</h5>
+      <h5 (click)="ShowWall()">Wall</h5>
+      <h5 (click)="Disconnect()">Disconnect </h5>
+      <h5>New comics 2019</h5>
+    </div>
+    <div class="col-sm-10">
+      <div class="main-page">
+        <div *ngIf="wallAble">
+          <h1>Wall</h1>
+        </div>
+        <div *ngIf="profileAble">
+        <mat-list>
+          <i class="far fa-edit" (click)="Edit()"></i>
+          <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm">
+          <mat-list-item *ngIf="!editAble"
+            >Your Firstname: {{ UserConnected?.firstname }}
+          </mat-list-item>
+          <div *ngIf="editAble" style="margin-top: 1%"></div>
+          <mat-form-field class="example-full-width" *ngIf="editAble">
+            <input
+              matInput
+              *ngIf="editAble"
+              type="text"
+              name="firstname"
+              minlength="2"
+              #firstname="ngModel"
+              value="{{UserConnected?.firstname}}"
+              ngModel
+
+            />
+            <mat-placeholder class="placeholder"
+              > {{UserConnected?.firstname}}</mat-placeholder
+            >
+            <mat-error *ngIf="firstname?.invalid"
+            >Your firstname is not in the right format</mat-error
+          >
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-list-item *ngIf="!editAble"
+            >Your Lastname: {{ UserConnected?.lastname }}
+          </mat-list-item>
+          <mat-form-field class="example-full-width" *ngIf="editAble">
+            <input
+              matInput
+              *ngIf="editAble"
+              type="text"
+              name="lastname"
+              #lastname="ngModel"
+              ngModel
+              value="{{UserConnected?.lastname}}"
+              minlength="2"
+
+            />
+            <mat-placeholder class="placeholder">{{UserConnected?.lastname}}</mat-placeholder>
+            <mat-error *ngIf="lastname?.invalid"
+            >Your lastname is not in the right format</mat-error
+          >
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-list-item *ngIf="!editAble"
+            >Your Superhero: {{ UserConnected?.superhero }}
+          </mat-list-item>
+          <mat-form-field class="example-full-width" *ngIf="editAble">
+            <input
+              matInput
+              *ngIf="editAble"
+              type="text"
+              name="superhero"
+              #superhero="ngModel"
+              ngModel
+              value="{{UserConnected?.superhero}}"
+              minlength="1"
+
+            />
+            <mat-placeholder class="placeholder"
+              >  {{UserConnected?.superhero}}</mat-placeholder
+            >
+            <mat-error *ngIf="superhero?.invalid"
+            >Your superhero is not in the right format</mat-error
+          >
+
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-list-item *ngIf="!editAble"
+            >Your Email: {{ UserConnected?.email }}
+          </mat-list-item>
+          <mat-form-field class="example-full-width" *ngIf="editAble">
+            <input
+              matInput
+              *ngIf="editAble"
+              type="email"
+              name="email"
+              #email="ngModel"
+              value="{{UserConnected?.email}}"
+              ngModel
+
+            />
+            <mat-placeholder class="placeholder">{{UserConnected?.email}}</mat-placeholder>
+            <mat-error *ngIf="email?.invalid"
+            >Your email is not in the right format</mat-error
+          >
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-form-field class="example-full-width" *ngIf="editAble">
+            <input
+              matInput
+              minlength="8"
+              name="password"
+              #password="ngModel"
+              value="{{UserConnected?.password}}"
+              ngModel
+              [type]="hide ? 'password' : 'text'"
+
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-placeholder class="placeholder"> {{UserConnected?.password}}</mat-placeholder>
+            <mat-error *ngIf="password.invalid"
+              >Your password is not in the right format</mat-error
+            >
+          </mat-form-field>
+              <button class="edit-button"  mat-raised-button *ngIf="editAble">Submit</button>
+        </form>
+        </mat-list>
+        <div class="footer">
+          <h2>
+            <img src="../../../../assets/images/emotion-spiderman-icon.png" />
+            Your friendly neighborhood Spider-Man
+          </h2>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

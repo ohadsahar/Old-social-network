@@ -27,6 +27,7 @@ export class HomePageComponent {
 
   Login() {
 
+
     const dialogRef = this.dialog.open(DialogLoginComponent);
 
     dialogRef.afterClosed().subscribe(result => {

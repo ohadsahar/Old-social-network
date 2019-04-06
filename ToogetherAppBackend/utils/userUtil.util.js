@@ -5,6 +5,7 @@ const userSchema = require("../models/UserSchema");
 const jwt = require("jsonwebtoken");
 
 async function ValidateUser(UserObject) {
+
   if (
     validator.isEmail(UserObject.email) &&
     validator.isLength(UserObject.password, 8) &&
@@ -137,11 +138,53 @@ async function UpdateUserLogStatus(id, action)
   }
 
 }
+
+async function GetConnectedUser(id) {
+
+  try {
+      const UserObject = await userSchema.findById({_id: id}).then(documents => {
+        return documents;
+      })
+      return {UserData: UserObject, success: true, message:'User successfully imported'};
+  } catch (error) {
+    return {success: false, message:'There was a problem importing the user from the server'};
+  }
+
+}
+
+async function UpdateUser(UserObject, id) {
+
+  {
+    try {
+      const NewData = {
+        
+        email: UserObject.email,
+        password: UserObject.password,
+        firstname: UserObject.firstname,
+        lastname: UserObject.lastname,
+        superhero: UserObject.superhero,
+        loggedin: UserObject.loggedin,
+        role: UserObject.role
+      }
+     
+      await userSchema.updateOne({_id: id}, NewData);
+      return { message: 'The user has been updated', success: true};
+    
+    } catch (error) {
+  
+      return { message: 'There was a problem connecting the user to the system and updated.', success: false}
+      
+    }
+  
+  }
+}
 module.exports = {
   ValidateUser,
   RegisterUser,
   GetAllUsers,
   ValidateUserInput,
   LoginValidate,
-  UpdateUserLogStatus
+  UpdateUserLogStatus,
+  GetConnectedUser,
+  UpdateUser,
 };

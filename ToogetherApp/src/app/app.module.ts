@@ -9,7 +9,10 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatIconModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatDividerModule,
+  MatListModule,
+  MatInput
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +41,12 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatFormFieldModule,
     MatIconModule,
     HttpClientModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule,
+    MatListModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   entryComponents: [DialogSignUpComponent, DialogLoginComponent],
   providers: [],

@@ -31,5 +31,13 @@ export class UserService {
     return this.http.put<{success: boolean}>(`${backendUrl}users/${id}`, Action);
   }
 
+  GetConnectedUser(id: string) {
+    return this.http.get<{UserObject: User, success: boolean}>(`${backendUrl}users/${id}`);
+  }
+
+  UpdateUser(UserObject: User, id: string) {
+    return this.http.post<{UserObject: User}>(`${backendUrl}users/${id}`, UserObject);
+  }
+
 
 }

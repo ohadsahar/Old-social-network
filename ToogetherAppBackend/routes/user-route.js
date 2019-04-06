@@ -53,10 +53,12 @@ async function FetchAllUsers(req, res) {
 }
 async function LoginToSystem(req, res) {
 
+    console.log('here');
     try {
         const validateUserInput = await userUtil.ValidateUserInput(req.body);
         const Login = await userUtil.LoginValidate(validateUserInput.User);
-     
+        
+       
         res.status(200).json({
             UserObject: Login.User,
             id: Login.id,
@@ -99,9 +101,49 @@ async function UpdateLoggedUser(req, res)
 
 }
 
+async function GetLoggedInUser(req,res) {
+
+    let User;
+    try {
+  
+         User = await userUtil.GetConnectedUser(req.params.id);
+        
+        if(User.success) {
+            res.status(200).json({
+                UserObject: User.UserData,
+                message: User.message,
+                success: User.success
+            });
+        } else {
+            res.status(401).json({
+                message: User.message,
+                success: User.success
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: User.message,
+            success: User.success
+        })
+    }
+   
+
+}
+
+async function UpdateUser(req,res) {
+
+    const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
+    
+    const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id);
+    console.log(updateUser);
+}
+
 router.post('/login', LoginToSystem);
 router.post('/register', RegisterUser);
+router.post('/:id', UpdateUser )
 router.get('', FetchAllUsers);
+router.get('/:id', GetLoggedInUser);
 router.put('/:id', UpdateLoggedUser)
+
 module.exports = router;
 

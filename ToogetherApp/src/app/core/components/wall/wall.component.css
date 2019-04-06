@@ -1,0 +1,130 @@
+
+.wall-style {
+
+  overflow-x: hidden;
+}
+.wall-style .left-nav {
+
+  height: 100vh;
+  background-image:linear-gradient(#031D44, #04395E);
+  width: 130px;
+  padding: 20px;
+  box-shadow: 3px 3px 3px cornflowerblue;
+}
+
+
+
+.wall-style .main-page {
+
+  padding: 100px;
+}
+.wall-style .row {
+
+  display: -webkit-box;
+  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
+}
+
+.wall-style h2 {
+
+  color: white;
+  font-family: 'Shadows Into Light', cursive;
+  position: absolute;
+  bottom: 20px;
+}
+.wall-style h5 {
+
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 23px;
+  text-align: center;
+  padding-top: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+.wall-style .mat-list-item   {
+
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 23px;
+  text-align: center;
+  padding-top: 30px;
+  color: white;
+
+}
+
+.fa-edit:before{
+
+    color: white;
+    cursor: pointer;
+
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  height: inherit;
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 23px;
+  color: white;
+}
+
+
+.wall-style .edit-button {
+
+  display: -webkit-box;
+  margin-top: 5%;
+}
+.wall-style .placeholder {
+
+  opacity: 0.6;
+  color: white;
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 16px;
+
+}
+
+.mat-error {
+
+  color: #f44336;
+  font-weight: bold;
+  font-size: 17px;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+  .wall-style .main-page {
+
+    padding: 0px;
+  }
+
+
+.wall-style .mat-list-item   {
+
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 15px;
+  padding-top: 30px;
+  color: white;
+
+}
+ .wall-style h2 {
+
+  color: white;
+    font-family: 'Shadows Into Light', cursive;
+    position: absolute;
+    bottom: 20px;
+    font-size: 10px;
+ }
+
+ .wall-style .mat-list-base {
+
+  padding: 30px;
+ }
+
+}
