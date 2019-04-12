@@ -2,7 +2,6 @@ import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
-import * as Wall from '../../../shared/actions/wall.actions';
 import { ResponseMessagesService } from '../../services/error.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { map } from 'rxjs/operators';
@@ -82,7 +81,7 @@ export class WallPageComponent implements OnInit {
               }
             this.spinnerService.hide();
             this.store.dispatch(new UI.StopLoading());
-            this.store.dispatch(new Wall.HideTheWall());
+            this.store.dispatch(new UI.HideTheWall());
             this.profileAble$ = this.store.pipe(map(data => {
               return data.wallRed.profileAble;
             }));
@@ -141,7 +140,7 @@ export class WallPageComponent implements OnInit {
 
   ShowProfile() {
 
-    this.store.dispatch(new Wall.HideTheWall());
+    this.store.dispatch(new UI.HideTheWall());
     this.profileAble$ = this.store.pipe(map(data => {
       return data.wallRed.profileAble;
     }));
@@ -152,14 +151,13 @@ export class WallPageComponent implements OnInit {
 
   ShowWall() {
 
-    this.store.dispatch(new Wall.ShowTheWall());
+    this.store.dispatch(new UI.ShowTheWall());
     this.profileAble$ = this.store.pipe(map(data => {
       return data.wallRed.profileAble;
     }));
     this.wallAble$ = this.store.pipe(map(data => {
       return data.wallRed.wallAble;
     }));
-
   }
 
   Disconnect() {

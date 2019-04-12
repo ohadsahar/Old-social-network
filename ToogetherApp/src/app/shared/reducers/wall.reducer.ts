@@ -1,4 +1,4 @@
-import { SHOW_WALL, HIDE_WALL } from '../actions/wall.actions';
+import { UIActions, SHOW_WALL, HIDE_WALL } from '../actions/ui.actions';
 
 
 export interface State {
@@ -16,7 +16,7 @@ const initialState: State = {
   counter: 0
 };
 
-export function WallReducer(state = initialState, action) {
+export function WallReducer(state = initialState, action: UIActions) {
 
     switch (action.type) {
       case SHOW_WALL:

@@ -1,7 +1,9 @@
 import { Action } from '@ngrx/store';
 
-export const START_LOADING = '[UI] Start Loading';
-export const STOP_LOADING = '[UI] Stop Loading';
+export const START_LOADING = 'Start Loading';
+export const STOP_LOADING = 'Stop Loading';
+export const SHOW_WALL = 'Start WALL';
+export const HIDE_WALL = 'Stop WALL';
 
 export class StartLoading implements Action {
 
@@ -13,5 +15,15 @@ export class StopLoading implements Action {
   readonly type = STOP_LOADING;
 }
 
-export type UIActions = StartLoading | StopLoading;
+export class ShowTheWall implements Action {
+
+  readonly type = SHOW_WALL;
+}
+
+export class HideTheWall implements Action {
+
+  readonly type = HIDE_WALL;
+}
+
+export type UIActions = StartLoading | StopLoading | ShowTheWall | HideTheWall;
 

@@ -1,4 +1,6 @@
-import { START_LOADING, STOP_LOADING } from '../actions/ui.actions';
+import { UIActions } from '../actions/ui.actions';
+import { START_LOADING, STOP_LOADING} from '../actions/ui.actions';
+
 
 
 export interface State {
@@ -9,7 +11,7 @@ const initialState: State = {
   isLoading: false
 };
 
-export function UiReducer(state = initialState, action) {
+export function UiReducer(state = initialState, action: UIActions) {
 
     switch (action.type) {
       case START_LOADING:
