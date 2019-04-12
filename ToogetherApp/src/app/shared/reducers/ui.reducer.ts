@@ -2,9 +2,7 @@ import { START_LOADING, STOP_LOADING } from '../actions/ui.actions';
 
 
 export interface State {
-
     isLoading: boolean;
-
 }
 
 const initialState: State = {

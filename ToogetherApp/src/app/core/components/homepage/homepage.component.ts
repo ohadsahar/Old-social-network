@@ -7,7 +7,6 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 
 @Component({

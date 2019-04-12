@@ -4,6 +4,14 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { map } from 'rxjs/operators';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import * as fromRoot from '../../../app.reducer';
+import * as UI from '../../../shared/actions/ui.actions';
+import * as Wall from '../../../shared/actions/wall.actions';
+import {Store} from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { ResponseMessagesService } from '../../services/error.service';
 
 @Component({
   selector: 'app-wall-page',
@@ -24,7 +32,8 @@ export class WallPageComponent implements OnInit {
   private counter: number;
   public editAble: boolean;
   public hide: boolean;
-  public profileAble: boolean;
+  public profileAble$: Observable<boolean>;
+  public wallAble$: Observable<boolean>;
   public wallAble: boolean;
 
   public MarvelCollection: any[] = [];
@@ -34,16 +43,22 @@ export class WallPageComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private responseMessageService: ResponseMessagesService,
+    private spinnerService: Ng4LoadingSpinnerService,
+    private store: Store<fromRoot.State>
   ) {
     this.editAble = false;
     this.hide = true;
-    this.profileAble = false;
+
     this.wallAble = true;
     this.counter = 0;
   }
 
   ngOnInit() {
+    this.spinnerService.show();
+
+    this.store.dispatch(new UI.StartLoading());
     this.http.get<{ data: any }>(this.urlComics).subscribe((response) => {
       this.MarvelCollection = response.data.results;
     });
@@ -57,9 +72,11 @@ export class WallPageComponent implements OnInit {
               } else {
                 this.router.navigate(['']);
               }
+            this.spinnerService.hide();
+            this.store.dispatch(new UI.StopLoading());
           },
           (error) => {
-            console.log(error);
+            this.responseMessageService.FailureMessage(error, 'Sorry');
           }
         );
       }
@@ -88,9 +105,12 @@ export class WallPageComponent implements OnInit {
         this.UserConnected.superhero = form.value.superhero;
       }
 
-
+      this.spinnerService.show();
+      this.store.dispatch(new UI.StartLoading());
       this.userService.UpdateUser(this.UserConnected, this.id).subscribe(response => {
         this.UserConnected = response.UserObject;
+        this.store.dispatch(new UI.StopLoading());
+        this.spinnerService.hide();
       });
     }
   }
@@ -108,27 +128,38 @@ export class WallPageComponent implements OnInit {
 
   ShowProfile() {
 
-    this.wallAble = false;
-    this.profileAble = true;
-
+    this.store.dispatch(new Wall.HideTheWall());
+    this.profileAble$ = this.store.pipe(map(data => {
+      return data.wallRed.profileAble;
+    }));
+    this.wallAble$ = this.store.pipe(map(data => {
+      return data.wallRed.wallAble;
+    }));
   }
 
   ShowWall() {
 
-    this.wallAble = true;
-    this.profileAble = false;
-    this.editAble = false;
-    this.counter = 0;
+    this.store.dispatch(new Wall.ShowTheWall());
+    this.profileAble$ = this.store.pipe(map(data => {
+      return data.wallRed.profileAble;
+    }));
+    this.wallAble$ = this.store.pipe(map(data => {
+      return data.wallRed.wallAble;
+    }));
+
   }
 
   Disconnect() {
 
+    this.spinnerService.show();
+    this.store.dispatch(new UI.StartLoading());
     this.userService.UpdateLoggedIn(this.id, false).subscribe((response) => {
       this.router.navigate(['']);
-      console.log(response);
+      this.store.dispatch(new UI.StopLoading());
+      this.spinnerService.hide();
     },
     (error) => {
-      console.log(error);
+      this.responseMessageService.FailureMessage(error, 'Sorry');
     });
   }
 }

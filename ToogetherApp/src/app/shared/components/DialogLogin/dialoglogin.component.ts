@@ -4,6 +4,12 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../app.reducer';
+import * as UI from '../../actions/ui.actions';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { ResponseMessagesService } from '../../../core/services/error.service';
+
 @Component({
   selector: 'app-dialog-login',
   templateUrl: './dialoglogin.component.html',
@@ -14,18 +20,18 @@ export class DialogLoginComponent {
   public hide: boolean;
   public id: string;
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private userService: UserService, private snackBar: MatSnackBar, private router: Router,
+              private responseMessageService: ResponseMessagesService,
+              private store: Store<fromRoot.State>, private spinnerService: Ng4LoadingSpinnerService) {
     this.hide = true;
-    console.log('Cons');
-
   }
 
   DoneLogin(form: NgForm) {
-    console.log('Comci comca');
-    console.log(form);
     if (form.invalid) {
       return;
     } else {
+      this.spinnerService.show();
+      this.store.dispatch(new UI.StartLoading());
       this.userService.LoginUser(form.value).subscribe(
         (response) => {
           if (response.token) {
@@ -36,6 +42,8 @@ export class DialogLoginComponent {
                 if (responseUpdate.success) {
                   this.openSnackBar('You have successfully logged in', '');
                   setTimeout(() => {
+                  this.spinnerService.hide();
+                  this.store.dispatch(new UI.StopLoading());
                   this.router.navigate(['Wall/' + this.id]);
                   }, 3000);
                 }
@@ -43,7 +51,7 @@ export class DialogLoginComponent {
           }
         },
         (error) => {
-          console.log(error);
+          this.responseMessageService.FailureMessage(error, 'Sorry');
         }
       );
     }

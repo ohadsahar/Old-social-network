@@ -4,7 +4,13 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '../../models/User.model';
 import { UserService } from 'src/app/core/services/user.service';
 import {MatSnackBar} from '@angular/material';
+
+
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import * as fromRoot from '../../../app.reducer';
+import * as UI from '../../actions/ui.actions';
 import { Store } from '@ngrx/store';
+import { ResponseMessagesService } from 'src/app/core/services/error.service';
 
 
 export interface Quote {
@@ -58,37 +64,38 @@ export class DialogSignUpComponent {
   });
 
   constructor(private userService: UserService, private snackBar: MatSnackBar,
-              ) {
-
+              private responseMessageService: ResponseMessagesService,
+              private spinnerService: Ng4LoadingSpinnerService,  private store: Store<fromRoot.State>) {
     this.hide = true;
-
-
   }
 
   DoneSignup(form: NgForm) {
 
-    console.log(form.value.quote);
+
     if (form.invalid)
     {
       return;
     } else {
+
+
+      this.spinnerService.show();
+      this.store.dispatch(new UI.StartLoading());
       this.UserObject = {email: form.value.email, password: form.value.password,
       firstname: form.value.firstname, lastname: form.value.lastname, superhero: form.value.userhero,
       loggedin: false, quote: this.selectedValue as any, image: this.imageFormGroup.value, role: null};
 
       this.userService.RegisterUser(this.UserObject).subscribe((response) => {
-
         if (response.success) {
 
             this.ResultUserObject = response;
             this.openSnackBar(this.ResultUserObject.message, '');
             form.resetForm();
+            this.spinnerService.hide();
+            this.store.dispatch(new UI.StopLoading());
         }
-
       },
       (error) => {
-        this.ResultUserObject = error;
-        this.openSnackBar(this.ResultUserObject.message, '');
+        this.responseMessageService.FailureMessage(error, 'Sorry');
       });
     }
   }
