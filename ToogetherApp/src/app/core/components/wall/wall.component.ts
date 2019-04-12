@@ -1,17 +1,20 @@
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import * as fromRoot from '../../../app.reducer';
+import * as UI from '../../../shared/actions/ui.actions';
+import * as Wall from '../../../shared/actions/wall.actions';
+import { ResponseMessagesService } from '../../services/error.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { map } from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { map } from 'rxjs/operators';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import * as fromRoot from '../../../app.reducer';
-import * as UI from '../../../shared/actions/ui.actions';
-import * as Wall from '../../../shared/actions/wall.actions';
-import {Store} from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { ResponseMessagesService } from '../../services/error.service';
+
+
+
 
 @Component({
   selector: 'app-wall-page',
@@ -48,14 +51,19 @@ export class WallPageComponent implements OnInit {
     private spinnerService: Ng4LoadingSpinnerService,
     private store: Store<fromRoot.State>
   ) {
-    this.editAble = false;
-    this.hide = true;
 
-    this.wallAble = true;
+    this.hide = true;
     this.counter = 0;
   }
 
   ngOnInit() {
+
+    this.OnWallComponentStart();
+
+  }
+
+  OnWallComponentStart() {
+
     this.spinnerService.show();
 
     this.store.dispatch(new UI.StartLoading());
@@ -74,6 +82,10 @@ export class WallPageComponent implements OnInit {
               }
             this.spinnerService.hide();
             this.store.dispatch(new UI.StopLoading());
+            this.store.dispatch(new Wall.HideTheWall());
+            this.profileAble$ = this.store.pipe(map(data => {
+              return data.wallRed.profileAble;
+            }));
           },
           (error) => {
             this.responseMessageService.FailureMessage(error, 'Sorry');
@@ -81,6 +93,7 @@ export class WallPageComponent implements OnInit {
         );
       }
     });
+
   }
 
   EditUser(form: NgForm) {
@@ -153,7 +166,7 @@ export class WallPageComponent implements OnInit {
 
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
-    this.userService.UpdateLoggedIn(this.id, false).subscribe((response) => {
+    this.userService.UpdateLoggedIn(this.id, false).subscribe(() => {
       this.router.navigate(['']);
       this.store.dispatch(new UI.StopLoading());
       this.spinnerService.hide();
