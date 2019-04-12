@@ -12,7 +12,9 @@ import {
   MatSnackBarModule,
   MatDividerModule,
   MatListModule,
-  MatInput
+  MatInput,
+  MatAutocompleteModule,
+  MatSelectModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -46,7 +48,9 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatListModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   entryComponents: [DialogSignUpComponent, DialogLoginComponent],
   providers: [],

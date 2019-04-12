@@ -53,7 +53,7 @@ async function FetchAllUsers(req, res) {
 }
 async function LoginToSystem(req, res) {
 
-    console.log('here');
+    
     try {
         const validateUserInput = await userUtil.ValidateUserInput(req.body);
         const Login = await userUtil.LoginValidate(validateUserInput.User);

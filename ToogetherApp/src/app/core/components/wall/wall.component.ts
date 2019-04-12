@@ -50,20 +50,13 @@ export class WallPageComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
-        console.log(this.id);
-        this.userService.GetConnectedUser(this.id).subscribe(
-          responseConnected => {
+        this.userService.GetConnectedUser(this.id).subscribe((responseConnected) => {
             this.UserConnected = responseConnected.UserObject;
-            setTimeout(() => {
-              console.log(!this.UserConnected.loggedin === true);
-              if ((!this.UserConnected.loggedin === true) === false)  {
-                console.log('e');
-                this.router.navigate(['']);
+            if (responseConnected.UserObject.loggedin as any === 'true')  {
+              this.router.navigate(['Wall/' + this.id]);
               } else {
-                console.log('s');
+                this.router.navigate(['']);
               }
-            }, 1000);
-
           },
           (error) => {
             console.log(error);

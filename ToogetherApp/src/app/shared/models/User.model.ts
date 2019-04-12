@@ -6,5 +6,10 @@ export interface User {
   lastname: string;
   superhero: string;
   loggedin: boolean;
+  quote: [{
+    name: string;
+    icon: string;
+  }],
+  image:File;
   role: string;
 }

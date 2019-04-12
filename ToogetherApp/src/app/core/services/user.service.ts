@@ -15,6 +15,7 @@ export class UserService {
 
   RegisterUser(UserObject: User) {
 
+    console.log(UserObject);
     return this.http.post<{UserObject: User, message: string, success: boolean}>(`${backendUrl}users/register`, UserObject);
 
   }
