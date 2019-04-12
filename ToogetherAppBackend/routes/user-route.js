@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router =  express.Router();
 
 
 /* Utils */
@@ -8,6 +8,7 @@ const userUtil = require("../utils/userUtil.util");
 
 async function RegisterUser(req,res) {
 
+    
     try {
         const validateUserResult = await  userUtil.ValidateUser(req.body);
         if (validateUserResult.success) {

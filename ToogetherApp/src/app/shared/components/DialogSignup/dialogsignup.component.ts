@@ -4,9 +4,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '../../models/User.model';
 import { UserService } from 'src/app/core/services/user.service';
 import {MatSnackBar} from '@angular/material';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-
+import { Store } from '@ngrx/store';
 
 
 export interface Quote {
@@ -59,7 +57,8 @@ export class DialogSignUpComponent {
     image: new FormControl(null, { validators: [Validators.required] })
   });
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar) {
+  constructor(private userService: UserService, private snackBar: MatSnackBar,
+              ) {
 
     this.hide = true;
 
@@ -76,6 +75,7 @@ export class DialogSignUpComponent {
       this.UserObject = {email: form.value.email, password: form.value.password,
       firstname: form.value.firstname, lastname: form.value.lastname, superhero: form.value.userhero,
       loggedin: false, quote: this.selectedValue as any, image: this.imageFormGroup.value, role: null};
+
       this.userService.RegisterUser(this.UserObject).subscribe((response) => {
 
         if (response.success) {
@@ -84,6 +84,7 @@ export class DialogSignUpComponent {
             this.openSnackBar(this.ResultUserObject.message, '');
             form.resetForm();
         }
+
       },
       (error) => {
         this.ResultUserObject = error;

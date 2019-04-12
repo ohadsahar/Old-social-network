@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { StoreModule} from '@ngrx/store';
+import { Reducers } from './app.reducer';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import {
   MatMenuModule,
   MatButtonModule,
@@ -50,7 +52,9 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatSelectModule
+    MatSelectModule,
+    Ng4LoadingSpinnerModule.forRoot(),
+    StoreModule.forRoot(Reducers)
   ],
   entryComponents: [DialogSignUpComponent, DialogLoginComponent],
   providers: [],

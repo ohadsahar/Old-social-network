@@ -1,7 +1,13 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material';
 import { DialogSignUpComponent } from 'src/app/shared/components/DialogSignup/dialogsignup.component';
 import { DialogLoginComponent } from 'src/app/shared/components/DialogLogin/dialoglogin.component';
+import { Store } from '@ngrx/store';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import * as fromRoot from '../../../app.reducer';
+import * as UI from '../../../shared/actions/ui.actions';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -12,27 +18,32 @@ import { DialogLoginComponent } from 'src/app/shared/components/DialogLogin/dial
     encapsulation: ViewEncapsulation.None,
 })
 
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) {}
+  isLoading$: Observable<boolean>;
 
+  constructor(public dialog: MatDialog, private store: Store<fromRoot.State>,
+              private spinnerService: Ng4LoadingSpinnerService) {
+
+    this.spinnerService.show();
+    this.store.dispatch(new UI.StartLoading());
+
+  }
+
+  ngOnInit() {
+
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    this.store.dispatch(new UI.StopLoading());
+    this.spinnerService.hide();
+  }
   SignUp() {
 
-    const dialogRef = this.dialog.open(DialogSignUpComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(DialogSignUpComponent);
   }
 
   Login() {
 
-
-    const dialogRef = this.dialog.open(DialogLoginComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(DialogLoginComponent);
   }
 }
 
