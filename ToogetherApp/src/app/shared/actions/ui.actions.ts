@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
-export const START_LOADING = 'Start Loading';
-export const STOP_LOADING = 'Stop Loading';
-export const SHOW_WALL = 'Start WALL';
-export const HIDE_WALL = 'Stop WALL';
-export const EDIT_ABLE = 'Start Editing';
-export const EDIT_CANCEL = 'Stop Editing';
+export const START_LOADING = ' [UI] Start Loading';
+export const STOP_LOADING = ' [UI] Stop Loading';
+export const SHOW_WALL = ' [UI]Start WALL';
+export const HIDE_WALL = ' [UI]Stop WALL';
+export const EDIT_ABLE = ' [UI]Start Editing';
+export const EDIT_CANCEL = ' [UI] Stop Editing';
 
 export class StartLoading implements Action {
 

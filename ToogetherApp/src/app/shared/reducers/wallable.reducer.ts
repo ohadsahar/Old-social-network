@@ -3,13 +3,15 @@ import {SHOW_WALL, HIDE_WALL, UIActions} from '../actions/ui.actions';
 
 
 export interface State {
-  profileAble: boolean;
+
   wallAble: boolean;
+  profileAble: boolean;
 }
 
 const initialState: State = {
-  profileAble: true,
-  wallAble: false
+
+  wallAble: false,
+  profileAble: true
 };
 
 
@@ -18,20 +20,26 @@ export function WallAbleReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case SHOW_WALL:
       return {
+        ...state,
         wallAble: true,
         profileAble: false
+
+
       };
     case HIDE_WALL:
       return {
+        ...state,
         wallAble: false,
         profileAble: true
+
       };
-    default:
+    default: {
       return state;
+    }
   }
 }
 
 
-export const GetProfileAble = (state: State) => state.profileAble;
-export const GetWallAble = (state: State) => state.wallAble;
 
+export const GetWallAble = (state: State) => state.wallAble;
+export const GetProfileAble = (state: State) => state.profileAble;

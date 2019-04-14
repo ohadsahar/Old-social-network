@@ -9,6 +9,7 @@ import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../actions/ui.actions';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { ResponseMessagesService } from '../../../core/services/error.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-login',
@@ -18,6 +19,10 @@ import { ResponseMessagesService } from '../../../core/services/error.service';
 })
 export class DialogLoginComponent {
   public hide: boolean;
+  public isLoading$: Observable<boolean>;
+  public profileAble$: Observable<boolean>;
+  public wallAble$: Observable<boolean>;
+  public editAble$: Observable<boolean>;
   public id: string;
 
   constructor(private userService: UserService, private snackBar: MatSnackBar, private router: Router,
@@ -32,6 +37,10 @@ export class DialogLoginComponent {
     } else {
       this.spinnerService.show();
       this.store.dispatch(new UI.StartLoading());
+      this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+      this.editAble$ = this.store.select(fromRoot.getIsEditAble);
+      this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
+      this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
       this.userService.LoginUser(form.value).subscribe(
         (response) => {
           if (response.token) {

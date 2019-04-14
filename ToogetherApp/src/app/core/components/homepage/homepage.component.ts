@@ -32,8 +32,7 @@ export class HomePageComponent implements OnInit {
   ngOnInit() {
 
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.store.dispatch(new UI.StopLoading());
-    this.spinnerService.hide();
+
   }
   SignUp() {
 

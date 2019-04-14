@@ -1,4 +1,4 @@
-import {START_LOADING, STOP_LOADING, UIActions} from '../actions/ui.actions';
+import {UIActions, START_LOADING, STOP_LOADING} from '../actions/ui.actions';
 
 export interface State {
 
@@ -6,25 +6,28 @@ export interface State {
 }
 
 
-const initialStateLoading: State = {
+const initialState: State = {
   isLoading: false
 };
 
 
 
 
-export function LoadingReducer(state = initialStateLoading, action: UIActions) {
+export function LoadingReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case START_LOADING:
       return {
+        ...state,
         isLoading: true
       };
     case STOP_LOADING:
       return {
+        ...state,
         isLoading: false
       };
-    default:
+    default: {
       return state;
+    }
   }
 }
 

@@ -15,7 +15,8 @@ import {
   MatDividerModule,
   MatListModule,
   MatAutocompleteModule,
-  MatSelectModule
+  MatSelectModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
