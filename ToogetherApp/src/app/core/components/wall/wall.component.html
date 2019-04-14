@@ -1,4 +1,6 @@
-<div class="wall-style">
+{{isLoading$ | async}}
+<ng4-loading-spinner *ngIf="isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
+<div class="wall-style" *ngIf="!(isLoading$ | async)">
   <div class="row">
     <div class="col-sm-2 col-md-2 col-lg-2 left-nav">
       <h5 (click)="ShowProfile()">Your profile</h5>
@@ -15,14 +17,14 @@
         <mat-list>
           <i class="far fa-edit" (click)="Edit()"></i>
           <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm">
-          <mat-list-item *ngIf="!editAble"
+          <mat-list-item *ngIf="!(editAble$ | async)"
             >Your Firstname: {{ UserConnected?.firstname }}
           </mat-list-item>
-          <div *ngIf="editAble" style="margin-top: 1%"></div>
-          <mat-form-field class="example-full-width" *ngIf="editAble">
+
+          <div *ngIf="editAble$ | async" style="margin-top: 1%"></div>
+          <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
             <input
               matInput
-              *ngIf="editAble"
               type="text"
               name="firstname"
               minlength="2"
@@ -39,13 +41,12 @@
           >
           </mat-form-field>
           <mat-divider></mat-divider>
-          <mat-list-item *ngIf="!editAble"
+          <mat-list-item *ngIf="!(editAble$ | async)"
             >Your Lastname: {{ UserConnected?.lastname }}
           </mat-list-item>
-          <mat-form-field class="example-full-width" *ngIf="editAble">
+          <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
             <input
               matInput
-              *ngIf="editAble"
               type="text"
               name="lastname"
               #lastname="ngModel"
@@ -60,13 +61,12 @@
           >
           </mat-form-field>
           <mat-divider></mat-divider>
-          <mat-list-item *ngIf="!editAble"
+          <mat-list-item *ngIf="!(editAble$ | async)"
             >Your Superhero: {{ UserConnected?.superhero }}
           </mat-list-item>
-          <mat-form-field class="example-full-width" *ngIf="editAble">
+          <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
             <input
               matInput
-              *ngIf="editAble"
               type="text"
               name="superhero"
               #superhero="ngModel"
@@ -84,13 +84,12 @@
 
           </mat-form-field>
           <mat-divider></mat-divider>
-          <mat-list-item *ngIf="!editAble"
+          <mat-list-item *ngIf="!(editAble$ | async)"
             >Your Email: {{ UserConnected?.email }}
           </mat-list-item>
-          <mat-form-field class="example-full-width" *ngIf="editAble">
+          <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
             <input
               matInput
-              *ngIf="editAble"
               type="email"
               name="email"
               #email="ngModel"
@@ -104,7 +103,7 @@
           >
           </mat-form-field>
           <mat-divider></mat-divider>
-          <mat-form-field class="example-full-width" *ngIf="editAble">
+          <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
             <input
               matInput
               minlength="8"
@@ -129,7 +128,7 @@
               >Your password is not in the right format</mat-error
             >
           </mat-form-field>
-              <button class="edit-button"  mat-raised-button *ngIf="editAble">Submit</button>
+              <button class="edit-button"  mat-raised-button *ngIf="editAble$ | async">Submit</button>
         </form>
         </mat-list>
         <div class="footer">

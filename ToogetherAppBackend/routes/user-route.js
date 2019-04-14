@@ -80,8 +80,10 @@ async function UpdateLoggedUser(req, res)
     try {
    
         const UpdateUser = await userUtil.UpdateUserLogStatus(req.params.id, req.body.action);
+    
         if (UpdateUser.success) 
         {
+         
             res.status(200).json({
                 message: UpdateUser.message,
                 success: UpdateUser.success
@@ -133,10 +135,20 @@ async function GetLoggedInUser(req,res) {
 
 async function UpdateUser(req,res) {
 
-    const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
+    try {
+        const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
+        const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id);
+
+        res.status(200).json({
+            UserObject: updateUser.updatedUser
+        })
+    } catch (error) {
+        res.statu(403).json({
+            UserObject: req.body
+        })
+    }
+
     
-    const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id);
-    console.log(updateUser);
 }
 
 router.post('/login', LoginToSystem);

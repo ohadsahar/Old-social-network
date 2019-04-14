@@ -168,7 +168,7 @@ async function UpdateUser(UserObject, id) {
       }
      
       await userSchema.updateOne({_id: id}, NewData);
-      return { message: 'The user has been updated', success: true};
+      return {updatedUser: NewData, message: 'The user has been updated', success: true};
     
     } catch (error) {
   

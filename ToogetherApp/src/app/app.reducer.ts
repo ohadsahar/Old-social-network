@@ -1,18 +1,26 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromUIReducer from './shared/reducers/ui.reducer';
-import * as WallReducer from './shared/reducers/wall.reducer';
-
-
+import * as fromLoadingReducer from './shared/reducers/loading.reducer';
+import * as fromWallAbleReducer from './shared/reducers/wallable.reducer';
+import * as fromEditProfileAbleReducer from './shared/reducers/profleedit.reducer';
 export interface State {
-    uiRed: fromUIReducer.State;
-    wallRed: WallReducer.State;
+
+    uiReducerLoading: fromLoadingReducer.State;
+    uiReducerWall: fromWallAbleReducer.State;
+    UIReducerEdit: fromEditProfileAbleReducer.State;
+
 }
 
 export const Reducers: ActionReducerMap<State> = {
-  uiRed: fromUIReducer.UiReducer,
-  wallRed: WallReducer.WallReducer,
+  uiReducerLoading: fromLoadingReducer.LoadingReducer,
+  uiReducerWall: fromWallAbleReducer.WallAbleReducer,
+  UIReducerEdit: fromEditProfileAbleReducer.EditProfileAbleReducer
 };
 
-export const getUiRedState = createFeatureSelector<fromUIReducer.State>('uiRed');
-export const getWallRedState = createFeatureSelector<WallReducer.State>('wallRed');
-export const getIsLoading = createSelector(getUiRedState, fromUIReducer.getIsLoading);
+export const GetReducuerLoading = createFeatureSelector<fromLoadingReducer.State>('uiReducerLoading');
+export const GetReducerWall = createFeatureSelector<fromWallAbleReducer.State>('uiReducerWall');
+export const GetReducerEdit = createFeatureSelector<fromEditProfileAbleReducer.State>('UIReducerEdit');
+
+export const getIsLoading = createSelector(GetReducuerLoading, fromLoadingReducer.getIsLoading);
+export const getIsEditAble = createSelector(GetReducerEdit, fromEditProfileAbleReducer.getIsEditAble);
+export const getIsWallAble = createSelector(GetReducerWall, fromWallAbleReducer.GetWallAble);
+export const getIsProfileAble = createSelector(GetReducerWall, fromWallAbleReducer.GetProfileAble);

@@ -14,7 +14,6 @@ import {
   MatSnackBarModule,
   MatDividerModule,
   MatListModule,
-  MatInput,
   MatAutocompleteModule,
   MatSelectModule
 } from '@angular/material';

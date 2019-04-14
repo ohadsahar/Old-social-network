@@ -1,6 +1,6 @@
 
-<ng4-loading-spinner *ngIf="!isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
-<div class="OhadSaharMenu">
+<ng4-loading-spinner *ngIf="isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
+<div class="OhadSaharMenu" *ngIf="!(isLoading$ | async)">
   <button mat-button [matMenuTriggerFor]="menu">
     <i class="fas fa-ellipsis-v"></i>Menu
   </button>
