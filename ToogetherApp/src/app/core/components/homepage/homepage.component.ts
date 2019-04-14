@@ -24,12 +24,11 @@ export class HomePageComponent implements OnInit {
   constructor(public dialog: MatDialog, private store: Store<fromRoot.State>,
               private spinnerService: Ng4LoadingSpinnerService) {
 
-    this.spinnerService.show();
-    this.store.dispatch(new UI.StartLoading());
 
   }
 
   ngOnInit() {
+
 
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
 

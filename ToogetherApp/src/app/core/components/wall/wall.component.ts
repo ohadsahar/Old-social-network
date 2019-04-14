@@ -11,7 +11,6 @@ import { ResponseMessagesService } from '../../services/error.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
 
-
 @Component({
   selector: 'app-wall-page',
   templateUrl: './wall.component.html',
@@ -19,7 +18,6 @@ import * as UI from '../../../shared/actions/ui.actions';
   encapsulation: ViewEncapsulation.None
 })
 export class WallPageComponent implements OnInit {
-
   private id: string;
   private counter: number;
   public hide: boolean;
@@ -45,7 +43,6 @@ export class WallPageComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.OnWallComponentStart();
   }
 
@@ -53,7 +50,9 @@ export class WallPageComponent implements OnInit {
 
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
-    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
+    this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
+    this.editAble$ = this.store.select(fromRoot.getIsEditAble);
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
@@ -67,10 +66,7 @@ export class WallPageComponent implements OnInit {
               this.router.navigate(['']);
             }
             this.store.dispatch(new UI.StopLoading());
-            this.store.dispatch(new UI.HideTheWall());
-            this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
-            this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
-            this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+
             this.spinnerService.hide();
           },
           error => {
@@ -107,23 +103,19 @@ export class WallPageComponent implements OnInit {
         this.UserConnected.superhero = form.value.superhero;
       }
 
-
       this.store.dispatch(new UI.StartLoading());
       this.spinnerService.show();
-      this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-      this.userService.UpdateUser(this.UserConnected, this.id).subscribe((response) => {
+
+      this.userService.UpdateUser(this.UserConnected, this.id).subscribe(
+        response => {
           this.UserConnected = response.UserObject;
           this.store.dispatch(new UI.HideTheWall());
-          this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
-          this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
-          this.store.dispatch(new UI.StopLoading());
-          this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-          this.spinnerService.hide();
           this.store.dispatch(new UI.CancelEdit());
-          this.editAble$ = this.store.select(fromRoot.getIsEditAble);
+          this.store.dispatch(new UI.StopLoading());
 
+          this.spinnerService.hide();
         },
-        (error) => {
+        error => {
           this.responseMessageService.FailureMessage(
             'Yuston we have problem, try again later',
             'Sorry'
@@ -137,36 +129,27 @@ export class WallPageComponent implements OnInit {
     this.counter += 1;
     if (this.counter === 1) {
       this.store.dispatch(new UI.EditAble());
-      this.editAble$ = this.store.select(fromRoot.getIsEditAble);
-      this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
+      this.store.dispatch(new UI.HideTheWall());
     } else {
       this.store.dispatch(new UI.CancelEdit());
-      this.editAble$ = this.store.select(fromRoot.getIsEditAble);
       this.counter = 0;
     }
   }
 
   ShowProfile() {
     this.store.dispatch(new UI.HideTheWall());
-    this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
-    this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
   }
 
   ShowWall() {
-
-
     this.store.dispatch(new UI.ShowTheWall());
-    this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
-    this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
   }
 
   Disconnect() {
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
-    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.userService.UpdateLoggedIn(this.id, false).subscribe(() => {
+    this.userService.UpdateLoggedIn(this.id, false).subscribe(
+      () => {
         this.store.dispatch(new UI.StopLoading());
-        this.isLoading$ = this.store.select(fromRoot.getIsLoading);
         this.spinnerService.hide();
         this.router.navigate(['']);
       },
@@ -181,12 +164,8 @@ export class WallPageComponent implements OnInit {
   }
 
   AfterError() {
-
     this.store.dispatch(new UI.HideTheWall());
     this.store.dispatch(new UI.StopLoading());
-    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
-    this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
     this.spinnerService.hide();
   }
 }
