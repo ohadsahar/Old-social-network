@@ -1,16 +1,16 @@
-import { ResultUser } from './../../models/Result-user';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
-import { User } from '../../models/User.model';
-import { UserService } from 'src/app/core/services/user.service';
-import {MatSnackBar} from '@angular/material';
-
-
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { ResponseMessagesService } from 'src/app/core/services/error.service';
+import { UserService } from 'src/app/core/services/user.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../actions/ui.actions';
-import { Store } from '@ngrx/store';
-import { ResponseMessagesService } from 'src/app/core/services/error.service';
+import { User } from '../../models/User.model';
+import { ResultUser } from './../../models/Result-user';
+
+
 
 
 export interface Quote {
@@ -72,8 +72,7 @@ export class DialogSignUpComponent {
   DoneSignup(form: NgForm) {
 
 
-    if (form.invalid)
-    {
+    if (form.invalid) {
       return;
     } else {
 
@@ -82,14 +81,14 @@ export class DialogSignUpComponent {
       this.store.dispatch(new UI.StartLoading());
       this.UserObject = {email: form.value.email, password: form.value.password,
       firstname: form.value.firstname, lastname: form.value.lastname, superhero: form.value.userhero,
-      loggedin: false, quote: this.selectedValue as any, image: this.imageFormGroup.value, role: null};
+      loggedin: false, image: this.imageFormGroup.controls.image.value, quote: this.selectedValue as any, role: null};
 
       this.userService.RegisterUser(this.UserObject).subscribe((response) => {
         if (response.success) {
 
             this.ResultUserObject = response;
             this.openSnackBar(this.ResultUserObject.message, '');
-            form.resetForm();
+            // form.resetForm();
             this.spinnerService.hide();
             this.store.dispatch(new UI.StopLoading());
         }

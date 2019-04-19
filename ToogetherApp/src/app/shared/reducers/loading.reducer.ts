@@ -17,12 +17,12 @@ export function LoadingReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case START_LOADING:
       return {
-        ...state,
+
         isLoading: true
       };
     case STOP_LOADING:
       return {
-        ...state,
+
         isLoading: false
       };
     default: {

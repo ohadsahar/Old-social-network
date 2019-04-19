@@ -1,7 +1,7 @@
 
 <ng4-loading-spinner *ngIf="isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
-<div class="wall-style" *ngIf="!(isLoading$ | async)">
-  <div class="row">
+<div class="wall-style" >
+  <div class="row" >
     <div class="col-sm-2 col-md-2 col-lg-2 left-nav">
       <h5 (click)="ShowProfile()">Your profile</h5>
       <h5 (click)="ShowWall()">Wall</h5>
@@ -13,10 +13,11 @@
         <div *ngIf="wallAble$ | async">
           <h1>Wall</h1>
         </div>
-        <div *ngIf="profileAble$ | async">
+        <div *ngIf="(profileAble$ | async)">
           <mat-list>
             <i class="far fa-edit" (click)="Edit()"></i>
-            <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm">
+
+            <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm" *ngIf="!(isLoading$ | async)">
               <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
               </mat-list-item>
 

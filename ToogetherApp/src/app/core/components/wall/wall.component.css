@@ -2,7 +2,16 @@
 .wall-style {
 
   overflow-x: hidden;
+  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
+  font-family: 'Shadows Into Light', cursive !important;
 }
+
+.row {
+
+  display: -webkit-box;
+  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
+}
+
 .wall-style .left-nav {
 
   height: 100vh;
@@ -17,11 +26,6 @@
 .wall-style .main-page {
 
   padding: 100px;
-}
-.wall-style .row {
-
-  display: -webkit-box;
-  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
 }
 
 .wall-style h2 {

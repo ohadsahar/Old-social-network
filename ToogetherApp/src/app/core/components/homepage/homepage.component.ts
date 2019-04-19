@@ -1,13 +1,7 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import {MatDialog} from '@angular/material';
-import { DialogSignUpComponent } from 'src/app/shared/components/DialogSignup/dialogsignup.component';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { DialogLoginComponent } from 'src/app/shared/components/DialogLogin/dialoglogin.component';
-import { Store } from '@ngrx/store';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import * as fromRoot from '../../../app.reducer';
-import * as UI from '../../../shared/actions/ui.actions';
-import { Observable } from 'rxjs';
-
+import { DialogSignUpComponent } from 'src/app/shared/components/DialogSignup/dialogsignup.component';
 
 @Component({
 
@@ -17,22 +11,11 @@ import { Observable } from 'rxjs';
     encapsulation: ViewEncapsulation.None,
 })
 
-export class HomePageComponent implements OnInit {
+export class HomePageComponent  {
 
-  isLoading$: Observable<boolean>;
-
-  constructor(public dialog: MatDialog, private store: Store<fromRoot.State>,
-              private spinnerService: Ng4LoadingSpinnerService) {
+  constructor(public dialog: MatDialog) {}
 
 
-  }
-
-  ngOnInit() {
-
-
-    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-
-  }
   SignUp() {
 
     this.dialog.open(DialogSignUpComponent);

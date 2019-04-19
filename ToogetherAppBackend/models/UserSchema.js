@@ -8,6 +8,7 @@ const User = mongoose.Schema({
     lastname: {type: String, required: true},
     superhero: {type: String, required: true},
     loggedin: {type: String},
+    Image: {type: String, required: true},
     role: {type: String, required: true}
 });
 

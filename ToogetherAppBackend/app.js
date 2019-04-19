@@ -29,7 +29,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/images", express.static(path.join("assets/images")));
-
 app.use('/admin/users', userRoute);
 
 module.exports = app;

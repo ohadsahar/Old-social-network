@@ -20,7 +20,6 @@ export function WallAbleReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case SHOW_WALL:
       return {
-        ...state,
         wallAble: true,
         profileAble: false
 
@@ -28,7 +27,6 @@ export function WallAbleReducer(state = initialState, action: UIActions) {
       };
     case HIDE_WALL:
       return {
-        ...state,
         wallAble: false,
         profileAble: true
 

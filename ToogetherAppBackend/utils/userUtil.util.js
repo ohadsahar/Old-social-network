@@ -32,8 +32,12 @@ async function ValidateUser(UserObject) {
   }
 }
 
-async function RegisterUser(UserObject) {
+async function RegisterUser(UserObject, req) {
+  
   try {
+
+    const url  = req.protocol + '://' + req.get('host');
+
     const UserToSave = new userSchema({
       email: UserObject.email,
       password: UserObject.password,
@@ -41,6 +45,7 @@ async function RegisterUser(UserObject) {
       lastname: UserObject.lastname,
       superhero: UserObject.superhero,
       loggedin: false,
+      Image: url + '/images/' + req.file.filename,
       role: "admin"
     });
 
@@ -102,10 +107,8 @@ async function ValidateUserInput(UserObject) {
 async function LoginValidate(UserObject) {
   try {
    
-  
     const FetchedUser = await userSchema.findOne({ email: UserObject.email });
-    
-    if (bycrypt.compare(FetchedUser.password, UserObject.password)) {
+    if (bycrypt.compare(UserObject.password, FetchedUser.password)) {
       const token = jwt.sign(
         { email: FetchedUser.email, id: FetchedUser._id },
         "SECRET_SHOULD_BE_SMALLER"
@@ -142,7 +145,7 @@ async function UpdateUserLogStatus(id, action)
 async function GetConnectedUser(id) {
 
   try {
-      const UserObject = await userSchema.findById({_id: id}).then(documents => {
+      const UserObject = await userSchema.findById({_id: id}).then(documents => { 
         return documents;
       })
       return {UserData: UserObject, success: true, message:'User successfully imported'};

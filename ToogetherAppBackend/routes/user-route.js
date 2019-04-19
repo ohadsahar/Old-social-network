@@ -1,18 +1,30 @@
 const express = require("express");
 const router =  express.Router();
-
-
-/* Utils */
-
+const config = require("../config");
 const userUtil = require("../utils/userUtil.util");
+const multer  = require('multer');
+
+//const upload =  config.ConfigMulter().upload;
+
+
+const storage = multer.diskStorage({
+    destination: 'assets/images',
+    filename: function(req, file ,cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+  });
+
+  const upload = multer({ storage: storage}).single('image');
+  
+
 
 async function RegisterUser(req,res) {
 
-    
+    console.log(req.body);
     try {
         const validateUserResult = await  userUtil.ValidateUser(req.body);
         if (validateUserResult.success) {
-            const saveUserData = await userUtil.RegisterUser(validateUserResult.User);
+            const saveUserData = await userUtil.RegisterUser(validateUserResult.User, req);
             if (saveUserData.success) 
             {
                 res.status(200).json({
@@ -80,7 +92,7 @@ async function UpdateLoggedUser(req, res)
     try {
    
         const UpdateUser = await userUtil.UpdateUserLogStatus(req.params.id, req.body.action);
-    
+        
         if (UpdateUser.success) 
         {
          
@@ -138,7 +150,6 @@ async function UpdateUser(req,res) {
     try {
         const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
         const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id);
-
         res.status(200).json({
             UserObject: updateUser.updatedUser
         })
@@ -152,7 +163,7 @@ async function UpdateUser(req,res) {
 }
 
 router.post('/login', LoginToSystem);
-router.post('/register', RegisterUser);
+router.post('/register',upload,RegisterUser);
 router.post('/:id', UpdateUser )
 router.get('', FetchAllUsers);
 router.get('/:id', GetLoggedInUser);
