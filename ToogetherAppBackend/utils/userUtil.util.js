@@ -13,6 +13,7 @@ async function ValidateUser(UserObject) {
     validator.isLength(UserObject.lastname, 2) &&
     validator.isLength(UserObject.superhero, 4)
   ) {
+    UserObject.quote = JSON.parse(UserObject.quote);
     UserObject.email = UserObject.email.toLowerCase();
     UserObject.password = await bycrypt.hash(UserObject.password, 10);
 
@@ -35,7 +36,8 @@ async function ValidateUser(UserObject) {
 async function RegisterUser(UserObject, req) {
   
   try {
-
+    console.log(req.file);
+    
     const url  = req.protocol + '://' + req.get('host');
 
     const UserToSave = new userSchema({
@@ -46,6 +48,7 @@ async function RegisterUser(UserObject, req) {
       superhero: UserObject.superhero,
       loggedin: false,
       Image: url + '/images/' + req.file.filename,
+      quote: UserObject.quote,
       role: "admin"
     });
 

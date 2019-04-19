@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -22,10 +22,14 @@ export class WallPageComponent implements OnInit {
   private id: string;
   private counter: number;
   public hide: boolean;
+  public imagePreview: string;
   public isLoading$: Observable<boolean>;
   public profileAble$: Observable<boolean>;
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
+  imageFormGroup = new FormGroup({
+    image: new FormControl(null, { validators: [Validators.required] })
+  });
 
   public MarvelCollection: any[] = [];
   public UserConnected: User;
@@ -37,10 +41,14 @@ export class WallPageComponent implements OnInit {
     private router: Router,
     private responseMessageService: ResponseMessagesService,
     private spinnerService: Ng4LoadingSpinnerService,
-    private store: Store<fromRoot.State>
+    private store: Store<fromRoot.State>,
+    private formBuilder: FormBuilder
   ) {
     this.hide = true;
     this.counter = 0;
+    this.imageFormGroup = this.formBuilder.group({
+      image: ''
+    });
 
   }
 
@@ -55,8 +63,8 @@ export class WallPageComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
-        this.userService.GetConnectedUser(this.id).subscribe(
-          responseConnected => {
+        this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
+            console.log(responseConnected);
             this.UserConnected = responseConnected.UserObject;
             console.log(this.UserConnected);
             if ((responseConnected.UserObject.loggedin as any) === 'true') {
@@ -145,6 +153,19 @@ export class WallPageComponent implements OnInit {
       }
     );
   }
+
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.imageFormGroup.patchValue({ image: file });
+    this.imageFormGroup.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
   ShowProfile() {
 
     this.DisableWall();

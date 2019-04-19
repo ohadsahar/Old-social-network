@@ -18,6 +18,10 @@
             <i class="far fa-edit" (click)="Edit()"></i>
 
             <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm" *ngIf="!(isLoading$ | async)">
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+
+
               <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
               </mat-list-item>
 
@@ -66,13 +70,46 @@
                 <mat-placeholder class="placeholder"> {{UserConnected?.password}}</mat-placeholder>
                 <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
               </mat-form-field>
+
+            </div>
+
+          <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="editAble$ | async">
+              <div [formGroup]="imageFormGroup" class="image-upload" >
+                  <button
+                  mat-stroked-button
+                  id="image-button"
+                  type="button"
+                  (click)="filePicker.click()">
+                  Upload picture
+                </button>
+                <input
+                  type="file"
+                  name="image"
+                  #filePicker
+                  (change)="onImagePicked($event)"
+                  style="visibility: hidden"/>
+
+                    <div
+                    *ngIf="imagePreview !== '' && imagePreview">
+                    <h3>New picture:</h3>
+                    <img [src]="imagePreview" class="img-thumbnail"/>
+                  </div>
+                    <h3>Old picture:</h3>
+                    <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="!(editAble$ | async)">
+                  <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                </div>
+              </div>
               <button class="edit-button" mat-raised-button *ngIf="editAble$ | async">Submit</button>
             </form>
           </mat-list>
           <div class="footer">
             <h2>
-
-              Your friendly neighborhood Spider-Man
+              <div *ngFor="let quote of UserConnected?.quote">
+                  <img src="{{quote?.icon}}" id="iconImg"> {{quote?.name}}
+              </div>
             </h2>
           </div>
         </div>

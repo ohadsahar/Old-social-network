@@ -3,6 +3,7 @@ const router =  express.Router();
 const config = require("../config");
 const userUtil = require("../utils/userUtil.util");
 const multer  = require('multer');
+const path = require("path");
 
 //const upload =  config.ConfigMulter().upload;
 
@@ -15,12 +16,10 @@ const storage = multer.diskStorage({
   });
 
   const upload = multer({ storage: storage}).single('image');
-  
 
 
 async function RegisterUser(req,res) {
 
-    console.log(req.body);
     try {
         const validateUserResult = await  userUtil.ValidateUser(req.body);
         if (validateUserResult.success) {
@@ -86,7 +85,6 @@ async function LoginToSystem(req, res) {
         })
     }
 }
-
 async function UpdateLoggedUser(req, res) 
 {
     try {
@@ -115,7 +113,6 @@ async function UpdateLoggedUser(req, res)
  
 
 }
-
 async function GetLoggedInUser(req,res) {
 
     let User;
@@ -144,7 +141,6 @@ async function GetLoggedInUser(req,res) {
    
 
 }
-
 async function UpdateUser(req,res) {
 
     try {
@@ -163,11 +159,11 @@ async function UpdateUser(req,res) {
 }
 
 router.post('/login', LoginToSystem);
-router.post('/register',upload,RegisterUser);
+router.post('/register', upload, RegisterUser);
 router.post('/:id', UpdateUser )
 router.get('', FetchAllUsers);
 router.get('/:id', GetLoggedInUser);
-router.put('/:id', UpdateLoggedUser)
+router.put('/:id', UpdateLoggedUser);
 
 module.exports = router;
 

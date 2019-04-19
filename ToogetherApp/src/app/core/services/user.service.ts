@@ -11,8 +11,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  RegisterUser(UserObject: User) {
-    console.log(UserObject.image);
+  RegisterUser(UserObject: any) {
 
     return this.http.post<{UserObject: User, message: string, success: boolean}>(`${backendUrl}users/register`, UserObject);
 

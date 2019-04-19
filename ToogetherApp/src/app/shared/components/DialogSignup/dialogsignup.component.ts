@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -63,10 +63,17 @@ export class DialogSignUpComponent {
     image: new FormControl(null, { validators: [Validators.required] })
   });
 
+
+
   constructor(private userService: UserService, private snackBar: MatSnackBar,
               private responseMessageService: ResponseMessagesService,
-              private spinnerService: Ng4LoadingSpinnerService,  private store: Store<fromRoot.State>) {
+              private spinnerService: Ng4LoadingSpinnerService,    private formBuilder: FormBuilder,
+              private store: Store<fromRoot.State>) {
     this.hide = true;
+
+    this.imageFormGroup = this.formBuilder.group({
+      image: ''
+    });
   }
 
   DoneSignup(form: NgForm) {
@@ -76,14 +83,20 @@ export class DialogSignUpComponent {
       return;
     } else {
 
-
       this.spinnerService.show();
       this.store.dispatch(new UI.StartLoading());
-      this.UserObject = {email: form.value.email, password: form.value.password,
-      firstname: form.value.firstname, lastname: form.value.lastname, superhero: form.value.userhero,
-      loggedin: false, image: this.imageFormGroup.controls.image.value, quote: this.selectedValue as any, role: null};
+      const userData = new FormData();
+      userData.append('email', form.value.email);
+      userData.append('password', form.value.password);
+      userData.append('firstname', form.value.firstname);
+      userData.append('lastname', form.value.lastname);
+      userData.append('superhero', form.value.userhero);
+      userData.append('loggedin', 'false');
+      userData.append('image', this.imageFormGroup.controls.image.value);
+      userData.append('quote', JSON.stringify(this.selectedValue as any));
+      userData.append('role', null);
 
-      this.userService.RegisterUser(this.UserObject).subscribe((response) => {
+      this.userService.RegisterUser(userData).subscribe((response) => {
         if (response.success) {
 
             this.ResultUserObject = response;

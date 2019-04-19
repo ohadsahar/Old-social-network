@@ -6,7 +6,7 @@ export interface User {
   lastname: string;
   superhero: string;
   loggedin: boolean;
-  image: File;
+  Image: File;
   quote: [{
     name: string;
     icon: string;
