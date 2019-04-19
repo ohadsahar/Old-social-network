@@ -3,19 +3,10 @@ const router =  express.Router();
 const config = require("../config");
 const userUtil = require("../utils/userUtil.util");
 const multer  = require('multer');
-const path = require("path");
-
-//const upload =  config.ConfigMulter().upload;
 
 
-const storage = multer.diskStorage({
-    destination: 'assets/images',
-    filename: function(req, file ,cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
 
-  const upload = multer({ storage: storage}).single('image');
+const upload = config.ConfigMulter().upload;
 
 
 async function RegisterUser(req,res) {
@@ -150,7 +141,7 @@ async function UpdateUser(req,res) {
             UserObject: updateUser.updatedUser
         })
     } catch (error) {
-        res.statu(403).json({
+        res.status(403).json({
             UserObject: req.body
         })
     }

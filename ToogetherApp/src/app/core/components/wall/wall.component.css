@@ -75,12 +75,29 @@
 
 }
 
+h3 {
+
+  color: white;
+  margin-top: 5% !important;
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 19px;
+}
+
+h4 {
+
+  color: white;
+  margin-top: 5% !important;
+  font-family: 'Shadows Into Light', cursive;
+  background-image:linear-gradient(to left, #003459,#0a2d46, #FF3F4E);
+}
 .image-preview {
 
   width: 200px;
   height: 200px;
 
 }
+
+
 
 .cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
 
