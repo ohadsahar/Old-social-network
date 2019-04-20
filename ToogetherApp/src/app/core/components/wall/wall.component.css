@@ -7,13 +7,15 @@
   height: 100vh;
 }
 
+
 .wall-style .left-nav {
 
-  height: 100vh;
+
   background-image:linear-gradient(#031D44, #04395E);
   width: 120px;
   padding: 20px;
   box-shadow: 3px 3px 3px cornflowerblue;
+  height: 100vh !important;;
 }
 
 .wall-style .example-full-width {
@@ -69,9 +71,20 @@
 }
 .wall-style .main-page {
 
-  padding: 100px;
+  padding: 38px;
 }
 
+.collection-of-images {
+
+  display: inline-flex;
+
+}
+
+#img-collection {
+
+  width: 200px !important;
+  height: 100px !important;
+}
 .wall-style h2 {
 
   color: white;

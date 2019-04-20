@@ -13,6 +13,7 @@ const User = mongoose.Schema({
             name: {type: String},
             icon: { type: String},
     }],
+    Images: {type: Array},
     role: {type: String, required: true}
 });
 

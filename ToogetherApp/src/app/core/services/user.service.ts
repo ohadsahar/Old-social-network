@@ -35,8 +35,12 @@ export class UserService {
 
   UpdateUser(UserObject: any, id: string) {
 
+    return this.http.post<{UserObject: User, message: string}>(`${backendUrl}users/${id}`, UserObject);
+  }
 
-    return this.http.post<{UserObject: User}>(`${backendUrl}users/${id}`, UserObject);
+  UpdateUserCollectionImages(UserImages: any, id: string) {
+
+    return this.http.post<{Images: any, message: string, success: boolean}>(`${backendUrl}users/images/${id}`, UserImages);
   }
 
 

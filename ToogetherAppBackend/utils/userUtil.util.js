@@ -35,11 +35,13 @@ async function ValidateUser(UserObject) {
 
 async function RegisterUser(UserObject, req) {
   
+  let UserToSave;
+
   try {
     
     const url  = req.protocol + '://' + req.get('host');
-
-    const UserToSave = new userSchema({
+    UserObject.quote = JSON.parse(UserObject.quote);
+    UserToSave = new userSchema({
       email: UserObject.email,
       password: UserObject.password,
       firstname: UserObject.firstname,
@@ -48,10 +50,12 @@ async function RegisterUser(UserObject, req) {
       loggedin: false,
       Image: url + '/images/' + req.file.filename,
       quote: UserObject.quote,
+      Images: null,
       role: "admin"
     });
 
     await UserToSave.save();
+    
     return {
       UserSaved: UserToSave,
       message:
@@ -59,6 +63,7 @@ async function RegisterUser(UserObject, req) {
       success: true
     };
   } catch (error) {
+
     return {
       UserSaved: UserToSave,
       message:
@@ -161,7 +166,10 @@ async function UpdateUser(UserObject, id, req) {
 
   let NewData;
   UserObject.quote = JSON.parse(UserObject.quote);
+  UserObject.Images = JSON.parse(UserObject.Images);
+ 
     try {
+
       if (req.file) {
         const url  = req.protocol + '://' + req.get('host');
          NewData = {
@@ -174,6 +182,7 @@ async function UpdateUser(UserObject, id, req) {
           loggedin: UserObject.loggedin,
           Image: url + '/images/' + req.file.filename,
           quote: UserObject.quote,
+          Images: UserObject.Images,
           role: UserObject.role
         }
       } else {
@@ -189,18 +198,45 @@ async function UpdateUser(UserObject, id, req) {
           loggedin: UserObject.loggedin,
           Image: UserObject.image,
           quote: UserObject.quote,
+          Images: UserObject.Images,
           role: UserObject.role
         }
       }
-     
+
       await userSchema.updateOne({_id: id}, NewData);
       return {updatedUser: NewData, message: 'The user has been updated', success: true};    
     } catch (error) {
+      
       return { message: 'There was a problem connecting the user to the system and updated.', success: false}
     }
   
   }
 
+
+  async function UpdateImages(req, id) {
+
+    const ArrayImg = [];
+    let NewData;
+
+    try {
+      if (req.files) {
+        const url  = req.protocol + '://' + req.get('host');
+        req.files.forEach(element => {
+          ArrayImg.push(url + '/images/' + element.filename)
+        });
+        NewData = {
+          Images: ArrayImg,
+        }
+      }
+      
+      await userSchema.updateOne({_id: id}, NewData);
+      return {Images: ArrayImg, message: 'Images added', success: true};
+    } catch (error) {
+        return {message: 'Problem', success: false};
+    }
+   
+
+  }
 module.exports = {
   ValidateUser,
   RegisterUser,
@@ -210,4 +246,5 @@ module.exports = {
   UpdateUserLogStatus,
   GetConnectedUser,
   UpdateUser,
+  UpdateImages
 };

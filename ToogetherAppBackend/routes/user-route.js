@@ -4,13 +4,17 @@ const config = require("../config");
 const userUtil = require("../utils/userUtil.util");
 const winston = require("winston")
 const upload = config.ConfigMulter().upload;
+const uploadMulti = config.ConfigMulterMultiImages().upload;
 
 async function  RegisterUser(req,res) {
 
+    let saveUserData;
+    
     try {
         const validateUserResult = await  userUtil.ValidateUser(req.body);
         if (validateUserResult.success) {
-            const saveUserData = await userUtil.RegisterUser(validateUserResult.User, req);
+            saveUserData = await userUtil.RegisterUser(validateUserResult.User, req);
+           
             if (saveUserData.success) 
             {
                 res.status(200).json({
@@ -27,7 +31,11 @@ async function  RegisterUser(req,res) {
             }
         }
     } catch (error) {
-        
+     
+        res.status(500).json({
+            message: saveUserData.message,
+            success: saveUserData.success
+        })
     }
 }
 async function FetchAllUsers(req, res) {
@@ -44,7 +52,6 @@ async function FetchAllUsers(req, res) {
         }  
     } catch (error) {
             res.status(400).json({
-                Users: FetchedUsers.Users,
                 message: FetchedUsers.message,
                 success: FetchedUsers.success
             })
@@ -66,7 +73,7 @@ async function LoginToSystem(req, res) {
             success: Login.success
         })
     } catch (error) {
-        res.status(200).json({
+        res.status(500).json({
             message: Login.message,
             success: Login.success
         })
@@ -132,27 +139,52 @@ async function GetLoggedInUser(req,res) {
 }
 async function UpdateUser(req,res) {
 
+    let updateUser;
     try {
         
         const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
-        const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id, req);
+        updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id, req);
        
         res.status(200).json({
-            UserObject: updateUser.updatedUser
+            UserObject: updateUser.updatedUser,
+            message: updateUser.message
         })
     } catch (error) {
 
-        res.status(403).json({
-            UserObject: req.body
+        res.status(500).json({
+            UserObject: req.body,
+            message: updateUser.message
         })
     }
 
     
 }
 
+async function UpdateUserImages(req,res) {
+
+  
+        try {
+        let UpdateImagesForUser = await userUtil.UpdateImages(req, req.params.id);
+        console.log(UpdateImagesForUser);
+        res.status(200).json({
+            Images: UpdateImagesForUser.Images,
+            message: UpdateImagesForUser.message,
+            success: UpdateImagesForUser.success
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: UpdateImagesForUser.message,
+            success: UpdateImagesForUser.success
+        })
+       
+    }
+
+    
+}
 router.post('/login', LoginToSystem);
 router.post('/register', upload, RegisterUser);
 router.post('/:id',upload, UpdateUser )
+router.post('/images/:id', uploadMulti, UpdateUserImages);
 router.get('', FetchAllUsers);
 router.get('/:id', GetLoggedInUser);
 router.put('/:id', UpdateLoggedUser);

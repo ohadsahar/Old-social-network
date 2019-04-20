@@ -11,6 +11,7 @@ import * as UI from '../../../shared/actions/ui.actions';
 import { ResponseMessagesService } from '../../services/error.service';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -29,16 +30,19 @@ export class WallPageComponent implements OnInit {
   public profileAble$: Observable<boolean>;
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
-  imageFormGroup = new FormGroup({
-    image: new FormControl(null, { validators: [Validators.required] })
-  });
+  imageFormGroup = new FormGroup({image: new FormControl(null,
+     { validators: [Validators.required] })});
+
+  imageFormArray = new FormGroup({image: new FormControl(null,
+      { validators: [Validators.required] })});
 
   public MarvelCollection: any[] = [];
   public UserConnected: User;
-
+  public ImagesArray: File [] = [];
 
   QuoteCtrl = new FormControl();
-  selectedValue: Quote[] ;
+  selectedValue: Quote[];
+  filesToUpload: Array<File> = [];
 
   quotes: Quote[] = [
     {
@@ -71,6 +75,10 @@ export class WallPageComponent implements OnInit {
     this.hide = true;
     this.counter = 0;
     this.imageFormGroup = this.formBuilder.group({
+      image: ''
+    });
+
+    this.imageFormArray = this.formBuilder.group({
       image: ''
     });
 
@@ -131,8 +139,7 @@ export class WallPageComponent implements OnInit {
         this.UserConnected.superhero = form.value.superhero;
       }
 
-      if (this.selectedValue !== undefined)
-      {
+      if (this.selectedValue !== undefined) {
 
         this.UserConnected.quote = [] as any;
         this.UserConnected.quote.push(this.selectedValue as any);
@@ -146,7 +153,7 @@ export class WallPageComponent implements OnInit {
       UserConnectedUpdate.append('superhero', this.UserConnected.superhero);
       UserConnectedUpdate.append('loggedin', 'true');
 
-      if (this.imageFormGroup.controls.image.value){
+      if (this.imageFormGroup.controls.image.value) {
 
         UserConnectedUpdate.append('image', this.imageFormGroup.controls.image.value);
       } else {
@@ -155,11 +162,17 @@ export class WallPageComponent implements OnInit {
       }
       UserConnectedUpdate.append('quote', JSON.stringify(this.UserConnected.quote as any));
       UserConnectedUpdate.append('role', this.UserConnected.role);
+      if (this.UserConnected.Images) {
+
+        UserConnectedUpdate.append('Images', JSON.stringify(this.UserConnected.Images));
+      }
+
       this.imagePreview = null;
 
       this.Loading();
       this.counter = 0;
       this.userService.UpdateUser(UserConnectedUpdate, this.id).subscribe((response) => {
+
           this.UserConnected = response.UserObject;
 
           this.DisableWall();
@@ -177,6 +190,7 @@ export class WallPageComponent implements OnInit {
   Edit() {
     this.counter += 1;
     if (this.counter === 1) {
+
       this.EnableEdit();
       this.DisableWall();
 
@@ -214,6 +228,34 @@ export class WallPageComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
+
+  upload() {
+
+
+    const formData: any = new FormData();
+    const files: Array<File> = this.filesToUpload;
+    let i
+    // tslint:disable-next-line:prefer-for-of
+    for ( i = 0; i < files.length; i++) {
+        // tslint:disable-next-line:no-string-literal
+        formData.append('uploads[]', files[i], files[i]['name']);
+        if (i >= files.length)
+        {
+          this.Loading();
+        }
+    }
+
+    this.userService.UpdateUserCollectionImages(formData, this.id).subscribe(response => {
+      this.UserConnected.Images = response.Images;
+      this.StopLoading();
+
+    });
+}
+
+fileChangeEvent(fileInput: any) {
+    this.filesToUpload =  fileInput.target.files as Array<File>;
+
+}
 
   ShowProfile() {
 

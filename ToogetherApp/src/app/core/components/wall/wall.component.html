@@ -56,6 +56,18 @@
               <div class="space-line" *ngIf="editAble$ | async"></div>
               <mat-list-item *ngIf="!(editAble$ | async)">Your Email: {{ UserConnected?.email }}
               </mat-list-item>
+
+              <mat-list-item *ngIf="!(editAble$ | async)">Your collection:</mat-list-item>
+
+                    <div class="collection-of-images" *ngIf="!(editAble$ | async)">
+                          <div *ngFor="let image of UserConnected.Images">
+                                <img src="{{image}}" class="img-thumbnail" id="img-collection">
+                            </div>
+                          </div>
+
+
+
+
               <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
                 <input matInput type="email" name="email" #email="ngModel" value="{{UserConnected?.email}}" ngModel />
                 <mat-placeholder id="edit-placeholder">{{UserConnected?.email}}</mat-placeholder>
@@ -112,10 +124,17 @@
                   </div>
                     <h3>Old picture:</h3>
                     <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                    <h4>Upload your collection</h4>
+
+
+                    <input id="cin" name="cin" type="file" (change)="fileChangeEvent($event)"
+                    placeholder="Upload a file..."  multiple/>
+
+                    <button mat-button color="primary" (click)="upload()">Upload</button>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="!(editAble$ | async)">
-                  <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                <img src="{{UserConnected?.Image}}" class="img-thumbnail">
                 </div>
               </div>
               <button class="edit-button" mat-raised-button *ngIf="editAble$ | async">Submit</button>
