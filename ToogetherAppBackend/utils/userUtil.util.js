@@ -160,7 +160,6 @@ async function GetConnectedUser(id) {
 async function UpdateUser(UserObject, id, req) {
 
   let NewData;
-  console.log(UserObject);
   UserObject.quote = JSON.parse(UserObject.quote);
     try {
       if (req.file) {

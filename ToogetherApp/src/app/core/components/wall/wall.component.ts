@@ -138,7 +138,6 @@ export class WallPageComponent implements OnInit {
         this.UserConnected.quote.push(this.selectedValue as any);
       }
 
-
       const UserConnectedUpdate = new FormData();
       UserConnectedUpdate.append('email', this.UserConnected.email);
       UserConnectedUpdate.append('password', this.UserConnected.password);
@@ -154,10 +153,9 @@ export class WallPageComponent implements OnInit {
 
         UserConnectedUpdate.append('image', this.UserConnected.Image);
       }
-
-
       UserConnectedUpdate.append('quote', JSON.stringify(this.UserConnected.quote as any));
       UserConnectedUpdate.append('role', this.UserConnected.role);
+      this.imagePreview = null;
 
       this.Loading();
       this.counter = 0;
