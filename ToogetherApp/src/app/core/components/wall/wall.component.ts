@@ -1,3 +1,4 @@
+import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgForm, FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -10,6 +11,7 @@ import * as UI from '../../../shared/actions/ui.actions';
 import { ResponseMessagesService } from '../../services/error.service';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+
 
 @Component({
   selector: 'app-wall-page',
@@ -34,6 +36,28 @@ export class WallPageComponent implements OnInit {
   public MarvelCollection: any[] = [];
   public UserConnected: User;
 
+
+  QuoteCtrl = new FormControl();
+  selectedValue: Quote[] ;
+
+  quotes: Quote[] = [
+    {
+      name: 'Your friendly neighborhood spider man',
+      icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
+    },
+    {
+      name: 'I am iron man',
+      icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
+    },
+    {
+      name: 'I am angry',
+      icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
+    },
+    {
+      name: 'I am groot',
+      icon: '../../../../assets/images/icons/groot.jpg'
+    }
+  ];
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -64,9 +88,7 @@ export class WallPageComponent implements OnInit {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
         this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
-            console.log(responseConnected);
             this.UserConnected = responseConnected.UserObject;
-            console.log(this.UserConnected);
             if ((responseConnected.UserObject.loggedin as any) === 'true') {
               this.router.navigate(['Wall/' + this.id]);
             } else {
@@ -109,10 +131,39 @@ export class WallPageComponent implements OnInit {
         this.UserConnected.superhero = form.value.superhero;
       }
 
+      if (this.selectedValue !== undefined)
+      {
+
+        this.UserConnected.quote = [] as any;
+        this.UserConnected.quote.push(this.selectedValue as any);
+      }
+
+
+      const UserConnectedUpdate = new FormData();
+      UserConnectedUpdate.append('email', this.UserConnected.email);
+      UserConnectedUpdate.append('password', this.UserConnected.password);
+      UserConnectedUpdate.append('firstname', this.UserConnected.firstname);
+      UserConnectedUpdate.append('lastname', this.UserConnected.lastname);
+      UserConnectedUpdate.append('superhero', this.UserConnected.superhero);
+      UserConnectedUpdate.append('loggedin', 'true');
+
+      if (this.imageFormGroup.controls.image.value){
+
+        UserConnectedUpdate.append('image', this.imageFormGroup.controls.image.value);
+      } else {
+
+        UserConnectedUpdate.append('image', this.UserConnected.Image);
+      }
+
+
+      UserConnectedUpdate.append('quote', JSON.stringify(this.UserConnected.quote as any));
+      UserConnectedUpdate.append('role', this.UserConnected.role);
+
       this.Loading();
       this.counter = 0;
-      this.userService.UpdateUser(this.UserConnected, this.id).subscribe((response) => {
+      this.userService.UpdateUser(UserConnectedUpdate, this.id).subscribe((response) => {
           this.UserConnected = response.UserObject;
+
           this.DisableWall();
           this.CancelEdit();
           this.StopLoading();

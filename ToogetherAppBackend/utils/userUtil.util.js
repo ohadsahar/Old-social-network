@@ -13,7 +13,7 @@ async function ValidateUser(UserObject) {
     validator.isLength(UserObject.lastname, 2) &&
     validator.isLength(UserObject.superhero, 4)
   ) {
-    UserObject.quote = JSON.parse(UserObject.quote);
+    
     UserObject.email = UserObject.email.toLowerCase();
     UserObject.password = await bycrypt.hash(UserObject.password, 10);
 
@@ -36,7 +36,6 @@ async function ValidateUser(UserObject) {
 async function RegisterUser(UserObject, req) {
   
   try {
-    console.log(req.file);
     
     const url  = req.protocol + '://' + req.get('host');
 
@@ -158,32 +157,51 @@ async function GetConnectedUser(id) {
 
 }
 
-async function UpdateUser(UserObject, id) {
+async function UpdateUser(UserObject, id, req) {
 
-  {
+  let NewData;
+  console.log(UserObject);
+  UserObject.quote = JSON.parse(UserObject.quote);
     try {
-      const NewData = {
-        
-        email: UserObject.email,
-        password: UserObject.password,
-        firstname: UserObject.firstname,
-        lastname: UserObject.lastname,
-        superhero: UserObject.superhero,
-        loggedin: UserObject.loggedin,
-        role: UserObject.role
+      if (req.file) {
+        const url  = req.protocol + '://' + req.get('host');
+         NewData = {
+          
+          email: UserObject.email,
+          password: UserObject.password,
+          firstname: UserObject.firstname,
+          lastname: UserObject.lastname,
+          superhero: UserObject.superhero,
+          loggedin: UserObject.loggedin,
+          Image: url + '/images/' + req.file.filename,
+          quote: UserObject.quote,
+          role: UserObject.role
+        }
+      } else {
+
+     
+         NewData = {
+          
+          email: UserObject.email,
+          password: UserObject.password,
+          firstname: UserObject.firstname,
+          lastname: UserObject.lastname,
+          superhero: UserObject.superhero,
+          loggedin: UserObject.loggedin,
+          Image: UserObject.image,
+          quote: UserObject.quote,
+          role: UserObject.role
+        }
       }
      
       await userSchema.updateOne({_id: id}, NewData);
-      return {updatedUser: NewData, message: 'The user has been updated', success: true};
-    
+      return {updatedUser: NewData, message: 'The user has been updated', success: true};    
     } catch (error) {
-  
       return { message: 'There was a problem connecting the user to the system and updated.', success: false}
-      
     }
   
   }
-}
+
 module.exports = {
   ValidateUser,
   RegisterUser,

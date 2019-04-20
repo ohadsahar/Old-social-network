@@ -33,7 +33,9 @@ export class UserService {
     return this.http.get<{UserObject: User, success: boolean}>(`${backendUrl}users/${id}`);
   }
 
-  UpdateUser(UserObject: User, id: string) {
+  UpdateUser(UserObject: any, id: string) {
+
+
     return this.http.post<{UserObject: User}>(`${backendUrl}users/${id}`, UserObject);
   }
 

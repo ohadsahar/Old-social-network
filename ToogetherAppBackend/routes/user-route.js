@@ -2,14 +2,10 @@ const express = require("express");
 const router =  express.Router();
 const config = require("../config");
 const userUtil = require("../utils/userUtil.util");
-const multer  = require('multer');
-
-
-
+const winston = require("winston")
 const upload = config.ConfigMulter().upload;
 
-
-async function RegisterUser(req,res) {
+async function  RegisterUser(req,res) {
 
     try {
         const validateUserResult = await  userUtil.ValidateUser(req.body);
@@ -78,6 +74,8 @@ async function LoginToSystem(req, res) {
 }
 async function UpdateLoggedUser(req, res) 
 {
+
+
     try {
    
         const UpdateUser = await userUtil.UpdateUserLogStatus(req.params.id, req.body.action);
@@ -135,12 +133,15 @@ async function GetLoggedInUser(req,res) {
 async function UpdateUser(req,res) {
 
     try {
+        
         const validateBeforeUpdate = await userUtil.ValidateUser(req.body);
-        const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id);
+        const updateUser = await userUtil.UpdateUser(validateBeforeUpdate.User, req.params.id, req);
+       
         res.status(200).json({
             UserObject: updateUser.updatedUser
         })
     } catch (error) {
+
         res.status(403).json({
             UserObject: req.body
         })
@@ -151,7 +152,7 @@ async function UpdateUser(req,res) {
 
 router.post('/login', LoginToSystem);
 router.post('/register', upload, RegisterUser);
-router.post('/:id', UpdateUser )
+router.post('/:id',upload, UpdateUser )
 router.get('', FetchAllUsers);
 router.get('/:id', GetLoggedInUser);
 router.put('/:id', UpdateLoggedUser);

@@ -4,19 +4,69 @@
   overflow-x: hidden;
   background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
   font-family: 'Shadows Into Light', cursive !important;
+  height: 100vh;
 }
 
 .wall-style .left-nav {
 
   height: 100vh;
   background-image:linear-gradient(#031D44, #04395E);
-  width: 130px;
+  width: 120px;
   padding: 20px;
   box-shadow: 3px 3px 3px cornflowerblue;
 }
 
+.wall-style .example-full-width {
+  width: 70% !important;
+}
 
+.mat-option img {
 
+  height: 40px !important;
+  width: 40px !important;
+}
+
+.mat-hint {
+  font-family: 'Shadows Into Light', cursive !important;
+  font-size: 16px;
+
+}
+
+.mat-form-field-appearance-legacy .mat-hint {
+
+  color: #FF3F4E;
+
+}
+.space-line {
+
+  height: 10px;
+
+}
+.example-option-img {
+
+  height: 40px !important;
+  width: 40px !important;
+}
+
+.mat-option {
+
+  background-color: #1D3557;
+  font-family: 'Shadows Into Light', cursive;
+  color: white;
+}
+
+.mat-select-value {
+
+  font-family: 'Shadows Into Light', cursive !important;
+  color: white;
+}
+
+.wall-style #edit-placeholder {
+
+  font-family: 'Shadows Into Light', cursive !important;
+  color: rgb(212, 195, 195);
+  font-size: 22px;
+}
 .wall-style .main-page {
 
   padding: 100px;
@@ -64,14 +114,14 @@
 
 #iconImg {
 
-  width: 35px;
-  height: 35px;
+  width: 35px !important;
+  height: 35px !important;
 }
 
 .img-thumbnail {
 
-  width: 200px;
-  height: 200px;
+  width: 200px !important;
+  height: 200px !important;
 
 }
 
