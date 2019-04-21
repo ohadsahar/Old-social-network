@@ -11,7 +11,7 @@ import * as UI from '../../../shared/actions/ui.actions';
 import { ResponseMessagesService } from '../../services/error.service';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
-import { map } from 'rxjs/operators';
+
 
 
 @Component({
@@ -50,7 +50,23 @@ export class WallPageComponent implements OnInit {
       icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
     },
     {
+      name: 'Coming from your friendly neighborhood Spider-Man!',
+      icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
+    },
+    {
+      name: 'With great hotness comes great responsibility.',
+      icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
+    },
+    {
+      name: `Then don't take my stuff`,
+      icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
+    },
+    {
       name: 'I am iron man',
+      icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
+    },
+      {
+      name: `sometimes you gotta Run before you can Walk.`,
       icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
     },
     {
@@ -58,9 +74,31 @@ export class WallPageComponent implements OnInit {
       icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
     },
     {
+      name: 'Leave me alone.',
+      icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
+    },
+    {
+      name: 'HULK SMASH!',
+      icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
+    },
+
+    {
+      name: 'Do not touch me again',
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+    {
+      name: `You have no idea what you're dealing with.`,
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+    {
+      name: ` I must go back to Asgard, but I give you my word. I will return for you.`,
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+
+    {
       name: 'I am groot',
       icon: '../../../../assets/images/icons/groot.jpg'
-    }
+    },
   ];
   constructor(
     private http: HttpClient,

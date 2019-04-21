@@ -20,8 +20,6 @@
             <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm" *ngIf="!(isLoading$ | async)">
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">
-
-
               <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
               </mat-list-item>
 
@@ -60,14 +58,14 @@
               <mat-list-item *ngIf="!(editAble$ | async)">Your collection:</mat-list-item>
 
                     <div class="collection-of-images" *ngIf="!(editAble$ | async)">
-                          <div *ngFor="let image of UserConnected.Images">
-                                <img src="{{image}}" class="img-thumbnail" id="img-collection">
-                            </div>
+                      <div class="row">
+                              <div *ngFor="let image of UserConnected?.Images">
+                                  <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <img src="{{image}}" class="img-thumbnail" id="img-collection">
+                                </div>
+                              </div>
+                              </div>
                           </div>
-
-
-
-
               <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
                 <input matInput type="email" name="email" #email="ngModel" value="{{UserConnected?.email}}" ngModel />
                 <mat-placeholder id="edit-placeholder">{{UserConnected?.email}}</mat-placeholder>
@@ -87,7 +85,7 @@
                 <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
               </mat-form-field>
               <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                  <mat-select [(ngModel)]="selectedValue" name="quote" value="{{UserConnected.quote}}">
+                  <mat-select [(ngModel)]="selectedValue" name="quote" value="{{UserConnected.quote}}" >
                     <mat-option *ngFor="let quote of quotes" [value]="quote">
                      <img src="{{quote.icon}}" class="example-option-img"> {{quote.name}}
                     </mat-option>
@@ -133,7 +131,7 @@
                     <button mat-button color="primary" (click)="upload()">Upload</button>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="!(editAble$ | async)">
+              <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
                 <img src="{{UserConnected?.Image}}" class="img-thumbnail">
                 </div>
               </div>

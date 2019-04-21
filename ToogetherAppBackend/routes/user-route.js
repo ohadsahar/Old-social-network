@@ -165,7 +165,7 @@ async function UpdateUserImages(req,res) {
   
         try {
         let UpdateImagesForUser = await userUtil.UpdateImages(req, req.params.id);
-        console.log(UpdateImagesForUser);
+        
         res.status(200).json({
             Images: UpdateImagesForUser.Images,
             message: UpdateImagesForUser.message,

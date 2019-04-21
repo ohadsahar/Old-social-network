@@ -22,6 +22,11 @@
   width: 70% !important;
 }
 
+#profile-image {
+
+  height: 50%;
+}
+
 .mat-option img {
 
   height: 40px !important;
@@ -61,6 +66,7 @@
 
   font-family: 'Shadows Into Light', cursive !important;
   color: white;
+
 }
 
 .wall-style #edit-placeholder {
@@ -71,19 +77,41 @@
 }
 .wall-style .main-page {
 
-  padding: 38px;
+  padding: 25px;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 .collection-of-images {
 
-  display: inline-flex;
+
+  margin: auto;
+  display: block;
+  justify-content: center;
 
 }
 
 #img-collection {
 
-  width: 100px !important;
-  height: 100px !important;
+  width: 120px !important;
+  height: 109px !important;
+  margin-bottom: 10%;
 }
 .wall-style h2 {
 
@@ -135,7 +163,15 @@
 
   width: 200px !important;
   height: 200px !important;
+  transition: transform .3s;
+  z-index: -1;;
 
+}
+
+.img-thumbnail:hover {
+
+  transform: scale(1.2);
+  z-index: 1;
 }
 
 h3 {
