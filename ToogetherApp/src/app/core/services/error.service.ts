@@ -12,14 +12,14 @@ export class ResponseMessagesService {
   SuccessMessage(message: string, action: string) {
 
       this.snackBar.open(message, action, {
-        duration: 2000,
+        duration: 6000,
       });
 
   }
 
   FailureMessage(message: string, action: string) {
       this.snackBar.open(message, action, {
-        duration: 2000,
+        duration: 6000,
       });
 
   }

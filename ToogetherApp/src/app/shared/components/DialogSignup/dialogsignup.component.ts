@@ -10,18 +10,13 @@ import * as UI from '../../actions/ui.actions';
 import { User } from '../../models/User.model';
 import { ResultUser } from './../../models/Result-user';
 
-
-
-
 export interface Quote {
 
   name: string;
   icon: string;
 
 }
-
 @Component({
-
   // tslint:disable-next-line:component-selector
   selector: 'app-dialogSignup',
   templateUrl: './dialogsignup.component.html',
@@ -31,11 +26,8 @@ export interface Quote {
 
 export class DialogSignUpComponent {
 
-
-
   QuoteCtrl = new FormControl();
   selectedValue: Quote[] ;
-
   quotes: Quote[] = [
     {
       name: 'Your friendly neighborhood spider man',
@@ -55,19 +47,17 @@ export class DialogSignUpComponent {
     }
   ];
   public hide: boolean;
-  public ResultUserObject: ResultUser;
-  private UserObject: User;
+  public resultUserObject: ResultUser;
+  private userObject: User;
   private quoteObject: Quote;
   public imagePreview: string;
   imageFormGroup = new FormGroup({
     image: new FormControl(null, { validators: [Validators.required] })
   });
 
-
-
   constructor(private userService: UserService, private snackBar: MatSnackBar,
               private responseMessageService: ResponseMessagesService,
-              private spinnerService: Ng4LoadingSpinnerService,    private formBuilder: FormBuilder,
+              private spinnerService: Ng4LoadingSpinnerService,private formBuilder: FormBuilder,
               private store: Store<fromRoot.State>) {
     this.hide = true;
 
@@ -97,13 +87,13 @@ export class DialogSignUpComponent {
       userData.append('role', null);
 
       this.userService.RegisterUser(userData).subscribe((response) => {
-        if (response.success) {
-
-            this.ResultUserObject = response;
-            this.openSnackBar(this.ResultUserObject.message, '');
+        if (response.userData.success) {
+            this.responseMessageService.SuccessMessage('Hurray, you signed up successfully!', 'Yay!');
             // form.resetForm();
             this.spinnerService.hide();
             this.store.dispatch(new UI.StopLoading());
+        } else {
+          this.responseMessageService.FailureMessage('Hi buddy, There was a problem during registration, please try again.', 'Sorry');
         }
       },
       (error) => {

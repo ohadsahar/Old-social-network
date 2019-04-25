@@ -1,6 +1,6 @@
+import { User } from './User.model';
 export interface ResultUser {
 
-      UserObject: any;
-      message: string;
+      UserObject: User;
       success: boolean;
 }

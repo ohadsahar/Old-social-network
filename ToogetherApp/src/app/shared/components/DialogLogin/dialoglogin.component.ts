@@ -45,10 +45,11 @@ export class DialogLoginComponent {
       this.Loading();
       this.userService.LoginUser(form.value).subscribe(
         (response) => {
-          if (response.token) {
-            this.id = response.id;
+          console.log(response);
+          if (response.userData.token) {
+            this.id = response.userData.id;
             this.userService
-              .UpdateLoggedIn(response.id, true)
+              .UpdateLoggedIn(response.userData.id, true)
               .subscribe(responseUpdate => {
                 if (responseUpdate.success) {
                   this.Connected = true;

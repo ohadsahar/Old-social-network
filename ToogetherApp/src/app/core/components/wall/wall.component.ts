@@ -1,7 +1,6 @@
-import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgForm, FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -9,6 +8,7 @@ import { Observable } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
 import { ResponseMessagesService } from '../../services/error.service';
+import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
 
@@ -121,11 +121,9 @@ export class WallPageComponent implements OnInit {
     });
 
   }
-
   ngOnInit() {
     this.OnWallComponentStart();
   }
-
   OnWallComponentStart() {
 
     this.Loading();
@@ -134,8 +132,8 @@ export class WallPageComponent implements OnInit {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
         this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
-            this.UserConnected = responseConnected.UserObject;
-            if ((responseConnected.UserObject.loggedin as any) === 'true') {
+            this.UserConnected = responseConnected.userData.UserObject;
+            if ((responseConnected.userData.UserObject.loggedin as any) === 'true') {
               this.router.navigate(['Wall/' + this.id]);
             } else {
               this.router.navigate(['']);
@@ -153,7 +151,6 @@ export class WallPageComponent implements OnInit {
       }
     });
   }
-
   EditUser(form: NgForm) {
 
     if (form.invalid) {
@@ -210,12 +207,11 @@ export class WallPageComponent implements OnInit {
       this.Loading();
       this.counter = 0;
       this.userService.UpdateUser(UserConnectedUpdate, this.id).subscribe((response) => {
+        this.UserConnected = response.userData.UserObject;
 
-          this.UserConnected = response.UserObject;
-
-          this.DisableWall();
-          this.CancelEdit();
-          this.StopLoading();
+        this.DisableWall();
+        this.CancelEdit();
+        this.StopLoading();
         },
         (error) => {
           this.StopLoading();
@@ -254,8 +250,6 @@ export class WallPageComponent implements OnInit {
       }
     );
   }
-
-
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.imageFormGroup.patchValue({ image: file });
@@ -266,35 +260,32 @@ export class WallPageComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
-
   upload() {
-
-
     const formData: any = new FormData();
     const files: Array<File> = this.filesToUpload;
-    let i
+    let i;
     // tslint:disable-next-line:prefer-for-of
     for ( i = 0; i < files.length; i++) {
         // tslint:disable-next-line:no-string-literal
         formData.append('uploads[]', files[i], files[i]['name']);
-        if (i >= files.length)
-        {
+        if (i >= files.length) {
           this.Loading();
         }
     }
-
     this.userService.UpdateUserCollectionImages(formData, this.id).subscribe(response => {
-      this.UserConnected.Images = response.Images;
+      if (response.userData.success) {
+      this.UserConnected.Images = response.userData.Images;
+      this.responseMessageService.SuccessMessage('Your album has been successfully updated.', 'Yay!');
+      } else {
+        this.responseMessageService.FailureMessage('There was a problem updating your album, please try again.', 'Sorry');
+      }
       this.StopLoading();
-
     });
 }
-
 fileChangeEvent(fileInput: any) {
     this.filesToUpload =  fileInput.target.files as Array<File>;
 
 }
-
   ShowProfile() {
 
     this.DisableWall();
@@ -302,7 +293,6 @@ fileChangeEvent(fileInput: any) {
   }
   ShowWall() {
     this.EnableWall();
-
   }
   AfterError() {
     this.store.dispatch(new UI.HideTheWall());
@@ -313,8 +303,6 @@ fileChangeEvent(fileInput: any) {
     this.spinnerService.hide();
   }
   Loading() {
-
-
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);

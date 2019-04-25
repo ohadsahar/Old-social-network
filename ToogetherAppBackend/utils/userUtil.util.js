@@ -1,44 +1,8 @@
-const express = require("express");
-const validator = require("validator");
-const bycrypt = require("bcryptjs");
+
 const userSchema = require("../models/UserSchema");
-const jwt = require("jsonwebtoken");
-
-async function ValidateUser(UserObject) {
-
-  if (
-    validator.isEmail(UserObject.email) &&
-    validator.isLength(UserObject.password, 8) &&
-    validator.isLength(UserObject.firstname, 2) &&
-    validator.isLength(UserObject.lastname, 2) &&
-    validator.isLength(UserObject.superhero, 4)
-  ) {
-    
-    UserObject.email = UserObject.email.toLowerCase();
-    UserObject.password = await bycrypt.hash(UserObject.password, 10);
-
-    return {
-      message:
-        "All data has been successfully verified, you will now be logged in",
-      success: true,
-      User: UserObject
-    };
-  } else {
-    return {
-      message:
-        "There was a problem verifying the data you entered into the system, please try again",
-      success: false,
-      User: UserObject
-    };
-  }
-}
 
 async function RegisterUser(UserObject, req) {
-  
-  let UserToSave;
-
-  try {
-    
+    let UserToSave;
     const url  = req.protocol + '://' + req.get('host');
     UserObject.quote = JSON.parse(UserObject.quote);
     UserToSave = new userSchema({
@@ -53,127 +17,48 @@ async function RegisterUser(UserObject, req) {
       Images: null,
       role: "admin"
     });
-
     await UserToSave.save();
-    
-    return {
+    const message = {
       UserSaved: UserToSave,
-      message:
-        "The details have been verified and saved in the system, you are welcome to login.",
       success: true
-    };
-  } catch (error) {
-
-    return {
-      UserSaved: UserToSave,
-      message:
-        "The details have been verified but we were unable to register you, please try again later.",
-      success: false
-    };
-  }
-}
-
+    }
+    return {message: message} 
+  } 
 async function GetAllUsers() {
-  try {
     const FetchAllUsers = await userSchema.find();
-    return {
+    const message = {
       Users: FetchAllUsers,
-      message: "All users has been fetched successfully",
-      success: true
-    };
-  } catch (error) {
-    return {
-      Users: FetchAllUsers,
-      message: "There was a problem trying to fetch all users",
-      success: false
-    };
-  }
-}
-
-async function ValidateUserInput(UserObject) {
-  if (
-    validator.isEmail(UserObject.email) &&
-    validator.isLength(UserObject.password, 8)
-  ) {
-    UserObject.email = UserObject.email.toLowerCase();
-
-    return {
-      User: UserObject,
-      message: "All data has been successfully verified.",
-      success: true
-    };
-  } else {
-    return {
-      User: UserObject,
-      message: "There was a problem trying to login, please try again.",
-      success: true
-    };
-  }
-}
-
-async function LoginValidate(UserObject) {
-  try {
-   
-    const FetchedUser = await userSchema.findOne({ email: UserObject.email });
-    if (bycrypt.compare(UserObject.password, FetchedUser.password)) {
-      const token = jwt.sign(
-        { email: FetchedUser.email, id: FetchedUser._id },
-        "SECRET_SHOULD_BE_SMALLER"
-      );
-      return {User: FetchedUser,id: FetchedUser._id, token: token, message: 'Login successful', success: true}
+      success: true,
     }
-  } catch (error) {
-      return {message: 'Login failed, please try again in a few minutes.', success: false}
-
-  }
-
-}
-
-async function UpdateUserLogStatus(id, action) 
-{
-  try {
+    return { message: message };
+  } 
+async function UpdateUserLogStatus(id, action) {
     const ChangeLog = {
-
       loggedin: action,
-    
     }
-   
     await userSchema.updateOne({_id: id}, ChangeLog);
-    return { message: 'The user is now logged on', success: true};
-  
-  } catch (error) {
-
-    return { message: 'There was a problem connecting the user to the system and updated.', success: false}
-    
-  }
-
+    const message = {
+      success: true
+    }
+    return {message: message }
 }
-
 async function GetConnectedUser(id) {
-
-  try {
       const UserObject = await userSchema.findById({_id: id}).then(documents => { 
         return documents;
       })
-      return {UserData: UserObject, success: true, message:'User successfully imported'};
-  } catch (error) {
-    return {success: false, message:'There was a problem importing the user from the server'};
-  }
-
-}
-
+      const message = {
+          UserObject: UserObject,
+          success: true
+      }
+      return {message: message};
+  } 
 async function UpdateUser(UserObject, id, req) {
-
   let NewData;
   UserObject.quote = JSON.parse(UserObject.quote);
   UserObject.Images = JSON.parse(UserObject.Images);
- 
-    try {
-
       if (req.file) {
         const url  = req.protocol + '://' + req.get('host');
          NewData = {
-          
           email: UserObject.email,
           password: UserObject.password,
           firstname: UserObject.firstname,
@@ -186,10 +71,7 @@ async function UpdateUser(UserObject, id, req) {
           role: UserObject.role
         }
       } else {
-
-     
-         NewData = {
-          
+         NewData = { 
           email: UserObject.email,
           password: UserObject.password,
           firstname: UserObject.firstname,
@@ -202,23 +84,16 @@ async function UpdateUser(UserObject, id, req) {
           role: UserObject.role
         }
       }
-
       await userSchema.updateOne({_id: id}, NewData);
-      return {updatedUser: NewData, message: 'The user has been updated', success: true};    
-    } catch (error) {
-      
-      return { message: 'There was a problem connecting the user to the system and updated.', success: false}
-    }
-  
-  }
-
-
-  async function UpdateImages(req, id) {
-
+      const message = {
+        UserObject: NewData,
+        success: true
+      }
+      return {message: message};    
+    } 
+async function UpdateCollection(req, id) {
     const ArrayImg = [];
     let NewData;
-
-    try {
       if (req.files) {
         const url  = req.protocol + '://' + req.get('host');
         req.files.forEach(element => {
@@ -227,24 +102,26 @@ async function UpdateUser(UserObject, id, req) {
         NewData = {
           Images: ArrayImg,
         }
+        await userSchema.updateOne({_id: id}, NewData);
+        const message = {
+          Images: ArrayImg,
+          success: true
+        }
+        return { message: message };
+      }  else {
+        const message = {
+          Images: ArrayImg,
+          success: false
+        }
+        return { message: message };
       }
-      
-      await userSchema.updateOne({_id: id}, NewData);
-      return {Images: ArrayImg, message: 'Images added', success: true};
-    } catch (error) {
-        return {message: 'Problem', success: false};
-    }
-   
-
-  }
+    } 
+  
 module.exports = {
-  ValidateUser,
   RegisterUser,
   GetAllUsers,
-  ValidateUserInput,
-  LoginValidate,
   UpdateUserLogStatus,
   GetConnectedUser,
   UpdateUser,
-  UpdateImages
+  UpdateCollection
 };
