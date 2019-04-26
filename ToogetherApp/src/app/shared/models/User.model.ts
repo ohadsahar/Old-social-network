@@ -11,6 +11,8 @@ export interface User {
     name: string;
     icon: string;
   }];
-  Images: any;
+  Images: [{
+    imagename: File;
+  }];
   role: string;
 }

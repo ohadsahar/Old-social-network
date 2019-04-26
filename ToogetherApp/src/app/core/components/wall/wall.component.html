@@ -1,7 +1,7 @@
 <ng4-loading-spinner *ngIf="isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
 <div class="wall-style">
   <div class="row">
-    <div class="col-sm-2 col-md-2 col-lg-2 left-nav">
+    <div class="col-sm-1 col-md-1 col-lg-1 left-nav">
       <h5 (click)="ShowProfile()">Your profile</h5>
       <h5 (click)="ShowWall()">Wall</h5>
       <h5 (click)="Disconnect()">Disconnect </h5>
@@ -56,7 +56,7 @@
                     <div class="row">
                       <div *ngFor="let image of UserConnected?.Images">
                         <div class="col-sm-12 col-md-12 col-lg-12">
-                          <img src="{{image}}" class="img-thumbnail" id="img-collection">
+                          <img src="{{image.imagename}}" class="img-thumbnail" id="img-collection">
                         </div>
                       </div>
                       <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage"
@@ -95,12 +95,13 @@
                     </div>
                     <mat-hint>Your quote</mat-hint>
                   </mat-form-field>
+                  <button class="edit-button" mat-raised-button *ngIf="editAble$ | async">Submit</button>
                 </div>
+
                 <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="editAble$ | async">
                   <div [formGroup]="imageFormGroup" class="image-upload">
                     <button mat-stroked-button id="image-button" type="button" (click)="filePicker.click()">
                       <h4>Upload picture</h4>
-                      <mat-divider id="someSpace"></mat-divider>
                     </button>
                     <input type="file" name="image" #filePicker (change)="onImagePicked($event)"
                       style="visibility: hidden" />
@@ -112,32 +113,33 @@
                     </div>
                     <h1 *ngIf="imagePreview !== '' && imagePreview">New picture:</h1>
                   </div>
-                  <mat-divider></mat-divider>
+
                   <div class="collection-edit-images">
-                    <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage" [pageSizeOptions]="pageSizeOptions"
-                      (page)="onChangePage($event)">
-                    </mat-paginator>
-                    <button mat-stroked-button id="image-button-two" type="button" (click)="filePickerTwo.click()">
-                      <h4>Upload your collection</h4>
-                      <div class="row">
-                        <div *ngFor="let image of UserConnected.Images">
-                          <div class="col-sm-12">
-                            <img [src]="image" class="img-thumbnail" id="img-collection-info" />
+                      <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage" [pageSizeOptions]="pageSizeOptions"
+                        (page)="onChangePage($event)">
+                      </mat-paginator>
+                      <button mat-stroked-button id="image-button-two" type="button" (click)="filePickerTwo.click()">
+                        <h4>Upload your collection</h4>
+                        <div class="row">
+                          <div *ngFor="let image of UserConnected.Images">
+                            <div class="col-sm-12">
+                              <img [src]="image.imagename" class="img-thumbnail" id="img-collection-info" />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <mat-divider id="someSpace"></mat-divider>
-                    </button>
-                    <input id="cin" name="cin" type="file" #filePickerTwo (change)="fileChangeEvent($event)"
-                      placeholder="Upload a file..." style="visibility: hidden" multiple />
-                    <button mat-button color="primary" (click)="upload()">Upload</button>
-                  </div>
+
+                      </button>
+                      <input id="cin" name="cin" type="file" #filePickerTwo (change)="fileChangeEvent($event)"
+                        placeholder="Upload a file..." style="visibility: hidden" multiple />
+                      <button mat-button color="primary" (click)="upload()">Upload</button>
+                    </div>
+
                 </div>
                 <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
-                  <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                  <img src="{{UserConnected?.Image}}" class="img-thumbnail profile-image">
                 </div>
+
               </div>
-              <button class="edit-button" mat-raised-button *ngIf="editAble$ | async">Submit</button>
             </form>
           </mat-list>
           <div class="footer" *ngIf="!(editAble$ | async)">

@@ -10,21 +10,13 @@
 
 .wall-style .left-nav {
 
-
   background-image:linear-gradient(#031D44, #04395E);
-  width: 120px;
-  padding: 20px;
   box-shadow: 3px 3px 3px cornflowerblue;
   height: 100vh !important;;
 }
 
 .wall-style .example-full-width {
   width: 70% !important;
-}
-
-#profile-image {
-
-  height: 50%;
 }
 
 .mat-option img {
@@ -70,7 +62,7 @@
 }
 .collection-edit-images {
 
-  margin-top: 80%;
+  margin-top: 50%;
   display: inline-grid;
 }
 
@@ -149,7 +141,7 @@
 .wall-style h5 {
 
   font-family: 'Shadows Into Light', cursive;
-  font-size: 23px;
+  font-size: 19px;
   text-align: center;
   padding-top: 30px;
   color: white;
@@ -280,6 +272,7 @@ h4 {
 .wall-style .edit-button {
 
   display: -webkit-box;
+  margin-top: 5%;
 }
 .wall-style .placeholder {
 

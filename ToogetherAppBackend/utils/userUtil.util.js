@@ -55,6 +55,7 @@ async function GetConnectedUser(id) {
       return {message: message};
 } 
 async function getImagesOnly(req) {
+
   const pageSize =+ req.query.pagesize;
   const currentPage = req.query.page;
   let imageQuery;
@@ -113,38 +114,31 @@ async function UpdateUser(UserObject, id, req) {
       return {message: message};    
 } 
 async function UpdateCollection(req, id) {
-    const ArrayImg = [];
-    let NewData;
+
+    let ArrayImg = [];
+    let finalArrayOfImages = [];
+    const imageQuery = await userSchema.findById({_id: id}).select("Images.imagename").where("Images");
       if (req.files) {
         const url  = req.protocol + '://' + req.get('host');
         req.files.forEach(element => {
-          ArrayImg.push(url + '/images/' + element.filename)
+          ArrayImg.push({imagename: url + '/images/' + element.filename})
         });
-        let imagesAfterUpdate = await userSchema.findById({_id: id}).select("Images");
-        if (imagesAfterUpdate.Images) {
-        ArrayImg.push(imagesAfterUpdate.Images);
-        NewData = {
-          Images: ArrayImg,
-        }
-      }
-        if (imagesAfterUpdate.Images)
-        {
-        await userSchema.findByIdAndUpdate({_id: id}, {$addToSet:{Images:ArrayImg}}, { new: true });
-        imagesAfterUpdate = await userSchema.findById({_id: id});
-        const message = {
-          Images: imagesAfterUpdate.Images,
-          success: true
-        }
-        return { message: message };
+        if (imageQuery) {
+          finalArrayOfImages = ArrayImg.concat(ArrayImg, imageQuery);          
+            await userSchema.findByIdAndUpdate({_id: id}, {$addToSet:{Images:finalArrayOfImages}}, { new: true, upsert: true });
+            const message = {
+              Images: ArrayImg,
+              success: true
+            }
+            return { message: message };
       } else {
-        await userSchema.findByIdAndUpdate({_id: id}, {Images: ArrayImg});
-        imagesAfterUpdate = await userSchema.findById({_id: id});
-        const message = {
-          Images: imagesAfterUpdate.Images,
-          success: true
-        }
-        return { message: message };
-      }
+            await userSchema.findByIdAndUpdate({_id: id}, {Images: ArrayImg});
+            const message = {
+              Images: ArrayImg,
+              success: true
+            }
+            return { message: message };
+           }
       } 
 } 
   
