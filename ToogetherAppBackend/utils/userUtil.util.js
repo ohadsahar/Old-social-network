@@ -43,19 +43,42 @@ async function UpdateUserLogStatus(id, action) {
     return {message: message }
 }
 async function GetConnectedUser(id) {
-      const UserObject = await userSchema.findById({_id: id}).then(documents => { 
-        return documents;
-      })
+     
+
+      const userObject = await userSchema.findById({_id: id}).select("email password firstname lastname superhero loggedin Image quote role");
+      const allImages = await userSchema.findById({_id: id}).select("Images");
+     
       const message = {
-          UserObject: UserObject,
+          UserObject: userObject,
+          allImages: allImages,
           success: true
       }
       return {message: message};
   } 
+
+async function getImagesOnly(req) {
+  const pageSize =+ req.query.pagesize;
+  const currentPage = req.query.page;
+  let imageQuery;
+  if (currentPage && pageSize) {
+    imageQuery = await userSchema.findById({_id: req.params.id}).select("Images").where('Images')
+    .slice((pageSize * (currentPage -1)), pageSize);
+    const message = {
+      userImage: imageQuery.Images,
+      success: true
+    }
+    return {message: message}
+  }
+}
 async function UpdateUser(UserObject, id, req) {
   let NewData;
   UserObject.quote = JSON.parse(UserObject.quote);
-  UserObject.Images = JSON.parse(UserObject.Images);
+  if (UserObject.Images)
+  {
+     UserObject.Images = JSON.parse(UserObject.Images);
+  } else {
+    UserObject.Images = null;
+  }
       if (req.file) {
         const url  = req.protocol + '://' + req.get('host');
          NewData = {
@@ -95,6 +118,7 @@ async function UpdateCollection(req, id) {
     const ArrayImg = [];
     let NewData;
       if (req.files) {
+
         const url  = req.protocol + '://' + req.get('host');
         req.files.forEach(element => {
           ArrayImg.push(url + '/images/' + element.filename)
@@ -102,9 +126,18 @@ async function UpdateCollection(req, id) {
         NewData = {
           Images: ArrayImg,
         }
-        await userSchema.updateOne({_id: id}, NewData);
+        let imagesAfterUpdate = await userSchema.findById({_id: id});
+        if (imagesAfterUpdate.Images)
+        {
+   
+        await userSchema.findByIdAndUpdate({_id: id}, {$addToSet:{Images:NewData.Images}});
+        } else {
+          await userSchema.findByIdAndUpdate({_id: id}, {Images: NewData.Images});
+          
+        }
+         imagesAfterUpdate = await userSchema.findById({_id: id});
         const message = {
-          Images: ArrayImg,
+          Images: imagesAfterUpdate.Images,
           success: true
         }
         return { message: message };
@@ -123,5 +156,6 @@ module.exports = {
   UpdateUserLogStatus,
   GetConnectedUser,
   UpdateUser,
-  UpdateCollection
+  UpdateCollection,
+  getImagesOnly
 };

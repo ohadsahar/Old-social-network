@@ -38,11 +38,13 @@ async function FetchAllUsers(req, res) {
 }
 async function LoginToSystem(req, res) {
     try {
+        
         const ValidateLoginInputAndThenLogin = await validateUtil.ValidateLoginInput(req.body);
         res.status(200).json({
             userData: ValidateLoginInputAndThenLogin.message
         })
     } catch (error) {
+        console.log(error);
         res.status(400).json({
             userData: ValidateLoginInputAndThenLogin.message
         })
@@ -65,16 +67,31 @@ async function UpdateLoggedUser(req, res) {
 }
 async function GetLoggedInUser(req,res) {
     try {
-        const ConnectedUser = await userUtil.GetConnectedUser(req.params.id);
+        const ConnectedUser = await userUtil.GetConnectedUser(req.params.id, req);
         res.status(200).json({
             userData: ConnectedUser.message
         });
     } catch (error) {
+        console.log(error);
         res.status(400).json({
             userData: ConnectedUser.message
         })
     } finally {
 
+    }
+}
+async function GetImagesWithPaginator(req,res) {
+
+    try {
+        const imagesWithPaginator = await userUtil.getImagesOnly(req);
+        res.status(200).json({
+            userData: imagesWithPaginator.message
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            userData: imagesWithPaginator.message
+        })
     }
 }
 async function UpdateUser(req,res) {
@@ -84,6 +101,7 @@ async function UpdateUser(req,res) {
             userData: validateUserInputAndThenUpdateUser.message,
         })
     } catch (error) {
+        console.log(error);
         res.status(400).json({
             userData: validateUserInputAndThenUpdateUser.message,
         })
@@ -91,13 +109,16 @@ async function UpdateUser(req,res) {
     }    
 }
 async function UpdateImagesCollectionOfUser(req,res) {
+
+    let NewCollectionOfImages
         try {
-        let NewCollectionOfImages = await userUtil.UpdateCollection(req, req.params.id);
+        NewCollectionOfImages = await userUtil.UpdateCollection(req, req.params.id);
         
         res.status(200).json({
             userData: NewCollectionOfImages.message
         })
     } catch (error) {
+        console.log(error);
         res.status(400).json({
             userData: NewCollectionOfImages.message
         })
@@ -111,6 +132,7 @@ router.post('/register', upload, RegisterUser);
 router.post('/:id',upload, UpdateUser )
 router.post('/images/:id', uploadMulti, UpdateImagesCollectionOfUser);
 router.get('', FetchAllUsers);
+router.get('/images/:id',GetImagesWithPaginator);
 router.get('/:id', GetLoggedInUser);
 router.put('/:id', UpdateLoggedUser);
 

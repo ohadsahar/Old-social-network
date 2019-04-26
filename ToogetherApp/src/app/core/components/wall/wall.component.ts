@@ -11,6 +11,7 @@ import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import { PageEvent } from '@angular/material';
 
 
 
@@ -26,6 +27,10 @@ export class WallPageComponent implements OnInit {
   private counter: number;
   public hide: boolean;
   public imagePreview: string;
+  public totalImages: number;
+  public pageSizeOptions: any;
+  public imagesPerPage: number;
+  public currentPage: number;
   public isLoading$: Observable<boolean>;
   public profileAble$: Observable<boolean>;
   public wallAble$: Observable<boolean>;
@@ -110,6 +115,9 @@ export class WallPageComponent implements OnInit {
     private store: Store<fromRoot.State>,
     private formBuilder: FormBuilder
   ) {
+    this.currentPage = 1;
+    this.pageSizeOptions = [3, 5, 7];
+    this.imagesPerPage = 3;
     this.hide = true;
     this.counter = 0;
     this.imageFormGroup = this.formBuilder.group({
@@ -133,12 +141,16 @@ export class WallPageComponent implements OnInit {
         this.id = paramMap.get('id');
         this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
             this.UserConnected = responseConnected.userData.UserObject;
+            this.totalImages = responseConnected.userData.allImages.Images.length;
             if ((responseConnected.userData.UserObject.loggedin as any) === 'true') {
               this.router.navigate(['Wall/' + this.id]);
             } else {
               this.router.navigate(['']);
             }
-            this.StopLoading();
+            this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
+              this.UserConnected.Images = response.userData.userImage;
+              this.StopLoading();
+          })
           },
           (error) => {
             this.responseMessageService.FailureMessage(
@@ -150,6 +162,14 @@ export class WallPageComponent implements OnInit {
         );
       }
     });
+  }
+  onChangePage(pageData: PageEvent) {
+
+    this.currentPage = pageData.pageIndex + 1;
+    this.imagesPerPage = pageData.pageSize;
+    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
+        this.UserConnected.Images = response.userData.userImage;
+    })
   }
   EditUser(form: NgForm) {
 
@@ -268,6 +288,7 @@ export class WallPageComponent implements OnInit {
     for ( i = 0; i < files.length; i++) {
         // tslint:disable-next-line:no-string-literal
         formData.append('uploads[]', files[i], files[i]['name']);
+
         if (i >= files.length) {
           this.Loading();
         }

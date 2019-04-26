@@ -16,7 +16,8 @@ import {
   MatListModule,
   MatAutocompleteModule,
   MatSelectModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -53,6 +54,7 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatInputModule,
     MatAutocompleteModule,
     MatSelectModule,
+    MatPaginatorModule,
     Ng4LoadingSpinnerModule.forRoot(),
     StoreModule.forRoot(Reducers)
   ],

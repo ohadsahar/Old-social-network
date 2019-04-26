@@ -25,7 +25,7 @@ function ConfigMulterMultiImages () {
     }
   });
 
-  const multerStorage = multer({ storage: storage}).array("uploads[]", 12);
+  const multerStorage = multer({ storage: storage}).array("uploads[]", 100);
 
   return {upload: multerStorage};
 

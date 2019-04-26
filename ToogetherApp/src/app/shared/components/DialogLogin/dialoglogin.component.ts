@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -28,7 +27,7 @@ export class DialogLoginComponent {
   public id: string;
   public data: UserLogin;
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar, private router: Router,
+  constructor(private userService: UserService, private router: Router,
               private responseMessageService: ResponseMessagesService,
               private store: Store<fromRoot.State>, private spinnerService: Ng4LoadingSpinnerService) {
     this.hide = true;
@@ -36,7 +35,6 @@ export class DialogLoginComponent {
   }
 
   DoneLogin(form: NgForm) {
-
     this.data = {email: form.value.email, password: form.value.password};
     if (form.invalid) {
       return;
@@ -45,15 +43,14 @@ export class DialogLoginComponent {
       this.Loading();
       this.userService.LoginUser(form.value).subscribe(
         (response) => {
-          console.log(response);
           if (response.userData.token) {
             this.id = response.userData.id;
             this.userService
               .UpdateLoggedIn(response.userData.id, true)
               .subscribe(responseUpdate => {
-                if (responseUpdate.success) {
+                if (responseUpdate) {
                   this.Connected = true;
-                  this.openSnackBar('You have successfully logged in', '');
+                  this.responseMessageService.SuccessMessage('You have successfully logged in', 'yay');
                   this.router.navigate(['Wall/' + this.id]);
                 }
               });
@@ -67,13 +64,6 @@ export class DialogLoginComponent {
       );
     }
   }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3000
-    });
-  }
-
 
   Loading() {
 

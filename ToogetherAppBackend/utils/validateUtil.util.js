@@ -59,7 +59,7 @@ async function ValidateLogin(userObject) {
       if (bycrypt.compare(userObject.password, fetchedUser.password)) {
         const token = jwt.sign(
           { email: fetchedUser.email, id: fetchedUser._id },
-          "SECRET_SHOULD_BE_SMALLER"
+          "OHAD_SAHAR_SERIAL_KEY_NEVER_GONNA_GUESS_IT"
         );
         const message = {
             User: fetchedUser,

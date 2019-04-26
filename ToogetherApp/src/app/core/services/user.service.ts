@@ -20,7 +20,14 @@ export class UserService {
     return this.http.post<{userData: LoggedInData}>(`${backendUrl}users/login`, UserObject);
   }
   GetConnectedUser(id: string) {
-    return this.http.get<{userData: ResultUser}>(`${backendUrl}users/${id}`);
+    return this.http.get<{userData: any}>(`${backendUrl}users/${id}`);
+  }
+
+  GetImagesViaPaginator(postsPerPage: number, currentPage: number, id: string)
+  {
+    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+    return this.http.get<{userData: any}>(`${backendUrl}users/images/${id}` +queryParams);
+
   }
   UpdateLoggedIn(id: string, action: boolean) {
     const Action = {action};

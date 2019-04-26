@@ -68,7 +68,33 @@
   color: white;
 
 }
+.collection-edit-images {
 
+  margin-top: 80%;
+  display: inline-grid;
+}
+
+.image-upload .mat-button.mat-accent {
+  margin-left: 5%;
+  font-size: 20px;
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.collection-edit-images .mat-button.mat-primary {
+
+  font-size: 20px;
+  font-family: 'Shadows Into Light', cursive;
+  color:white;
+
+}
+.title-image {
+
+  display: inline;
+}
+.old-new-images {
+
+  display: -webkit-box;
+}
 .wall-style #edit-placeholder {
 
   font-family: 'Shadows Into Light', cursive !important;
@@ -130,6 +156,17 @@
   cursor: pointer;
 }
 
+#old-image {
+
+  margin-left: 10%;
+}
+
+.wall-style h1 {
+
+  font-size: 14px;
+  color: white;
+}
+
 .wall-style .mat-list-item   {
 
   font-family: 'Shadows Into Light', cursive;
@@ -150,6 +187,11 @@
 .image-upload {
 
   height: 0px;;
+}
+#img-collection-info {
+
+  width: 50px !important;
+  height: 50px !important;
 }
 
 
