@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -11,9 +11,6 @@ import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
-import { PageEvent } from '@angular/material';
-
-
 
 @Component({
   selector: 'app-wall-page',
@@ -106,7 +103,6 @@ export class WallPageComponent implements OnInit {
     },
   ];
   constructor(
-    private http: HttpClient,
     private route: ActivatedRoute,
     private userService: UserService,
     private router: Router,
@@ -123,11 +119,9 @@ export class WallPageComponent implements OnInit {
     this.imageFormGroup = this.formBuilder.group({
       image: ''
     });
-
     this.imageFormArray = this.formBuilder.group({
       image: ''
     });
-
   }
   ngOnInit() {
     this.OnWallComponentStart();
@@ -141,7 +135,10 @@ export class WallPageComponent implements OnInit {
         this.id = paramMap.get('id');
         this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
             this.UserConnected = responseConnected.userData.UserObject;
+            if (responseConnected.userData.allImages.Images)
+            {
             this.totalImages = responseConnected.userData.allImages.Images.length;
+            }
             if ((responseConnected.userData.UserObject.loggedin as any) === 'true') {
               this.router.navigate(['Wall/' + this.id]);
             } else {
@@ -288,7 +285,6 @@ export class WallPageComponent implements OnInit {
     for ( i = 0; i < files.length; i++) {
         // tslint:disable-next-line:no-string-literal
         formData.append('uploads[]', files[i], files[i]['name']);
-
         if (i >= files.length) {
           this.Loading();
         }
@@ -296,6 +292,7 @@ export class WallPageComponent implements OnInit {
     this.userService.UpdateUserCollectionImages(formData, this.id).subscribe(response => {
       if (response.userData.success) {
       this.UserConnected.Images = response.userData.Images;
+      this.totalImages = response.userData.Images.length;
       this.responseMessageService.SuccessMessage('Your album has been successfully updated.', 'Yay!');
       } else {
         this.responseMessageService.FailureMessage('There was a problem updating your album, please try again.', 'Sorry');
@@ -303,7 +300,7 @@ export class WallPageComponent implements OnInit {
       this.StopLoading();
     });
 }
-fileChangeEvent(fileInput: any) {
+  fileChangeEvent(fileInput: any) {
     this.filesToUpload =  fileInput.target.files as Array<File>;
 
 }

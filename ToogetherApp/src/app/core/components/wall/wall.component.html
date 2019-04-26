@@ -1,7 +1,6 @@
-
 <ng4-loading-spinner *ngIf="isLoading$ | async" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
-<div class="wall-style" >
-  <div class="row" >
+<div class="wall-style">
+  <div class="row">
     <div class="col-sm-2 col-md-2 col-lg-2 left-nav">
       <h5 (click)="ShowProfile()">Your profile</h5>
       <h5 (click)="ShowWall()">Wall</h5>
@@ -16,149 +15,126 @@
         <div *ngIf="(profileAble$ | async)">
           <mat-list>
             <i class="far fa-edit" (click)="Edit()"></i>
-
             <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm" *ngIf="!(isLoading$ | async)">
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">
-              <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
-              </mat-list-item>
-
-              <div *ngIf="editAble$ | async" style="margin-top: 1%"></div>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                <input matInput type="text" name="firstname" minlength="2" #firstname="ngModel"
-                  value="{{UserConnected?.firstname}}" ngModel />
-                <mat-placeholder id="edit-placeholder"> {{UserConnected?.firstname}}</mat-placeholder>
-                <mat-hint>Your firstname</mat-hint>
-                <mat-error *ngIf="firstname?.invalid">Your firstname is not in the right format</mat-error>
-              </mat-form-field>
-              <div class="space-line" *ngIf="editAble$ | async"></div>
-              <mat-list-item *ngIf="!(editAble$ | async)">Your Lastname: {{ UserConnected?.lastname }}
-              </mat-list-item>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                <input matInput type="text" name="lastname" #lastname="ngModel" ngModel
-                  value="{{UserConnected?.lastname}}" minlength="2" />
-                <mat-placeholder id="edit-placeholder">{{UserConnected?.lastname}}</mat-placeholder>
-                <mat-hint>Your lastname</mat-hint>
-                <mat-error *ngIf="lastname?.invalid">Your lastname is not in the right format</mat-error>
-              </mat-form-field>
-              <div class="space-line" *ngIf="editAble$ | async"></div>
-              <mat-list-item *ngIf="!(editAble$ | async)">Your Superhero: {{ UserConnected?.superhero }}
-              </mat-list-item>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                <input matInput type="text" name="superhero" #superhero="ngModel" ngModel
-                  value="{{UserConnected?.superhero}}" minlength="1" />
-                <mat-placeholder id="edit-placeholder"> {{UserConnected?.superhero}}</mat-placeholder>
-                <mat-hint>Your superhero</mat-hint>
-                <mat-error *ngIf="superhero?.invalid">Your superhero is not in the right format</mat-error>
-              </mat-form-field>
-              <div class="space-line" *ngIf="editAble$ | async"></div>
-              <mat-list-item *ngIf="!(editAble$ | async)">Your Email: {{ UserConnected?.email }}
-              </mat-list-item>
-
-              <mat-list-item *ngIf="!(editAble$ | async)">Your collection:</mat-list-item>
-
-                    <div class="collection-of-images" *ngIf="!(editAble$ | async)">
-                      <div class="row">
-                              <div *ngFor="let image of UserConnected?.Images">
-                                  <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <img src="{{image}}" class="img-thumbnail" id="img-collection">
-                                </div>
-                              </div>
-                              <mat-paginator [length]="totalImages"
-                              [pageSize]="imagesPerPage"  [pageSizeOptions]="pageSizeOptions"
-                              (page)="onChangePage($event)">
-                              </mat-paginator>
-                              </div>
-                          </div>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                <input matInput type="email" name="email" #email="ngModel" value="{{UserConnected?.email}}" ngModel />
-                <mat-placeholder id="edit-placeholder">{{UserConnected?.email}}</mat-placeholder>
-                <mat-hint>Your email</mat-hint>
-                <mat-error *ngIf="email?.invalid">Your email is not in the right format</mat-error>
-              </mat-form-field>
-              <div class="space-line" *ngIf="editAble$ | async"></div>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                <input matInput minlength="8" name="password" #password="ngModel" value="{{UserConnected?.password}}"
-                  ngModel [type]="hide ? 'password' : 'text'" />
-                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="hide">
-                  <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-                </button>
-                <mat-placeholder id="edit-placeholder"> {{UserConnected?.password}}</mat-placeholder>
-                <mat-hint>Your password</mat-hint>
-                <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
-              </mat-form-field>
-              <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
-                  <mat-select [(ngModel)]="selectedValue" name="quote" value="{{UserConnected.quote}}" >
-                    <mat-option *ngFor="let quote of quotes" [value]="quote">
-                     <img src="{{quote.icon}}" class="example-option-img"> {{quote.name}}
-                    </mat-option>
-                  </mat-select>
-                  <div *ngFor="let q of UserConnected.quote">
-                    <mat-placeholder id="edit-placeholder">   <img src="{{q?.icon}}" id="iconImg"> {{q?.name}}</mat-placeholder>
-                  </div>
-
-                  <mat-hint>Your quote</mat-hint>
-                </mat-form-field>
-            </div>
-
-          <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="editAble$ | async">
-              <div [formGroup]="imageFormGroup" class="image-upload" >
-                  <button
-                  mat-stroked-button
-                  id="image-button"
-                  type="button"
-                  (click)="filePicker.click()">
-                  <h4>Upload picture</h4>
-                  <mat-divider id="someSpace"></mat-divider>
-                </button>
-                <input
-                  type="file"
-                  name="image"
-                  #filePicker
-                  (change)="onImagePicked($event)"
-                  style="visibility: hidden"/>
-                <div class="old-new-images">
-               <div *ngIf="imagePreview !== '' && imagePreview">
-                      <img [src]="imagePreview" class="img-thumbnail"/>
-                  </div>
-                      <img src="{{UserConnected?.Image}}" class="img-thumbnail" id="old-image">
-                </div>
-                <h1 *ngIf="imagePreview !== '' && imagePreview">New picture:</h1>
-              </div>
-                <mat-divider></mat-divider>
-
-                <div class="collection-edit-images">
-                    <mat-paginator [length]="totalImages"
-                    [pageSize]="imagesPerPage"  [pageSizeOptions]="pageSizeOptions"
-                    (page)="onChangePage($event)">
-                    </mat-paginator>
-                    <button
-                    mat-stroked-button
-                    id="image-button-two"
-                    type="button"
-                    (click)="filePickerTwo.click()">
-                    <h4>Upload your collection</h4>
+                  <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
+                  </mat-list-item>
+                  <div *ngIf="editAble$ | async" style="margin-top: 1%"></div>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <input matInput type="text" name="firstname" minlength="2" #firstname="ngModel"
+                      value="{{UserConnected?.firstname}}" ngModel />
+                    <mat-placeholder id="edit-placeholder"> {{UserConnected?.firstname}}</mat-placeholder>
+                    <mat-hint>Your firstname</mat-hint>
+                    <mat-error *ngIf="firstname?.invalid">Your firstname is not in the right format</mat-error>
+                  </mat-form-field>
+                  <div class="space-line" *ngIf="editAble$ | async"></div>
+                  <mat-list-item *ngIf="!(editAble$ | async)">Your Lastname: {{ UserConnected?.lastname }}
+                  </mat-list-item>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <input matInput type="text" name="lastname" #lastname="ngModel" ngModel
+                      value="{{UserConnected?.lastname}}" minlength="2" />
+                    <mat-placeholder id="edit-placeholder">{{UserConnected?.lastname}}</mat-placeholder>
+                    <mat-hint>Your lastname</mat-hint>
+                    <mat-error *ngIf="lastname?.invalid">Your lastname is not in the right format</mat-error>
+                  </mat-form-field>
+                  <div class="space-line" *ngIf="editAble$ | async"></div>
+                  <mat-list-item *ngIf="!(editAble$ | async)">Your Superhero: {{ UserConnected?.superhero }}
+                  </mat-list-item>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <input matInput type="text" name="superhero" #superhero="ngModel" ngModel
+                      value="{{UserConnected?.superhero}}" minlength="1" />
+                    <mat-placeholder id="edit-placeholder"> {{UserConnected?.superhero}}</mat-placeholder>
+                    <mat-hint>Your superhero</mat-hint>
+                    <mat-error *ngIf="superhero?.invalid">Your superhero is not in the right format</mat-error>
+                  </mat-form-field>
+                  <div class="space-line" *ngIf="editAble$ | async"></div>
+                  <mat-list-item *ngIf="!(editAble$ | async)">Your Email: {{ UserConnected?.email }}
+                  </mat-list-item>
+                  <mat-list-item *ngIf="!(editAble$ | async)">Your collection:</mat-list-item>
+                  <div class="collection-of-images" *ngIf="!(editAble$ | async)">
                     <div class="row">
-                  <div *ngFor="let image of UserConnected.Images">
-                      <div class="col-sm-12">
-                          <img [src]="image" class="img-thumbnail" id="img-collection-info"/>
+                      <div *ngFor="let image of UserConnected?.Images">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                          <img src="{{image}}" class="img-thumbnail" id="img-collection">
+                        </div>
                       </div>
-
+                      <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage"
+                        [pageSizeOptions]="pageSizeOptions" (page)="onChangePage($event)">
+                      </mat-paginator>
                     </div>
-
-
                   </div>
-                    <mat-divider id="someSpace"></mat-divider>
-                  </button>
-                  <input id="cin" name="cin" type="file"  #filePickerTwo (change)="fileChangeEvent($event)"
-                  placeholder="Upload a file..."  style="visibility: hidden" multiple/>
-                  <button mat-button color="primary" (click)="upload()">Upload</button>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <input matInput type="email" name="email" #email="ngModel" value="{{UserConnected?.email}}"
+                      ngModel />
+                    <mat-placeholder id="edit-placeholder">{{UserConnected?.email}}</mat-placeholder>
+                    <mat-hint>Your email</mat-hint>
+                    <mat-error *ngIf="email?.invalid">Your email is not in the right format</mat-error>
+                  </mat-form-field>
+                  <div class="space-line" *ngIf="editAble$ | async"></div>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <input matInput minlength="8" name="password" #password="ngModel"
+                      value="{{UserConnected?.password}}" ngModel [type]="hide ? 'password' : 'text'" />
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hide">
+                      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                    </button>
+                    <mat-placeholder id="edit-placeholder"> {{UserConnected?.password}}</mat-placeholder>
+                    <mat-hint>Your password</mat-hint>
+                    <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
+                    <mat-select [(ngModel)]="selectedValue" name="quote" value="{{UserConnected.quote}}">
+                      <mat-option *ngFor="let quote of quotes" [value]="quote">
+                        <img src="{{quote.icon}}" class="example-option-img"> {{quote.name}}
+                      </mat-option>
+                    </mat-select>
+                    <div *ngFor="let q of UserConnected.quote">
+                      <mat-placeholder id="edit-placeholder"> <img src="{{q?.icon}}" id="iconImg"> {{q?.name}}
+                      </mat-placeholder>
+                    </div>
+                    <mat-hint>Your quote</mat-hint>
+                  </mat-form-field>
                 </div>
-
-              </div>
-              <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
-                <img src="{{UserConnected?.Image}}" class="img-thumbnail">
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="editAble$ | async">
+                  <div [formGroup]="imageFormGroup" class="image-upload">
+                    <button mat-stroked-button id="image-button" type="button" (click)="filePicker.click()">
+                      <h4>Upload picture</h4>
+                      <mat-divider id="someSpace"></mat-divider>
+                    </button>
+                    <input type="file" name="image" #filePicker (change)="onImagePicked($event)"
+                      style="visibility: hidden" />
+                    <div class="old-new-images">
+                      <div *ngIf="imagePreview !== '' && imagePreview">
+                        <img [src]="imagePreview" class="img-thumbnail" />
+                      </div>
+                      <img src="{{UserConnected?.Image}}" class="img-thumbnail" id="old-image">
+                    </div>
+                    <h1 *ngIf="imagePreview !== '' && imagePreview">New picture:</h1>
+                  </div>
+                  <mat-divider></mat-divider>
+                  <div class="collection-edit-images">
+                    <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage" [pageSizeOptions]="pageSizeOptions"
+                      (page)="onChangePage($event)">
+                    </mat-paginator>
+                    <button mat-stroked-button id="image-button-two" type="button" (click)="filePickerTwo.click()">
+                      <h4>Upload your collection</h4>
+                      <div class="row">
+                        <div *ngFor="let image of UserConnected.Images">
+                          <div class="col-sm-12">
+                            <img [src]="image" class="img-thumbnail" id="img-collection-info" />
+                          </div>
+                        </div>
+                      </div>
+                      <mat-divider id="someSpace"></mat-divider>
+                    </button>
+                    <input id="cin" name="cin" type="file" #filePickerTwo (change)="fileChangeEvent($event)"
+                      placeholder="Upload a file..." style="visibility: hidden" multiple />
+                    <button mat-button color="primary" (click)="upload()">Upload</button>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
+                  <img src="{{UserConnected?.Image}}" class="img-thumbnail">
                 </div>
               </div>
               <button class="edit-button" mat-raised-button *ngIf="editAble$ | async">Submit</button>
@@ -166,9 +142,8 @@
           </mat-list>
           <div class="footer" *ngIf="!(editAble$ | async)">
             <h2>
-
-              <div *ngFor="let quote of UserConnected?.quote" >
-                  Your quote: <img src="{{quote?.icon}}" id="iconImg"> {{quote?.name}}
+              <div *ngFor="let quote of UserConnected?.quote">
+                Your quote: <img src="{{quote?.icon}}" id="iconImg"> {{quote?.name}}
               </div>
             </h2>
           </div>

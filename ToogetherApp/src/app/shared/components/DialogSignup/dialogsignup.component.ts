@@ -1,13 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators, FormBuilder } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { ResponseMessagesService } from 'src/app/core/services/error.service';
 import { UserService } from 'src/app/core/services/user.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../actions/ui.actions';
-import { User } from '../../models/User.model';
 import { ResultUser } from './../../models/Result-user';
 
 export interface Quote {
@@ -34,7 +32,23 @@ export class DialogSignUpComponent {
       icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
     },
     {
+      name: 'Coming from your friendly neighborhood Spider-Man!',
+      icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
+    },
+    {
+      name: 'With great hotness comes great responsibility.',
+      icon: '../../../../assets/images/icons/emotion-spiderman-icon.png'
+    },
+    {
+      name: `Then don't take my stuff`,
+      icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
+    },
+    {
       name: 'I am iron man',
+      icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
+    },
+      {
+      name: `sometimes you gotta Run before you can Walk.`,
       icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
     },
     {
@@ -42,20 +56,40 @@ export class DialogSignUpComponent {
       icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
     },
     {
+      name: 'Leave me alone.',
+      icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
+    },
+    {
+      name: 'HULK SMASH!',
+      icon: '../../../../assets/images/icons/iconfinder_Happy_Hulk_73375.png'
+    },
+
+    {
+      name: 'Do not touch me again',
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+    {
+      name: `You have no idea what you're dealing with.`,
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+    {
+      name: ` I must go back to Asgard, but I give you my word. I will return for you.`,
+      icon: '../../../../assets/images/icons/Thor.png'
+    },
+
+    {
       name: 'I am groot',
       icon: '../../../../assets/images/icons/groot.jpg'
-    }
+    },
   ];
   public hide: boolean;
   public resultUserObject: ResultUser;
-  private userObject: User;
-  private quoteObject: Quote;
   public imagePreview: string;
   imageFormGroup = new FormGroup({
     image: new FormControl(null, { validators: [Validators.required] })
   });
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar,
+  constructor(private userService: UserService,
               private responseMessageService: ResponseMessagesService,
               private spinnerService: Ng4LoadingSpinnerService,private formBuilder: FormBuilder,
               private store: Store<fromRoot.State>) {
@@ -101,7 +135,6 @@ export class DialogSignUpComponent {
       });
     }
   }
-
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.imageFormGroup.patchValue({ image: file });
@@ -111,10 +144,5 @@ export class DialogSignUpComponent {
       this.imagePreview = reader.result as string;
     };
     reader.readAsDataURL(file);
-  }
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 6000,
-    });
   }
 }
