@@ -3,13 +3,10 @@ import { EDIT_ABLE, EDIT_CANCEL, UIActions } from '../actions/ui.actions';
 export interface State {
   editAble: boolean;
   counter: number;
-
 }
-
 const initialState: State = {
   editAble: false,
   counter: 0,
-
 };
 
 export function EditProfileAbleReducer(state = initialState, action: UIActions) {
@@ -18,14 +15,11 @@ export function EditProfileAbleReducer(state = initialState, action: UIActions) 
       return {
         editAble: true,
         counter: 0
-
       };
     case EDIT_CANCEL:
       return {
-
         editAble: false,
         counter: 0,
-
       };
     default: {
       return state;

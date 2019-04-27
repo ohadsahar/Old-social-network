@@ -6,9 +6,6 @@ import { Observable } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import { UserService } from '../../../core/services/user.service';
 import * as UI from '../../../shared/actions/ui.actions';
-
-
-
 @Component({
 
   selector: 'app-dialog-delete',
@@ -56,15 +53,14 @@ export class DialogDeleteComponent implements OnInit {
   SelectedImagesToDelete(id: string) {
 
     this.arrayOfImages.push(id);
-    console.log(this.arrayOfImages);
   }
   onChangePage(pageData: PageEvent) {
 
     this.currentPage = pageData.pageIndex + 1;
     this.imagesPerPage = pageData.pageSize;
-    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
+    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
+    .subscribe(response => {
         this.imagesCollection.Images = response.userData.userImage;
-
     });
   }
 

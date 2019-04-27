@@ -6,7 +6,6 @@
           <div *ngFor="let image of imagesCollection">
               <mat-checkbox [checked]="image._id" (change)="SelectedImagesToDelete(image._id)"></mat-checkbox>
             <div class="col-sm-12 col-md-12 col-lg-12">
-
               <img src="{{image.imagename}}" class="img-thumbnail" id="img-collection">
             </div>
           </div>
