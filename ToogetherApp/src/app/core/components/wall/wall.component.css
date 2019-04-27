@@ -7,6 +7,10 @@
   height: 100vh;
 }
 
+.mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon-button .mat-icon, .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon-button .mat-icon {
+  color: white;
+}
+
 
 .wall-style .left-nav {
 
@@ -19,6 +23,12 @@
   width: 70% !important;
 }
 
+.menu-img {
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
 .mat-option img {
 
   height: 40px !important;
@@ -173,6 +183,7 @@
 
   font-size: 14px;
   color: white;
+  margin-top: 3%;
 }
 
 .wall-style .mat-list-item   {
@@ -334,6 +345,16 @@ h4 {
     padding: 0px;
   }
 
+  .wall-style .edit-button {
+
+    margin-top: 5%;
+    display: -webkit-box;
+    color: white;
+    font-size: 16px;
+    background-color: transparent;
+    font-family: 'Shadows Into Light', cursive;
+
+  }
 
 .wall-style .mat-list-item   {
 
@@ -349,9 +370,14 @@ h4 {
     font-family: 'Shadows Into Light', cursive;
     position: absolute;
     bottom: 20px;
-    font-size: 10px;
+    font-size: 18px;
+    margin-bottom: 10%;
  }
 
+ #quote-space {
+
+  margin-top: 3%;
+ }
  .wall-style .mat-list-base {
 
   padding: 30px;
@@ -365,6 +391,7 @@ h4 {
     margin-bottom: 10%;
   }
 
+
   .img-thumbnail {
 
     width: 100px !important;
@@ -372,10 +399,20 @@ h4 {
     margin: auto;
     display: block;
     margin-top: 3%;
-    margin-bottom: 11%;
+    margin-bottom: 20%;
 
   }
 
+  .wall-style h1 {
+
+    font-size: 14px;
+    color: white;
+
+  }
+
+  h4 {
+    margin-top: 5%;
+  }
   .profile-menu {
 
     margin: auto !important;
@@ -421,6 +458,8 @@ h4 {
     margin-top: 50%;
     display: inline-grid;
   }
+
+
 }
 
 

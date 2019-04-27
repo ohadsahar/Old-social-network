@@ -23,6 +23,7 @@ import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/d
 })
 
 export class WallPageComponent implements OnInit {
+
   private id: string;
   private counter: number;
   public hide: boolean;
@@ -37,6 +38,8 @@ export class WallPageComponent implements OnInit {
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
   public mobile$: Observable<boolean>;
+
+
   imageFormGroup = new FormGroup({image: new FormControl(null,
      { validators: [Validators.required] })});
 
@@ -196,30 +199,8 @@ onResize(event) {
     if (form.invalid) {
       return;
     } else {
-      if (form.value.email) {
-        this.UserConnected.email = form.value.email;
-      }
-      if (form.value.firstname) {
-        this.UserConnected.firstname = form.value.firstname;
-      }
 
-      if (form.value.lastname) {
-        this.UserConnected.lastname = form.value.lastname;
-      }
-
-      if (form.value.password) {
-        this.UserConnected.password = form.value.password;
-      }
-      if (form.value.superhero) {
-        this.UserConnected.superhero = form.value.superhero;
-      }
-
-      if (this.selectedValue !== undefined) {
-
-        this.UserConnected.quote = [] as any;
-        this.UserConnected.quote.push(this.selectedValue as any);
-      }
-
+      this.ValidateForm(form);
       const UserConnectedUpdate = new FormData();
       UserConnectedUpdate.append('email', this.UserConnected.email);
       UserConnectedUpdate.append('password', this.UserConnected.password);
@@ -248,10 +229,10 @@ onResize(event) {
       this.counter = 0;
       this.userService.UpdateUser(UserConnectedUpdate, this.id).subscribe((response) => {
         this.UserConnected = response.userData.UserObject;
-
         this.DisableWall();
         this.CancelEdit();
         this.StopLoading();
+        this.responseMessageService.SuccessMessage('Details updated successfully!', 'Yay!');
         },
         (error) => {
           this.StopLoading();
@@ -290,6 +271,33 @@ onResize(event) {
       }
     );
   }
+  ValidateForm(form: NgForm) {
+
+    if (form.value.email) {
+      this.UserConnected.email = form.value.email;
+    }
+    if (form.value.firstname) {
+      this.UserConnected.firstname = form.value.firstname;
+    }
+
+    if (form.value.lastname) {
+      this.UserConnected.lastname = form.value.lastname;
+    }
+
+    if (form.value.password) {
+      this.UserConnected.password = form.value.password;
+    }
+    if (form.value.superhero) {
+      this.UserConnected.superhero = form.value.superhero;
+    }
+
+    if (this.selectedValue !== undefined) {
+
+      this.UserConnected.quote = [] as any;
+      this.UserConnected.quote.push(this.selectedValue as any);
+    }
+
+  }
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.imageFormGroup.patchValue({ image: file });
@@ -323,14 +331,11 @@ onResize(event) {
       }
       this.StopLoading();
     });
-}
+  }
   fileChangeEvent(fileInput: any) {
-    this.filesToUpload =  fileInput.target.files as Array<File>;
+      this.filesToUpload =  fileInput.target.files as Array<File>;
 
-}
-
-
-
+  }
   PhoneOrComputer(innerWidth: number) {
     if (innerWidth <= 800) {
       this.store.dispatch(new UI.Mobile());
@@ -382,6 +387,8 @@ onResize(event) {
   EnableWall() {
 
     this.store.dispatch(new UI.ShowTheWall());
+    this.store.dispatch(new UI.CancelEdit());
+    this.editAble$ = this.store.select(fromRoot.getIsEditAble);
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
   }
