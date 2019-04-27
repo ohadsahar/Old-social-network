@@ -114,20 +114,20 @@ async function UpdateUser(UserObject, id, req) {
       return {message: message};    
 } 
 async function UpdateCollection(req, id) {
-
     let ArrayImg = [];
     let finalArrayOfImages = [];
-    const imageQuery = await userSchema.findById({_id: id}).select("Images.imagename").where("Images");
+    const imageCollection = await userSchema.findById({_id: id}).select("Images.imagename");
       if (req.files) {
         const url  = req.protocol + '://' + req.get('host');
         req.files.forEach(element => {
           ArrayImg.push({imagename: url + '/images/' + element.filename})
         });
-        if (imageQuery) {
-          finalArrayOfImages = ArrayImg.concat(ArrayImg, imageQuery);          
-            await userSchema.findByIdAndUpdate({_id: id}, {$addToSet:{Images:finalArrayOfImages}}, { new: true, upsert: true });
+        if (imageCollection.Images) {
+          finalArrayOfImages = [...ArrayImg, ...imageCollection.Images];  
+        
+            await userSchema.findOneAndUpdate({_id: id}, {$set: {Images:finalArrayOfImages}}, {upsert: true });
             const message = {
-              Images: ArrayImg,
+              Images: finalArrayOfImages,
               success: true
             }
             return { message: message };

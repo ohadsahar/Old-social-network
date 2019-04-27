@@ -3,20 +3,16 @@ import { UIActions, MOBILE_DETECTED, TABLET_DETECTED, DESKTOP_DETECTED } from '.
 export interface State {
 
   mobile: boolean;
-  tablet: boolean;
-  desktop: boolean;
 }
 
 const initialState: State = {
 
-  mobile: false,
-  tablet: false,
-  desktop: false
-}
+    mobile: false
+};
 
-export function WindowTrackerReducer(state = initialState, action: UIActions) {
+export function WindowSizeReducer(state = initialState, action: UIActions) {
 
-  switch(action.type) {
+  switch (action.type) {
 
     case MOBILE_DETECTED:
       return {
@@ -24,14 +20,16 @@ export function WindowTrackerReducer(state = initialState, action: UIActions) {
       };
     case TABLET_DETECTED:
       return {
-        tablet: true
+        mobile: false
       };
     case DESKTOP_DETECTED:
-    return {
-      desktop: true
+      return {
+        mobile: false
+      };
+      default: {
+        return state;
+      }
     }
-  }
 }
 
-
-
+export const GetMobileOrDesktop = (state: State) => state.mobile;

@@ -62,7 +62,7 @@
 }
 .collection-edit-images {
 
-  margin-top: 50%;
+  margin-top: 30%;
   display: inline-grid;
 }
 
@@ -78,6 +78,16 @@
   font-family: 'Shadows Into Light', cursive;
   color:white;
 
+}
+
+#submit-collection {
+
+  color:white;
+  font-size: 16px;
+  font-family: 'Shadows Into Light', cursive;
+  margin: auto;
+  display: block;
+  cursor: pointer;
 }
 .title-image {
 
@@ -148,6 +158,12 @@
   cursor: pointer;
 }
 
+.edit-able-paginator-image {
+
+  margin-top: 25%;
+
+}
+
 #old-image {
 
   margin-left: 10%;
@@ -196,6 +212,7 @@
 .wall-style .mat-paginator-page-size, .mat-paginator-range-actions {
 
   color: white;
+  margin-top: 5%;
 }
 
 .wall-style .mat-select-arrow {
@@ -240,7 +257,6 @@ h3 {
 h4 {
 
   color: white;
-  margin-top: 5% !important;
   font-family: 'Shadows Into Light', cursive;
   background-image:linear-gradient(to left, #003459,#0a2d46, #FF3F4E);
 }
@@ -254,6 +270,7 @@ h4 {
   cursor: pointer;
   width: 70%;
   text-align: center;
+  margin-bottom: 2%;
   font-size: 23px;
 
 }
@@ -285,7 +302,12 @@ h4 {
 .wall-style .edit-button {
 
   display: -webkit-box;
-  margin-top: 5%;
+  margin-top: 10%;
+  color: white;
+  font-size: 16px;
+  background-color: transparent;
+  font-family: 'Shadows Into Light', cursive;
+
 }
 .wall-style .placeholder {
 
@@ -334,5 +356,73 @@ h4 {
 
   padding: 30px;
  }
+
+ @media only screen and (max-width: 600px) {
+  #img-collection {
+
+    width: 50px !important;
+    height: 50px !important;
+    margin-bottom: 10%;
+  }
+
+  .img-thumbnail {
+
+    width: 100px !important;
+    height: 100px !important;
+    margin: auto;
+    display: block;
+    margin-top: 3%;
+    margin-bottom: 11%;
+
+  }
+
+  .profile-menu {
+
+    margin: auto !important;
+    color: white;
+    font-family: 'Shadows Into Light', cursive;
+  }
+
+  #quote-superhero {
+
+    margin-top: 10%;
+  }
+
+  .mat-divider  {
+
+    border-top-color: white !important;
+
+  }
+
+  .mat-menu-content:not(:empty) {
+
+    background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
+
+  }
+
+  .mat-paginator-container {
+
+    margin: auto !important;
+    display: block !important;
+  }
+
+  button.mat-menu-item {
+
+    color:white;
+    font-size: 16px;
+    font-family: 'Shadows Into Light', cursive;
+    border:none;
+
+
+  }
+
+  .collection-edit-images {
+
+    margin-top: 50%;
+    display: inline-grid;
+  }
+}
+
+
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { UserService } from './../../services/user.service';
 import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
 import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/dialog-delete.component';
 
+
 @Component({
   selector: 'app-wall-page',
   templateUrl: './wall.component.html',
@@ -25,6 +26,7 @@ export class WallPageComponent implements OnInit {
   private id: string;
   private counter: number;
   public hide: boolean;
+  public innerWidth: number;
   public imagePreview: string;
   public totalImages: number;
   public pageSizeOptions: any;
@@ -34,6 +36,7 @@ export class WallPageComponent implements OnInit {
   public profileAble$: Observable<boolean>;
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
+  public mobile$: Observable<boolean>;
   imageFormGroup = new FormGroup({image: new FormControl(null,
      { validators: [Validators.required] })});
 
@@ -47,7 +50,6 @@ export class WallPageComponent implements OnInit {
   QuoteCtrl = new FormControl();
   selectedValue: Quote[];
   filesToUpload: Array<File> = [];
-
   quotes: Quote[] = [
     {
       name: 'Your friendly neighborhood spider man',
@@ -129,10 +131,19 @@ export class WallPageComponent implements OnInit {
   ngOnInit() {
     this.OnWallComponentStart();
   }
+
+  @HostListener('window:resize', ['$event'])
+onResize(event) {
+  this.innerWidth = window.innerWidth;
+  this.PhoneOrComputer(this.innerWidth);
+}
+
   OnWallComponentStart() {
 
     this.Loading();
+    this.PhoneOrComputer(this.innerWidth);
     this.DisableWall();
+    this.innerWidth = window.innerWidth;
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
@@ -290,6 +301,7 @@ export class WallPageComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   upload() {
+
     const formData: any = new FormData();
     const files: Array<File> = this.filesToUpload;
     let i;
@@ -316,6 +328,18 @@ export class WallPageComponent implements OnInit {
     this.filesToUpload =  fileInput.target.files as Array<File>;
 
 }
+
+
+
+  PhoneOrComputer(innerWidth: number) {
+    if (innerWidth <= 800) {
+      this.store.dispatch(new UI.Mobile());
+      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
+    }  else if (innerWidth >= 1000) {
+      this.store.dispatch(new UI.Desktop());
+      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
+    }
+  }
   ShowProfile() {
 
     this.DisableWall();
