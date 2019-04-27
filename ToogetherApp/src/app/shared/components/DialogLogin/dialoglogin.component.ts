@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import { ResponseMessagesService } from '../../../core/services/error.service';
 import * as UI from '../../actions/ui.actions';
-import { UserService } from './../../../core/services/user.service';
 import { UserLogin } from '../../models/UserLogin.model';
+import { UserService } from './../../../core/services/user.service';
 
 
 @Component({

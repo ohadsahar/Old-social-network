@@ -91,7 +91,7 @@ export class DialogSignUpComponent {
 
   constructor(private userService: UserService,
               private responseMessageService: ResponseMessagesService,
-              private spinnerService: Ng4LoadingSpinnerService,private formBuilder: FormBuilder,
+              private spinnerService: Ng4LoadingSpinnerService, private formBuilder: FormBuilder,
               private store: Store<fromRoot.State>) {
     this.hide = true;
 

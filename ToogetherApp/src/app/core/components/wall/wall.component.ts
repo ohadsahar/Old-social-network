@@ -1,18 +1,17 @@
-import { Component, OnInit, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { PageEvent } from '@angular/material';
+import { MatDialog, PageEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
+import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/dialog-delete.component';
 import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
-import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/dialog-delete.component';
 
 
 @Component({
@@ -152,8 +151,7 @@ onResize(event) {
         this.id = paramMap.get('id');
         this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
             this.UserConnected = responseConnected.userData.UserObject;
-            if (responseConnected.userData.allImages.Images)
-            {
+            if (responseConnected.userData.allImages.Images) {
             this.totalImages = responseConnected.userData.allImages.Images.length;
             }
             if ((responseConnected.userData.UserObject.loggedin as any) === 'true') {
@@ -164,7 +162,7 @@ onResize(event) {
             this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
               this.UserConnected.Images = response.userData.userImage;
               this.StopLoading();
-          })
+          });
           },
           (error) => {
             this.responseMessageService.FailureMessage(
@@ -192,7 +190,7 @@ onResize(event) {
     this.imagesPerPage = pageData.pageSize;
     this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
         this.UserConnected.Images = response.userData.userImage;
-    })
+    });
   }
   EditUser(form: NgForm) {
 

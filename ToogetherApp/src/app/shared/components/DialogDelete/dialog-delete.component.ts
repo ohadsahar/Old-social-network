@@ -1,11 +1,11 @@
-import { Component, ViewEncapsulation, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, PageEvent } from '@angular/material';
-import { UserService } from '../../../core/services/user.service';
 import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../app.reducer';
-import * as UI from '../../../shared/actions/ui.actions';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable } from 'rxjs';
+import * as fromRoot from '../../../app.reducer';
+import { UserService } from '../../../core/services/user.service';
+import * as UI from '../../../shared/actions/ui.actions';
 
 
 
@@ -49,7 +49,7 @@ export class DialogDeleteComponent implements OnInit {
       console.log(response.userData.userImage);
       this.imagesCollection = response.userData.userImage;
       this.StopLoading();
-  })
+  });
 
   }
 
@@ -65,7 +65,7 @@ export class DialogDeleteComponent implements OnInit {
     this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
         this.imagesCollection.Images = response.userData.userImage;
 
-    })
+    });
   }
 
   Loading() {
