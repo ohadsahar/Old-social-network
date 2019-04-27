@@ -17,7 +17,8 @@ import {
   MatAutocompleteModule,
   MatSelectModule,
   MatProgressSpinnerModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,10 +29,12 @@ import { DialogSignUpComponent } from './shared/components/DialogSignup/dialogsi
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogLoginComponent } from './shared/components/DialogLogin/dialoglogin.component';
+import { DialogDeleteComponent } from './shared/components/DialogDelete/dialog-delete.component';
 import { WallPageComponent } from './core/components/wall/wall.component';
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent, DialogSignUpComponent, DialogLoginComponent, WallPageComponent],
+  declarations: [AppComponent, HomePageComponent, DialogSignUpComponent,
+    DialogLoginComponent, WallPageComponent, DialogDeleteComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -55,10 +58,11 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatAutocompleteModule,
     MatSelectModule,
     MatPaginatorModule,
+    MatCheckboxModule,
     Ng4LoadingSpinnerModule.forRoot(),
     StoreModule.forRoot(Reducers)
   ],
-  entryComponents: [DialogSignUpComponent, DialogLoginComponent],
+  entryComponents: [DialogSignUpComponent, DialogLoginComponent, DialogDeleteComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

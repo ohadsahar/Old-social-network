@@ -11,6 +11,8 @@ import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/dialog-delete.component';
 
 @Component({
   selector: 'app-wall-page',
@@ -109,7 +111,8 @@ export class WallPageComponent implements OnInit {
     private responseMessageService: ResponseMessagesService,
     private spinnerService: Ng4LoadingSpinnerService,
     private store: Store<fromRoot.State>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog
   ) {
     this.currentPage = 1;
     this.pageSizeOptions = [3, 5, 7];
@@ -157,6 +160,15 @@ export class WallPageComponent implements OnInit {
             this.AfterError();
           }
         );
+      }
+    });
+  }
+
+  DialogDeleteCollectionImages() {
+    this.dialog.open(DialogDeleteComponent, {
+      data: {
+        totalImages: this.totalImages,
+        id: this.id
       }
     });
   }

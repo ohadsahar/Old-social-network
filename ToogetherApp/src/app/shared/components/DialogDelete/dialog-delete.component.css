@@ -1,0 +1,47 @@
+ .mat-dialog-container {
+
+  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E) !important;
+  opacity: 1;
+}
+
+.mat-dialog-delete .collection-of-images {
+
+
+  margin: auto;
+  display: block;
+  justify-content: center;
+
+}
+
+.mat-dialog-delete .mat-paginator-icon {
+
+  color: white;
+}
+
+
+.mat-dialog-delete #img-collection {
+
+  width: 120px !important;
+  height: 109px !important;
+  margin-bottom: 10%;
+}
+
+.mat-dialog-delete #img-collection:hover {
+
+  transform: scale(1);
+}
+
+.mat-dialog-delete .mat-paginator {
+
+  background-image:linear-gradient(to left, #003459,#003459, #FF3F4E);
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 16px;
+  color: white;
+}
+
+.mat-dialog-delete #mat-dialog-delete-title {
+
+  font-size: 20px;
+  font-family: 'Shadows Into Light', cursive;
+  font-weight: bold;
+}

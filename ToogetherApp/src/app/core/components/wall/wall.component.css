@@ -244,6 +244,19 @@ h4 {
   font-family: 'Shadows Into Light', cursive;
   background-image:linear-gradient(to left, #003459,#0a2d46, #FF3F4E);
 }
+
+.edit-collection {
+
+  color: white;
+  margin-top: 5% !important;
+  font-family: 'Shadows Into Light', cursive;
+  background-image:linear-gradient(to left, #003459,#0a2d46, #FF3F4E);
+  cursor: pointer;
+  width: 70%;
+  text-align: center;
+  font-size: 23px;
+
+}
 .image-preview {
 
   width: 200px;

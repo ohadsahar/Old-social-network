@@ -1,0 +1,24 @@
+<div class="mat-dialog-delete">
+<h2 mat-dialog-title id="mat-dialog-delete-title">Delete</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="collection-of-images" *ngIf="!(editAble$ | async)">
+        <div class="row">
+          <div *ngFor="let image of imagesCollection">
+              <mat-checkbox [checked]="image._id" (change)="SelectedImagesToDelete(image._id)"></mat-checkbox>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+              <img src="{{image.imagename}}" class="img-thumbnail" id="img-collection">
+            </div>
+          </div>
+
+        </div>
+        <mat-paginator [length]="totalImages" [pageSize]="imagesPerPage"
+        [pageSizeOptions]="pageSizeOptions" (page)="onChangePage($event)">
+      </mat-paginator>
+      </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>
+</div>
