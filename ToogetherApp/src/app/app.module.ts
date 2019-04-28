@@ -59,6 +59,7 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     MatSelectModule,
     MatPaginatorModule,
     MatCheckboxModule,
+    MatCardModule,
     Ng4LoadingSpinnerModule.forRoot(),
     StoreModule.forRoot(Reducers)
   ],

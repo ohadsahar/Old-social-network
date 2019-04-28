@@ -40,7 +40,6 @@ export class DialogDeleteComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
     .subscribe(response => {
       console.log(response.userData.userImage);
@@ -63,7 +62,6 @@ export class DialogDeleteComponent implements OnInit {
         this.imagesCollection.Images = response.userData.userImage;
     });
   }
-
   Loading() {
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
