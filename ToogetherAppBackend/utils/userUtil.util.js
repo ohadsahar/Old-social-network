@@ -1,46 +1,94 @@
 const userSchema = require("../models/UserSchema");
+const bycrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-async function RegisterUser(UserObject, req) {
-    let UserToSave;
+async function registerUser(userData, req) {
+
     const url  = req.protocol + '://' + req.get('host');
-    UserObject.quote = JSON.parse(UserObject.quote);
-    UserToSave = new userSchema({
-      email: UserObject.email,
-      password: UserObject.password,
-      firstname: UserObject.firstname,
-      lastname: UserObject.lastname,
-      superhero: UserObject.superhero,
-      loggedin: false,
-      Image: url + '/images/' + req.file.filename,
-      quote: UserObject.quote,
-      Images: null,
-      role: "admin"
+    userData.quote = JSON.parse(userData.quote);
+    const user = new userSchema({
+      email: userData.email,password: userData.password,
+      firstname: userData.firstname,lastname: userData.lastname,
+      superhero: userData.superhero,loggedin: false,
+      Image: url + '/images/' + req.file.filename,quote: userData.quote,
+      Images: null,role: "admin"
     });
-    await UserToSave.save();
-    const message = {
-      UserSaved: UserToSave,
-      success: true
-    }
-    return {message: message} 
+    await user.save();
+    return {userData: user,success: true}
 } 
-async function GetAllUsers() {
-    const FetchAllUsers = await userSchema.find();
-    const message = {
-      Users: FetchAllUsers,
-      success: true,
-    }
-    return { message: message };
+async function fetchAllUsers() {
+    const fetchedUsers = await userSchema.find();
+    return {users: fetchedUsers,success: true}
 } 
-async function UpdateUserLogStatus(id, action) {
-    const ChangeLog = {
-      loggedin: action,
+async function updateUser(userData, id, req) {
+
+      let newData;
+      if (req.file) {
+          newData = createObjectWithNewProfileImage(req,userData).user;
+      } else {
+          newData = createObjectWithoutProfileImage(userData).user;
+      }
+      await userSchema.updateOne({_id: id}, newData);
+      return {userData: newData, success: true};    
+} 
+async function login(userData) {
+  const fetchedUser = await userSchema.findOne({ email: userData.email });
+  if (bycrypt.compare(userData.password, fetchedUser.password)) {
+    const token = jwt.sign(
+      { email: fetchedUser.email, id: fetchedUser._id },
+      "OHAD_SAHAR_SERIAL_KEY_NEVER_GONNA_GUESS_IT"
+    );
+    const userData = {
+        user: fetchedUser,
+        id: fetchedUser._id,  token: token, message: 'Login successful', success: true
     }
-    await userSchema.updateOne({_id: id}, ChangeLog);
-    const message = {
-      success: true
-    }
-    return {message: message }
+    return {userData: userData}
+  } 
+     
 }
+async function updateStatus(status, id) {
+
+  await userSchema.updateOne({_id: id}, status);
+  return {success: true }
+}
+function createObjectWithNewProfileImage(req, userData) {
+
+  const url  = req.protocol + '://' + req.get('host');
+  const newUserData = {
+   email: userData.email,
+   password: userData.password,
+   firstname: userData.firstname,
+   lastname: userData.lastname,
+   superhero: userData.superhero,
+   loggedin: userData.loggedin,
+   Image: url + '/images/' + req.file.filename,
+   quote: userData.quote,
+   Images: userData.Images,
+   role: userData.role
+ }
+
+ return {user: newUserData};
+
+}
+function createObjectWithoutProfileImage(userData) {
+
+  const newUserData = { 
+    email: userData.email,
+    password: userData.password,
+    firstname: userData.firstname,
+    lastname: userData.lastname,
+    superhero: userData.superhero,
+    loggedin: userData.loggedin,
+    Image: userData.image,
+    quote: userData.quote,
+    Images: userData.Images,
+    role: userData.role
+  }
+  return {user: newUserData}
+}
+
+
+
 async function GetConnectedUser(id) {
      
 
@@ -69,50 +117,6 @@ async function getImagesOnly(req) {
     return {message: message}
   }
 }
-async function UpdateUser(UserObject, id, req) {
-  let NewData;
-  UserObject.quote = JSON.parse(UserObject.quote);
-  if (UserObject.Images)
-  {
-     UserObject.Images = JSON.parse(UserObject.Images);
-  } else {
-    UserObject.Images = null;
-  }
-      if (req.file) {
-        const url  = req.protocol + '://' + req.get('host');
-         NewData = {
-          email: UserObject.email,
-          password: UserObject.password,
-          firstname: UserObject.firstname,
-          lastname: UserObject.lastname,
-          superhero: UserObject.superhero,
-          loggedin: UserObject.loggedin,
-          Image: url + '/images/' + req.file.filename,
-          quote: UserObject.quote,
-          Images: UserObject.Images,
-          role: UserObject.role
-        }
-      } else {
-         NewData = { 
-          email: UserObject.email,
-          password: UserObject.password,
-          firstname: UserObject.firstname,
-          lastname: UserObject.lastname,
-          superhero: UserObject.superhero,
-          loggedin: UserObject.loggedin,
-          Image: UserObject.image,
-          quote: UserObject.quote,
-          Images: UserObject.Images,
-          role: UserObject.role
-        }
-      }
-      await userSchema.updateOne({_id: id}, NewData);
-      const message = {
-        UserObject: NewData,
-        success: true
-      }
-      return {message: message};    
-} 
 async function UpdateCollection(req, id) {
     let ArrayImg = [];
     let finalArrayOfImages = [];
@@ -141,13 +145,18 @@ async function UpdateCollection(req, id) {
            }
       } 
 } 
-  
+
+
+
 module.exports = {
-  RegisterUser,
-  GetAllUsers,
-  UpdateUserLogStatus,
+  registerUser,
+  fetchAllUsers,
+  updateUser,
+  login,
+  updateStatus,
+  createObjectWithNewProfileImage,
+  createObjectWithoutProfileImage,
   GetConnectedUser,
-  UpdateUser,
   UpdateCollection,
   getImagesOnly
 };

@@ -85,6 +85,7 @@ export class DialogSignUpComponent {
   public hide: boolean;
   public resultUserObject: ResultUser;
   public imagePreview: string;
+  public userData = new FormData();
   imageFormGroup = new FormGroup({
     image: new FormControl(null, { validators: [Validators.required] })
   });
@@ -94,36 +95,22 @@ export class DialogSignUpComponent {
               private spinnerService: Ng4LoadingSpinnerService, private formBuilder: FormBuilder,
               private store: Store<fromRoot.State>) {
     this.hide = true;
-
     this.imageFormGroup = this.formBuilder.group({
       image: ''
     });
   }
 
   DoneSignup(form: NgForm) {
-
-
     if (form.invalid) {
       return;
     } else {
-
       this.spinnerService.show();
       this.store.dispatch(new UI.StartLoading());
-      const userData = new FormData();
-      userData.append('email', form.value.email);
-      userData.append('password', form.value.password);
-      userData.append('firstname', form.value.firstname);
-      userData.append('lastname', form.value.lastname);
-      userData.append('superhero', form.value.userhero);
-      userData.append('loggedin', 'false');
-      userData.append('image', this.imageFormGroup.controls.image.value);
-      userData.append('quote', JSON.stringify(this.selectedValue as any));
-      userData.append('role', null);
-
-      this.userService.RegisterUser(userData).subscribe((response) => {
-        if (response.userData.success) {
+      this.createUserObject(form);
+      this.userService.registerUser(this.userData).subscribe((response) => {
+        if (response.message.success) {
             this.responseMessageService.SuccessMessage('Hurray, you signed up successfully!', 'Yay!');
-            // form.resetForm();
+            form.resetForm();
             this.spinnerService.hide();
             this.store.dispatch(new UI.StopLoading());
         } else {
@@ -144,5 +131,18 @@ export class DialogSignUpComponent {
       this.imagePreview = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
+  createUserObject(form: NgForm) {
+
+    this.userData.append('email', form.value.email);
+    this.userData.append('password', form.value.password);
+    this.userData.append('firstname', form.value.firstname);
+    this.userData.append('lastname', form.value.lastname);
+    this.userData.append('superhero', form.value.userhero);
+    this.userData.append('loggedin', 'false');
+    this.userData.append('image', this.imageFormGroup.controls.image.value);
+    this.userData.append('quote', JSON.stringify(this.selectedValue as any));
+    this.userData.append('role', null);
+
   }
 }

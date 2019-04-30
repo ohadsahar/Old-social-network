@@ -49,10 +49,40 @@ export class DialogDeleteComponent implements OnInit {
 
   }
 
-  SelectedImagesToDelete(id: string) {
+  // Selected(customerid: string, customername: string) {
+  //   /* The selected function, keep and remove the users that has been selected, for knowing which customers to delete ,
+  //   after the user click the delete button */
+  //   const customer = this.arrayOfImages.findIndex(element => {
+  //     return element === customerid;
+  //   });
 
-    this.arrayOfImages.push(id);
-  }
+  //   if (customer !== -1) {
+  //     const index = this.arrayOfImages.indexOf(customerid);
+  //     this.arrayOfImages.splice(index, 1);
+  //   } else {
+  //     this.arrayOfImages.push(customerid);
+  //   }
+  //   if (this.arrayOfImages.length > 1) {
+  //     this.cannotdelete = false;
+  //     this.deletemsg = ' Are you sure you want to delete ' + this.customersToDelete.length + ' customers?';
+  //   }
+  //   if (this.arrayOfImages.length === 1) {
+  //     this.customerService.GetSpecificUser(this.customersToDelete[0]).subscribe(result => {
+  //       customername = result.CustomerInfo.customername;
+  //     });
+
+  //     setTimeout(() => {
+  //       this.cannotdelete = false;
+  //       this.deletemsg = ' Are you sure you want to delete  ' + customername + ' ';
+  //     }, 300);
+  //   }
+  //   if (this.arrayOfImages.length === 0) {
+  //     this.cannotdelete = true;
+  //     this.deletemsg = 'You cannot delete 0 customers';
+  //   }
+
+  // }
+
   onChangePage(pageData: PageEvent) {
 
     this.currentPage = pageData.pageIndex + 1;

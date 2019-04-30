@@ -41,13 +41,10 @@ export class DialogLoginComponent {
     } else {
       this.Connected = true;
       this.Loading();
-      this.userService.LoginUser(form.value).subscribe(
-        (response) => {
-          if (response.userData.token) {
-            this.id = response.userData.id;
-            this.userService
-              .UpdateLoggedIn(response.userData.id, true)
-              .subscribe(responseUpdate => {
+      this.userService.login(form.value).subscribe((response) => {
+          if (response.message.token) {
+            this.id = response.message.id;
+            this.userService.updateStatusLogged(response.message.id, true).subscribe(responseUpdate => {
                 if (responseUpdate) {
                   this.Connected = true;
                   this.responseMessageService.SuccessMessage('You have successfully logged in', 'yay');
@@ -59,6 +56,7 @@ export class DialogLoginComponent {
           }
         },
         (error) => {
+          console.log(error);
           this.responseMessageService.FailureMessage(error, 'Sorry');
         }
       );

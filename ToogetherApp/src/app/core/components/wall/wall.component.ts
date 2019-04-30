@@ -175,7 +175,6 @@ onResize(event) {
       }
     });
   }
-
   DialogDeleteCollectionImages() {
     this.dialog.open(DialogDeleteComponent, {
       data: {
@@ -225,8 +224,8 @@ onResize(event) {
 
       this.Loading();
       this.counter = 0;
-      this.userService.UpdateUser(UserConnectedUpdate, this.id).subscribe((response) => {
-        this.UserConnected = response.userData.UserObject;
+      this.userService.updateUser(UserConnectedUpdate, this.id).subscribe((response) => {
+        this.UserConnected = response.message.userData;
         this.DisableWall();
         this.CancelEdit();
         this.StopLoading();
@@ -255,7 +254,7 @@ onResize(event) {
   Disconnect() {
 
     this.Loading();
-    this.userService.UpdateLoggedIn(this.id, false).subscribe(
+    this.userService.updateStatusLogged(this.id, false).subscribe(
       () => {
         this.StopLoading();
         this.router.navigate(['']);

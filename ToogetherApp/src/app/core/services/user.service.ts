@@ -5,6 +5,8 @@ import { CollectionImages } from '../../shared/models/collection-images.model';
 import { LoggedInData } from '../../shared/models/login-user.model';
 import { environment } from './../../../environments/environment';
 import { UserLogin } from './../../shared/models/UserLogin.model';
+import { ResultData } from '../../shared/models/data.model';
+
 
 const backendUrl = environment.backendUrl;
 
@@ -13,12 +15,24 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  RegisterUser(UserObject: any) {
-    return this.http.post<{userData: ResultUser}>(`${backendUrl}users/register`, UserObject);
+  registerUser(userData: any) {
+
+    return this.http.post<{message: ResultData}>(`${backendUrl}users/register`, userData);
   }
-  LoginUser(UserObject: UserLogin) {
-    return this.http.post<{userData: LoggedInData}>(`${backendUrl}users/login`, UserObject);
+  updateUser(userData: any, id: string) {
+
+    return this.http.post<{message: ResultData}>(`${backendUrl}users/${id}`, userData);
   }
+  login(userDetails: UserLogin) {
+
+    return this.http.post<{message: LoggedInData}>(`${backendUrl}users/login`, userDetails);
+  }
+  updateStatusLogged(id: string, action: boolean) {
+    const Action = {action};
+    return this.http.put<{success: boolean}>(`${backendUrl}users/${id}`, Action);
+  }
+
+
   GetConnectedUser(id: string) {
     return this.http.get<{userData: any}>(`${backendUrl}users/${id}`);
   }
@@ -26,14 +40,6 @@ export class UserService {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
     return this.http.get<{userData: any}>(`${backendUrl}users/images/${id}` + queryParams);
 
-  }
-  UpdateLoggedIn(id: string, action: boolean) {
-    const Action = {action};
-    return this.http.put<{success: boolean}>(`${backendUrl}users/${id}`, Action);
-  }
-  UpdateUser(UserObject: any, id: string) {
-
-    return this.http.post<{userData: ResultUser}>(`${backendUrl}users/${id}`, UserObject);
   }
   UpdateUserCollectionImages(UserImages: any, id: string) {
 

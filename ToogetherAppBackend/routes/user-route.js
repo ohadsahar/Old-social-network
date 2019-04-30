@@ -1,70 +1,85 @@
 const express = require("express");
 const router =  express.Router();
+const userService = require('../services/user.service');
 const config = require("../config");
-const userUtil = require("../utils/userUtil.util");
-const validateUtil = require('../utils/validateUtil.util');
-const winston = require("winston");
 const upload = config.ConfigMulter().upload;
 const uploadMulti = config.ConfigMulterMultiImages().upload;
 
-async function RegisterUser(req,res) {
-    let validationUserAndThenRegister;
+async function register(req,res) {
+    let resultOfCreate;
     try {
-        validationUserAndThenRegister = await validateUtil.ValidateRegisterInput(req.body, req);
+        resultOfCreate = await userService.create(req.body, req);
         res.status(200).json({
-            userData: validationUserAndThenRegister.message
+            message: resultOfCreate,
         })
     } catch (error) {
         res.status(400).json({
-            userData: validationUserAndThenRegister.message
+            message: error,
         })
     } finally {
-
+        console.log('The function register() ended!');
     }
 }
-async function FetchAllUsers(req, res) {
+async function getUsers(req, res) {
     try {
-        const FetchedUsers = await userUtil.GetAllUsers();
+        const resultFetchedUsers = await userService.get();
             res.status(200).json({
-                userData: FetchedUsers.message
+                message: resultFetchedUsers
             })
     } catch (error) {
             res.status(400).json({
-                userData: FetchedUsers.message
+                message: error
         })
     } finally {
-
+        console.log('The function getUsers() ended!');
     }
 }
-async function LoginToSystem(req, res) {
+async function updateUser(req,res) {
+    
+    try {
+        const resultOfUpdateUser = await userService.update(req.body, req.params.id, req);
+        res.status(200).json({
+            message: resultOfUpdateUser.userData
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error,
+        })
+    } finally {
+        console.log('The function updateUser() ended!');
+    }    
+}
+async function attemptToLogin(req, res) {
+    try {
+        const resultOfLoginAttempt = await userService.login(req.body);
+        res.status(200).json({
+            message: resultOfLoginAttempt.userData
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error
+        })
+    } finally {
+        console.log('The function attemptToLogin() ended!');
+    }
+}
+async function updateStatus(req, res) {
     try {
         
-        const ValidateLoginInputAndThenLogin = await validateUtil.ValidateLoginInput(req.body);
+        const updateStatus = await userService.changeStatus(req.params.id, req.body.action);
         res.status(200).json({
-            userData: ValidateLoginInputAndThenLogin.message
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            userData: ValidateLoginInputAndThenLogin.message
-        })
-    } finally {
-
-    }
-}
-async function UpdateLoggedUser(req, res) {
-    try {
-        const UpdateUser = await userUtil.UpdateUserLogStatus(req.params.id, req.body.action);
-            res.status(200).json({
-                message: UpdateUser.message.success,
-            }) 
+            message: updateStatus.success,
+        }) 
     } catch (error) {
         res.status(400).json({
-            message: UpdateUser.message.success,
+            message: error
         })
     } finally{
+        console.log('The function updateStatus() ended!');
     }
 }
+
+
 async function GetLoggedInUser(req,res) {
     try {
         const ConnectedUser = await userUtil.GetConnectedUser(req.params.id, req);
@@ -94,20 +109,6 @@ async function GetImagesWithPaginator(req,res) {
         })
     }
 }
-async function UpdateUser(req,res) {
-    try {
-        const validateUserInputAndThenUpdateUser = await validateUtil.ValidateUserInputForUpdate(req.body, req.params.id, req);
-        res.status(200).json({
-            userData: validateUserInputAndThenUpdateUser.message,
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            userData: validateUserInputAndThenUpdateUser.message,
-        })
-    } finally {
-    }    
-}
 async function UpdateImagesCollectionOfUser(req,res) {
 
     let NewCollectionOfImages
@@ -127,14 +128,18 @@ async function UpdateImagesCollectionOfUser(req,res) {
     }
 }
 
-router.post('/login', LoginToSystem);
-router.post('/register', upload, RegisterUser);
-router.post('/:id',upload, UpdateUser )
+router.post('/register', upload, register);
+router.post('/login', attemptToLogin);
+router.put('/:id', updateStatus);
+router.put('/:id',upload, updateUser);
+router.get('', getUsers);
+
 router.post('/images/:id', uploadMulti, UpdateImagesCollectionOfUser);
-router.get('', FetchAllUsers);
 router.get('/images/:id',GetImagesWithPaginator);
 router.get('/:id', GetLoggedInUser);
-router.put('/:id', UpdateLoggedUser);
+
+
+
 
 module.exports = router;
 
