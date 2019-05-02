@@ -1,5 +1,16 @@
-import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  NgForm,
+  Validators
+} from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -13,16 +24,14 @@ import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.co
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
 
-
 @Component({
   selector: 'app-wall-page',
   templateUrl: './wall.component.html',
   styleUrls: ['./wall.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class WallPageComponent implements OnInit {
-
+  public userConnectedUpdate = new FormData();
   private id: string;
   private counter: number;
   public hide: boolean;
@@ -38,16 +47,17 @@ export class WallPageComponent implements OnInit {
   public editAble$: Observable<boolean>;
   public mobile$: Observable<boolean>;
 
+  imageFormGroup = new FormGroup({
+    image: new FormControl(null, { validators: [Validators.required] })
+  });
 
-  imageFormGroup = new FormGroup({image: new FormControl(null,
-     { validators: [Validators.required] })});
-
-  imageFormArray = new FormGroup({image: new FormControl(null,
-      { validators: [Validators.required] })});
+  imageFormArray = new FormGroup({
+    image: new FormControl(null, { validators: [Validators.required] })
+  });
 
   public MarvelCollection: any[] = [];
   public UserConnected: User;
-  public ImagesArray: File [] = [];
+  public ImagesArray: File[] = [];
 
   QuoteCtrl = new FormControl();
   selectedValue: Quote[];
@@ -73,7 +83,7 @@ export class WallPageComponent implements OnInit {
       name: 'I am iron man',
       icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
     },
-      {
+    {
       name: `sometimes you gotta Run before you can Walk.`,
       icon: '../../../../assets/images/icons/iconfinder_ironman_III_52378.png'
     },
@@ -106,7 +116,7 @@ export class WallPageComponent implements OnInit {
     {
       name: 'I am groot',
       icon: '../../../../assets/images/icons/groot.jpg'
-    },
+    }
   ];
   constructor(
     private route: ActivatedRoute,
@@ -131,51 +141,57 @@ export class WallPageComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.OnWallComponentStart();
+    this.loadUpWall();
   }
-
   @HostListener('window:resize', ['$event'])
-onResize(event) {
-  this.innerWidth = window.innerWidth;
-  this.PhoneOrComputer(this.innerWidth);
-}
-
-  OnWallComponentStart() {
-
-    this.Loading();
-    this.PhoneOrComputer(this.innerWidth);
-    this.DisableWall();
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    this.phoneOrComputer(this.innerWidth);
+  }
+  loadUpWall() {
+    this.loading();
+    this.phoneOrComputer(this.innerWidth);
+    this.disableWall();
     this.innerWidth = window.innerWidth;
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
         this.id = paramMap.get('id');
-        this.userService.GetConnectedUser(this.id).subscribe(responseConnected => {
-            this.UserConnected = responseConnected.userData.UserObject;
-            if (responseConnected.userData.allImages.Images) {
-            this.totalImages = responseConnected.userData.allImages.Images.length;
+        this.userService.getCurrentUser(this.id).subscribe(
+          responseConnected => {
+            this.UserConnected = responseConnected.message.userData;
+            if (responseConnected.message.userImages) {
+              this.totalImages = responseConnected.message.userImages.length;
             }
-            if ((responseConnected.userData.UserObject.loggedin as any) === 'true') {
+            if (
+              (responseConnected.message.userData.loggedin as any) === 'true'
+            ) {
               this.router.navigate(['Wall/' + this.id]);
             } else {
               this.router.navigate(['']);
             }
-            this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
-              this.UserConnected.Images = response.userData.userImage;
-              this.StopLoading();
-          });
+            this.userService
+              .getImagesViaPaginator(
+                this.imagesPerPage,
+                this.currentPage,
+                this.id
+              )
+              .subscribe(response => {
+                this.UserConnected.Images = response.message.Images;
+                this.stopLoading();
+              });
           },
-          (error) => {
+          error => {
             this.responseMessageService.FailureMessage(
-              'Yuston we have problem, try again later',
+              'Sorry we have problem right now, try again later',
               'Sorry'
             );
-            this.AfterError();
+            this.afterError();
           }
         );
       }
     });
   }
-  DialogDeleteCollectionImages() {
+  dialogDeleteImages() {
     this.dialog.open(DialogDeleteComponent, {
       data: {
         totalImages: this.totalImages,
@@ -184,79 +200,85 @@ onResize(event) {
     });
   }
   onChangePage(pageData: PageEvent) {
-
     this.currentPage = pageData.pageIndex + 1;
     this.imagesPerPage = pageData.pageSize;
-    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id).subscribe(response => {
-        this.UserConnected.Images = response.userData.userImage;
-    });
+    this.userService
+      .getImagesViaPaginator(this.imagesPerPage, this.currentPage, this.id)
+      .subscribe(response => {
+        this.UserConnected.Images = response.message.Images;
+      });
   }
-  EditUser(form: NgForm) {
-
+  updateUser(form: NgForm) {
     if (form.invalid) {
       return;
     } else {
-
-      this.ValidateForm(form);
-      const UserConnectedUpdate = new FormData();
-      UserConnectedUpdate.append('email', this.UserConnected.email);
-      UserConnectedUpdate.append('password', this.UserConnected.password);
-      UserConnectedUpdate.append('firstname', this.UserConnected.firstname);
-      UserConnectedUpdate.append('lastname', this.UserConnected.lastname);
-      UserConnectedUpdate.append('superhero', this.UserConnected.superhero);
-      UserConnectedUpdate.append('loggedin', 'true');
-
-      if (this.imageFormGroup.controls.image.value) {
-
-        UserConnectedUpdate.append('image', this.imageFormGroup.controls.image.value);
-      } else {
-
-        UserConnectedUpdate.append('image', this.UserConnected.Image);
-      }
-      UserConnectedUpdate.append('quote', JSON.stringify(this.UserConnected.quote as any));
-      UserConnectedUpdate.append('role', this.UserConnected.role);
-      if (this.UserConnected.Images) {
-
-        UserConnectedUpdate.append('Images', JSON.stringify(this.UserConnected.Images));
-      }
-
+      this.validateForm(form);
+      this.createUserObjectForUpdate();
       this.imagePreview = null;
-
-      this.Loading();
+      this.loading();
       this.counter = 0;
-      this.userService.updateUser(UserConnectedUpdate, this.id).subscribe((response) => {
-        this.UserConnected = response.message.userData;
-        this.DisableWall();
-        this.CancelEdit();
-        this.StopLoading();
-        this.responseMessageService.SuccessMessage('Details updated successfully!', 'Yay!');
+      this.userService.updateUser(this.userConnectedUpdate, this.id).subscribe(
+        response => {
+          this.UserConnected = response.message.userData;
+          this.disableWall();
+          this.cancelEdit();
+          this.stopLoading();
+          this.responseMessageService.SuccessMessage(
+            'Details updated successfully!',
+            'Yay!'
+          );
         },
-        (error) => {
-          this.StopLoading();
-          this.responseMessageService.FailureMessage('Sorry there is a problem right now, try again later', 'Sorry');
-
+        error => {
+          this.afterError();
         }
       );
     }
   }
-  Edit() {
+  createUserObjectForUpdate(): void {
+    console.log(this.UserConnected)
+    this.userConnectedUpdate.append('email', this.UserConnected.email);
+    console.log(this.userConnectedUpdate);
+    this.userConnectedUpdate.append('password', this.UserConnected.password);
+    this.userConnectedUpdate.append('firstname', this.UserConnected.firstname);
+    this.userConnectedUpdate.append('lastname', this.UserConnected.lastname);
+    this.userConnectedUpdate.append('superhero', this.UserConnected.superhero);
+    this.userConnectedUpdate.append('loggedin', 'true');
+    if (this.imageFormGroup.controls.image.value) {
+      this.userConnectedUpdate.append(
+        'image',
+        this.imageFormGroup.controls.image.value
+      );
+    } else {
+      this.userConnectedUpdate.append('image', this.UserConnected.Image);
+    }
+    this.userConnectedUpdate.append(
+      'quote',
+      JSON.stringify(this.UserConnected.quote as any)
+    );
+    this.userConnectedUpdate.append('role', this.UserConnected.role);
+    if (this.UserConnected.Images) {
+      this.userConnectedUpdate.append(
+        'Images',
+        JSON.stringify(this.UserConnected.Images)
+      );
+    }
+    console.log(this.userConnectedUpdate);
+  }
+  edit(): void {
     this.counter += 1;
     if (this.counter === 1) {
-
-      this.EnableEdit();
-      this.DisableWall();
-
+      this.enableEdit();
+      this.disableWall();
     } else {
-      this.CancelEdit();
+      this.cancelEdit();
       this.counter = 0;
     }
   }
-  Disconnect() {
-
-    this.Loading();
+  disconnect(): void {
+    this.loading();
     this.userService.updateStatusLogged(this.id, false).subscribe(
       () => {
-        this.StopLoading();
+        this.stopLoading();
         this.router.navigate(['']);
       },
       error => {
@@ -264,38 +286,11 @@ onResize(event) {
           'Yuston we have problem, try again later',
           'Sorry'
         );
-        this.AfterError();
+        this.afterError();
       }
     );
   }
-  ValidateForm(form: NgForm) {
-
-    if (form.value.email) {
-      this.UserConnected.email = form.value.email;
-    }
-    if (form.value.firstname) {
-      this.UserConnected.firstname = form.value.firstname;
-    }
-
-    if (form.value.lastname) {
-      this.UserConnected.lastname = form.value.lastname;
-    }
-
-    if (form.value.password) {
-      this.UserConnected.password = form.value.password;
-    }
-    if (form.value.superhero) {
-      this.UserConnected.superhero = form.value.superhero;
-    }
-
-    if (this.selectedValue !== undefined) {
-
-      this.UserConnected.quote = [] as any;
-      this.UserConnected.quote.push(this.selectedValue as any);
-    }
-
-  }
-  onImagePicked(event: Event) {
+  onImagePicked(event: Event): void {
     const file = (event.target as HTMLInputElement).files[0];
     this.imageFormGroup.patchValue({ image: file });
     this.imageFormGroup.get('image').updateValueAndValidity();
@@ -305,97 +300,91 @@ onResize(event) {
     };
     reader.readAsDataURL(file);
   }
-  upload() {
-
+  fileChangeEvent(fileInput: any): void {
+    this.filesToUpload = fileInput.target.files as Array<File>;
+  }
+  uploadCollection(): void {
     const formData: any = new FormData();
     const files: Array<File> = this.filesToUpload;
     let i;
     // tslint:disable-next-line:prefer-for-of
-    for ( i = 0; i < files.length; i++) {
-        // tslint:disable-next-line:no-string-literal
-        formData.append('uploads[]', files[i], files[i]['name']);
-        if (i >= files.length) {
-          this.Loading();
+    for (i = 0; i < files.length; i++) {
+      // tslint:disable-next-line:no-string-literal
+      formData.append('uploads[]', files[i], files[i]['name']);
+      if (i >= files.length) {this.loading(); }
+    }
+    this.userService.updateImageCollection(formData, this.id).subscribe(response => {
+        if (response.userData.success) {
+          this.UserConnected.Images = response.userData.Images;
+          this.totalImages = response.userData.Images.length;
+          this.responseMessageService.SuccessMessage('Your album has been successfully updated.', 'Yay!');
+        } else {this.responseMessageService.FailureMessage('There was a problem updating your album, please try again.',
+            'Sorry'
+          );
         }
-    }
-    this.userService.UpdateUserCollectionImages(formData, this.id).subscribe(response => {
-      if (response.userData.success) {
-      this.UserConnected.Images = response.userData.Images;
-      this.totalImages = response.userData.Images.length;
-      this.responseMessageService.SuccessMessage('Your album has been successfully updated.', 'Yay!');
-      } else {
-        this.responseMessageService.FailureMessage('There was a problem updating your album, please try again.', 'Sorry');
-      }
-      this.StopLoading();
-    });
+        this.stopLoading();
+      });
   }
-  fileChangeEvent(fileInput: any) {
-      this.filesToUpload =  fileInput.target.files as Array<File>;
-
-  }
-  PhoneOrComputer(innerWidth: number) {
-    if (innerWidth <= 800) {
-      this.store.dispatch(new UI.Mobile());
-      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
-    }  else if (innerWidth >= 1000) {
-      this.store.dispatch(new UI.Desktop());
-      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
-    }
-  }
-  ShowProfile() {
-
-    this.DisableWall();
-
-  }
-  ShowWall() {
-    this.EnableWall();
-  }
-  AfterError() {
+  afterError(): void {
+    this.stopLoading();
     this.store.dispatch(new UI.HideTheWall());
     this.store.dispatch(new UI.StopLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
     this.spinnerService.hide();
+    this.responseMessageService.FailureMessage(
+      'Sorry there is a problem right now, try again later',
+      'Sorry'
+    );
   }
-  Loading() {
+  /* Validate functions */
+  validateForm(form: NgForm): void {
+    if (form.value.email) {this.UserConnected.email = form.value.email;}
+    if (form.value.firstname) {this.UserConnected.firstname = form.value.firstname; }
+    if (form.value.lastname) {this.UserConnected.lastname = form.value.lastname; }
+    if (form.value.password) {this.UserConnected.password = form.value.password; }
+    if (form.value.superhero) {this.UserConnected.superhero = form.value.superhero; }
+    if (this.selectedValue) { this.UserConnected.quote = [] as any; this.UserConnected.quote.push(this.selectedValue as any); }
+  }
+  phoneOrComputer(innerWidth: number): void {
+    if (innerWidth <= 800) {
+      this.store.dispatch(new UI.Mobile());
+      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
+    } else if (innerWidth >= 1000) {
+      this.store.dispatch(new UI.Desktop());
+      this.mobile$ = this.store.select(fromRoot.getMobileOrDesktop);
+    }
+  }
+  /* Ngrx functions */
+  loading(): void {
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
-  StopLoading() {
-
+  stopLoading(): void {
     this.spinnerService.hide();
     this.store.dispatch(new UI.StopLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-
   }
-  EnableEdit() {
-
+  enableEdit(): void {
     this.store.dispatch(new UI.EditAble());
     this.editAble$ = this.store.select(fromRoot.getIsEditAble);
-
   }
-  CancelEdit() {
-
+  cancelEdit(): void {
     this.store.dispatch(new UI.CancelEdit());
     this.editAble$ = this.store.select(fromRoot.getIsEditAble);
   }
-  EnableWall() {
-
+  enableWall(): void {
     this.store.dispatch(new UI.ShowTheWall());
     this.store.dispatch(new UI.CancelEdit());
     this.editAble$ = this.store.select(fromRoot.getIsEditAble);
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
   }
-  DisableWall() {
-
-
+  disableWall(): void {
     this.store.dispatch(new UI.HideTheWall());
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
-
   }
-
 }

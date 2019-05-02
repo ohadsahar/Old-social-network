@@ -40,13 +40,17 @@ export class DialogDeleteComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
+    this.onLoadDeleteComponent();
+
+  }
+
+  onLoadDeleteComponent() {
+
+    this.userService.getImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
     .subscribe(response => {
-      console.log(response.userData.userImage);
-      this.imagesCollection = response.userData.userImage;
+      this.imagesCollection = response.message.Images;
       this.StopLoading();
   });
-
   }
 
   // Selected(customerid: string, customername: string) {
@@ -87,9 +91,9 @@ export class DialogDeleteComponent implements OnInit {
 
     this.currentPage = pageData.pageIndex + 1;
     this.imagesPerPage = pageData.pageSize;
-    this.userService.GetImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
+    this.userService.getImagesViaPaginator(this.imagesPerPage, this.currentPage , this.id)
     .subscribe(response => {
-        this.imagesCollection.Images = response.userData.userImage;
+        this.imagesCollection.Images = response.message.Images;
     });
   }
   Loading() {
@@ -100,7 +104,7 @@ export class DialogDeleteComponent implements OnInit {
   StopLoading() {
 
     this.spinnerService.hide();
-    this.store.dispatch(new UI.StopLoading());
+    this.store.dispatch(new UI.StartLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
 
   }

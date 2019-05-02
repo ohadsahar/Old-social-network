@@ -7,16 +7,19 @@ async function create(userData, req) {
     return  {userData: createdUser.userData, success: createdUser.success};
 }
 async function get() {
-    const fetchedUsers = await userUtil.fetchAllUsers();
+    let fetchedUsers = await userUtil.fetchAllUsers();
     return {users: fetchedUsers.users,success: fetchedUsers.success}
 } 
+async function getImagesCollection(req) {
+    const  allImagesOfCurrentUser = await userUtil.getImagesOnly(req);
+    return {imageCollections: allImagesOfCurrentUser}
+}
 async function update(userData, id, req) {
     const validateInput = await validateUtil.validateUpdateInput(userData);
     const resultUpdateUser = await userUtil.updateUser(validateInput.userData, id, req);
     return {userData: resultUpdateUser.userData, success: resultUpdateUser.success};
 } 
 async function login(userData) {
-
     const validateInput = await validateUtil.validateLoginInput(userData);
     const resultOfLogin = await userUtil.login(validateInput.userData);
     return {userData: resultOfLogin.userData};
@@ -26,11 +29,19 @@ async function changeStatus(id, action) {
     const updateStatus = await userUtil.updateStatus(status, id);
     return {success: updateStatus.success};
 }
+async function getConnectedUser(id) {
+     
+    const userConnectedValues = await userUtil.getConnectedUserValues(id);
+    const userConnectedCollectionImages = await userUtil.getAllImagesOfConnectedUser(id);   
+    return {userData: userConnectedValues, userImages: userConnectedCollectionImages.Images}
+} 
 
 module.exports = {
     create,
     get,
     update,
     login,
-    changeStatus
+    changeStatus,
+    getImagesCollection,
+    getConnectedUser
 }

@@ -2,16 +2,16 @@
 <div class="wall-style">
   <div class="row">
     <div class="col-sm-1 col-md-1 col-lg-1 left-nav"  *ngIf="!(mobile$ | async)">
-      <h5 (click)="ShowProfile()"><img src="{{UserConnected?.Image}}" class="menu-img"> {{UserConnected?.firstname}} Profile</h5>
-      <h5 (click)="ShowWall()">Wall</h5>
-      <h5 (click)="Disconnect()">Disconnect </h5>
+      <h5 (click)="disableWall()"><img src="{{UserConnected?.Image}}" class="menu-img"> {{UserConnected?.firstname}} Profile</h5>
+      <h5 (click)="enableWall()">Wall</h5>
+      <h5 (click)="disconnect()">Disconnect </h5>
       <h5>New comics 2019</h5>
     </div>
     <button mat-button [matMenuTriggerFor]="menu" *ngIf="mobile$ | async" class="profile-menu">Menu</button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item><h5 (click)="ShowProfile()"><img src="{{UserConnected?.Image}}" class="menu-img"> {{UserConnected?.firstname}} Profile</h5></button>
-      <button mat-menu-item><h5 (click)="ShowWall()">Wall</h5></button>
-      <button mat-menu-item><h5 (click)="Disconnect()">Disconnect </h5></button>
+      <button mat-menu-item><h5 (click)="disableWall()"><img src="{{UserConnected?.Image}}" class="menu-img"> {{UserConnected?.firstname}} Profile</h5></button>
+      <button mat-menu-item><h5 (click)="enableWall()">Wall</h5></button>
+      <button mat-menu-item><h5 (click)="disconnect()">Disconnect </h5></button>
       <button mat-menu-item><h5>New comics 2019</h5></button>
     </mat-menu>
     <div class="col-sm-10">
@@ -44,8 +44,8 @@
         <!-- Profile section includes full edit options -->
         <div *ngIf="(profileAble$ | async)">
           <mat-list>
-            <i class="far fa-edit" (click)="Edit()"></i><h4 *ngIf="editAble$ | async">Edit Mode</h4>
-            <form id="EditForm" (submit)="EditUser(EditForm)" #EditForm="ngForm" *ngIf="!(isLoading$ | async)">
+            <i class="far fa-edit" (click)="edit()"></i><h4 *ngIf="editAble$ | async">Edit Mode</h4>
+            <form id="updateForm" (submit)="updateUser(updateForm)" #updateForm="ngForm" *ngIf="!(isLoading$ | async)">
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">
                   <mat-list-item *ngIf="!(editAble$ | async)">Your Firstname: {{ UserConnected?.firstname }}
@@ -184,11 +184,11 @@
 
                     </div>
                     <div class="col-sm-12">
-                        <div class="edit-collection" (click)="DialogDeleteCollectionImages()">Edit collection</div>
+                        <div class="edit-collection" (click)="dialogDeleteImages()">Edit collection</div>
                     </div>
                     <div class="space"></div>
                     <mat-divider *ngIf="(mobile$ | async) && (editAble$ | async)" ></mat-divider>
-                    <button mat-button color="primary" (click)="upload()" id="submit-collection">Submit your collection</button>
+                    <button mat-button color="primary" (click)="uploadCollection()" id="submit-collection">Submit your collection</button>
                 </div>
                 <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
                   <img src="{{UserConnected?.Image}}" class="img-thumbnail profile-image">

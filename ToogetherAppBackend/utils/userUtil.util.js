@@ -18,10 +18,13 @@ async function registerUser(userData, req) {
 } 
 async function fetchAllUsers() {
     const fetchedUsers = await userSchema.find();
-    return {users: fetchedUsers,success: true}
+    if (fetchedUsers) {
+        return {users: fetchedUsers,success: true}
+    } else {
+      throw new Error(`userUtil: fetchAllUsers - ${error}`)
+    }
 } 
 async function updateUser(userData, id, req) {
-
       let newData;
       if (req.file) {
           newData = createObjectWithNewProfileImage(req,userData).user;
@@ -51,6 +54,64 @@ async function updateStatus(status, id) {
   await userSchema.updateOne({_id: id}, status);
   return {success: true }
 }
+async function getImagesOnly(req, id) {
+
+  const pageSize =+ req.query.pagesize;
+  const currentPage = req.query.page;
+  let imageQuery;
+  if (currentPage && pageSize) {
+    imageQuery = await userSchema.findById({_id: req.params.id}).select("Images").where('Images')
+    .slice((pageSize * (currentPage -1)), pageSize);
+     return imageQuery.Images;
+  } else {
+    throw new Error(`userUtil: getImagesOnly - no pagesize and number of page ${error}`);
+  }
+}
+async function getConnectedUserValues(id) {
+
+    const resultUserValues = await userSchema.findById({_id: id}).select("email password firstname lastname superhero loggedin Image quote role");
+    if(resultUserValues) {
+      return resultUserValues;
+    } else {
+      throw new Error(`userUtil: getConnectedUserValues - Error: ${error}`);
+    }
+}
+async function getAllImagesOfConnectedUser(id) {
+  const resultOfFetchedImages = await userSchema.findById({_id: id}).select("Images");
+  if (resultOfFetchedImages) {
+    return resultOfFetchedImages;
+  } else {
+    throw new Error(`userUtil: getAllImagesOfConnectedUser - Error: ${error}`);
+  }
+}
+async function UpdateCollection(req, id) {
+  let ArrayImg = [];
+  let finalArrayOfImages = [];
+  const imageCollection = await userSchema.findById({_id: id}).select("Images.imagename");
+    if (req.files) {
+      const url  = req.protocol + '://' + req.get('host');
+      req.files.forEach(element => {
+        ArrayImg.push({imagename: url + '/images/' + element.filename})
+      });
+      if (imageCollection.Images) {
+        finalArrayOfImages = [...ArrayImg, ...imageCollection.Images];  
+      
+          await userSchema.findOneAndUpdate({_id: id}, {$set: {Images:finalArrayOfImages}}, {upsert: true });
+          const message = {
+            Images: finalArrayOfImages,
+            success: true
+          }
+          return { message: message };
+    } else {
+          await userSchema.findByIdAndUpdate({_id: id}, {Images: ArrayImg});
+          const message = {
+            Images: ArrayImg,
+            success: true
+          }
+          return { message: message };
+         }
+    } 
+} 
 function createObjectWithNewProfileImage(req, userData) {
 
   const url  = req.protocol + '://' + req.get('host');
@@ -87,76 +148,16 @@ function createObjectWithoutProfileImage(userData) {
   return {user: newUserData}
 }
 
-
-
-async function GetConnectedUser(id) {
-     
-
-      const userObject = await userSchema.findById({_id: id}).select("email password firstname lastname superhero loggedin Image quote role");
-      const allImages = await userSchema.findById({_id: id}).select("Images");
-     
-      const message = {
-          UserObject: userObject,
-          allImages: allImages,
-          success: true
-      }
-      return {message: message};
-} 
-async function getImagesOnly(req) {
-
-  const pageSize =+ req.query.pagesize;
-  const currentPage = req.query.page;
-  let imageQuery;
-  if (currentPage && pageSize) {
-    imageQuery = await userSchema.findById({_id: req.params.id}).select("Images").where('Images')
-    .slice((pageSize * (currentPage -1)), pageSize);
-    const message = {
-      userImage: imageQuery.Images,
-      success: true
-    }
-    return {message: message}
-  }
-}
-async function UpdateCollection(req, id) {
-    let ArrayImg = [];
-    let finalArrayOfImages = [];
-    const imageCollection = await userSchema.findById({_id: id}).select("Images.imagename");
-      if (req.files) {
-        const url  = req.protocol + '://' + req.get('host');
-        req.files.forEach(element => {
-          ArrayImg.push({imagename: url + '/images/' + element.filename})
-        });
-        if (imageCollection.Images) {
-          finalArrayOfImages = [...ArrayImg, ...imageCollection.Images];  
-        
-            await userSchema.findOneAndUpdate({_id: id}, {$set: {Images:finalArrayOfImages}}, {upsert: true });
-            const message = {
-              Images: finalArrayOfImages,
-              success: true
-            }
-            return { message: message };
-      } else {
-            await userSchema.findByIdAndUpdate({_id: id}, {Images: ArrayImg});
-            const message = {
-              Images: ArrayImg,
-              success: true
-            }
-            return { message: message };
-           }
-      } 
-} 
-
-
-
 module.exports = {
   registerUser,
   fetchAllUsers,
   updateUser,
   login,
   updateStatus,
+  UpdateCollection,
+  getImagesOnly,
+  getAllImagesOfConnectedUser,
+  getConnectedUserValues,
   createObjectWithNewProfileImage,
   createObjectWithoutProfileImage,
-  GetConnectedUser,
-  UpdateCollection,
-  getImagesOnly
 };

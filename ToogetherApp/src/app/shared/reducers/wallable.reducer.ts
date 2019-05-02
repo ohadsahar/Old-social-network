@@ -9,7 +9,7 @@ const initialState: State = {
   profileAble: true
 };
 
-export function WallAbleReducer(state = initialState, action: UIActions) {
+export function wallAbleReducer(state = initialState, action: UIActions) {
 
   switch (action.type) {
     case SHOW_WALL:
@@ -27,5 +27,5 @@ export function WallAbleReducer(state = initialState, action: UIActions) {
     }
   }
 }
-export const GetWallAble = (state: State) => state.wallAble;
-export const GetProfileAble = (state: State) => state.profileAble;
+export const getWallAble = (state: State) => state.wallAble;
+export const getProfileAble = (state: State) => state.profileAble;

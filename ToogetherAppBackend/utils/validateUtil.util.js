@@ -6,6 +6,8 @@ async function validateLoginInput(userData) {
   if (validator.isEmail(userData.email) && validator.isLength(userData.password, 8)) {
     userData.email = userData.email.toLowerCase();
     return {userData: userData};
+  } else {
+    throw new Error(`validateUtil: validateLoginInput -  ${error}`);
   }
 }
 async function validateRegisterInput(userData) {
@@ -15,6 +17,8 @@ async function validateRegisterInput(userData) {
       userData.email = userData.email.toLowerCase();
       userData.password = await bycrypt.hash(userData.password, 10);
       return {userData: userData, success: true}
+  } else {
+    throw new Error(`validateUtil: validateRegisterInput - ${error}`);
   }
 }
 async function validateUpdateInput(userData) {
@@ -34,7 +38,9 @@ async function validateUpdateInput(userData) {
       validator.isLength(userData.superhero, 4) && validator.isLength(userData.quote, {min: 10, max: undefined})
     ) {
       return {userData: userData};  
-    } 
+    } else {
+      throw new Error (`validateUtil: validateUpdateInput - ${error}`);
+    }
 }
 
 

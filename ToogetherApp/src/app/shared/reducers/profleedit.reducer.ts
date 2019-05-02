@@ -9,7 +9,7 @@ const initialState: State = {
   counter: 0,
 };
 
-export function EditProfileAbleReducer(state = initialState, action: UIActions) {
+export function editProfileAbleReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case EDIT_ABLE:
       return {

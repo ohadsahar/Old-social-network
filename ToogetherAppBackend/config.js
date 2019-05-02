@@ -1,7 +1,7 @@
 const multer  = require('multer');
 const path = require("path");
 
- function ConfigMulter() {
+ function configMulter() {
 
    const storage = multer.diskStorage({
         destination: 'assets/images',
@@ -14,8 +14,7 @@ const path = require("path");
 
       return {upload: multerStorage};
 }
-
-function ConfigMulterMultiImages () {
+function configMulterMultiImages () {
 
   
   const storage = multer.diskStorage({
@@ -33,6 +32,6 @@ function ConfigMulterMultiImages () {
 
 module.exports = {
 
-    ConfigMulter,
-    ConfigMulterMultiImages
+    configMulter,
+    configMulterMultiImages,
 }

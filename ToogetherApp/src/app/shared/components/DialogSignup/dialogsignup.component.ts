@@ -6,7 +6,7 @@ import { ResponseMessagesService } from 'src/app/core/services/error.service';
 import { UserService } from 'src/app/core/services/user.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../actions/ui.actions';
-import { ResultUser } from './../../models/Result-user';
+
 
 export interface Quote {
 
@@ -83,7 +83,7 @@ export class DialogSignUpComponent {
     },
   ];
   public hide: boolean;
-  public resultUserObject: ResultUser;
+  public resultUserObject: any;
   public imagePreview: string;
   public userData = new FormData();
   imageFormGroup = new FormGroup({

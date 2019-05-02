@@ -5,7 +5,7 @@ export interface State {
 const initialState: State = {
     mobile: false
 };
-export function WindowSizeReducer(state = initialState, action: UIActions) {
+export function windowSizeReducer(state = initialState, action: UIActions) {
   switch (action.type) {
     case MOBILE_DETECTED:
       return {
@@ -24,4 +24,4 @@ export function WindowSizeReducer(state = initialState, action: UIActions) {
       }
     }
 }
-export const GetMobileOrDesktop = (state: State) => state.mobile;
+export const getMobileOrDesktop = (state: State) => state.mobile;
