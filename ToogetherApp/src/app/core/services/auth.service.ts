@@ -44,10 +44,6 @@ export class AuthService {
   registerUser(userData: any) {
     return this.http.post<{message: ResultData}>(`${authUrl}register`, userData);
   }
-  updateStatusLogged(id: string, action: boolean) {
-    const Action = {action};
-    return this.http.put<{success: boolean}>(`${authUrl}${id}`, Action);
-  }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }

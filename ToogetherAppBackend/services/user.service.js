@@ -12,7 +12,7 @@ async function get() {
 } 
 async function getImagesCollection(req) {
     const  allImagesOfCurrentUser = await userUtil.getImagesOnly(req);
-    return {imageCollections: allImagesOfCurrentUser}
+    return {Images: allImagesOfCurrentUser}
 }
 async function update(userData, id, req) {
     const validateInput = await validateUtil.validateUpdateInput(userData);

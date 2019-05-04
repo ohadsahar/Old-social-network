@@ -43,6 +43,7 @@ async function getImagesCollection(req, res) {
         const resultOfImagesCollection = await userService.getImagesCollection(req);
         res.status(200).json({message: resultOfImagesCollection, success: true})
     } catch (error) {
+        console.log(error);
         res.status(400).json({message: error,success: false})
     } finally {
         console.log('The function getImagesCollection() ended!');
@@ -50,8 +51,8 @@ async function getImagesCollection(req, res) {
 }
 async function updateImagesCollectionOfUser(req, res) {
     try {
-        const NewCollectionOfImages = await userUtil.UpdateCollection(req, req.params.id);
-        res.status(200).json({userData: NewCollectionOfImages.message,success: true})
+        const newCollectionOfImages = await userUtil.UpdateCollection(req, req.params.id);
+        res.status(200).json({userData: newCollectionOfImages.message,success: true})
     } catch (error) {
         res.status(400).json({userData: error,success: false})
     } finally {

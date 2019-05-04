@@ -1,5 +1,5 @@
-const userSchema = require("../models/UserSchema");
-const bycrypt = require("bcryptjs");
+const userSchema = require("../models/userSchema");
+const bycrypt = require("bcryptjs");  
 const jwt = require("jsonwebtoken");
 
 async function registerUser(userData, req) {
@@ -48,11 +48,6 @@ async function login(userData) {
     return {userData: userData}
   } 
      
-}
-async function updateStatus(status, id) {
-
-  await userSchema.updateOne({_id: id}, status);
-  return {success: true }
 }
 async function getImagesOnly(req, id) {
 
@@ -153,7 +148,6 @@ module.exports = {
   fetchAllUsers,
   updateUser,
   login,
-  updateStatus,
   UpdateCollection,
   getImagesOnly,
   getAllImagesOfConnectedUser,

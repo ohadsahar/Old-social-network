@@ -1,29 +1,18 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  NgForm,
-  Validators
-} from '@angular/forms';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../../shared/actions/ui.actions';
 import { DialogDeleteComponent } from '../../../shared/components/DialogDelete/dialog-delete.component';
+import { AuthService } from '../../services/auth.service';
 import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-wall-page',
@@ -150,7 +139,7 @@ export class WallPageComponent implements OnInit {
     this.innerWidth = window.innerWidth;
     this.phoneOrComputer(this.innerWidth);
   }
-    loadUpWall() {
+  loadUpWall() {
     this.loading();
     this.phoneOrComputer(this.innerWidth);
     this.disableWall();
@@ -163,7 +152,7 @@ export class WallPageComponent implements OnInit {
                 if (responseConnected.message.userImages) {
                   this.totalImages = responseConnected.message.userImages.length;
                 }
-                this.userService.getImagesViaPaginator(this.imagesPerPage,this.currentPage, this.id)
+                this.userService.getImagesViaPaginator(this.imagesPerPage, this.currentPage, this.id)
                   .subscribe(response => {
                     this.UserConnected.Images = response.message.Images;
                     this.stopLoading();
@@ -176,8 +165,6 @@ export class WallPageComponent implements OnInit {
             );
           }
         });
-
-
   }
   dialogDeleteImages() {
     this.dialog.open(DialogDeleteComponent, {
@@ -229,25 +216,13 @@ export class WallPageComponent implements OnInit {
     this.userConnectedUpdate.append('lastname', this.UserConnected.lastname);
     this.userConnectedUpdate.append('superhero', this.UserConnected.superhero);
     if (this.imageFormGroup.controls.image.value) {
-      this.userConnectedUpdate.append(
-        'image',
-        this.imageFormGroup.controls.image.value
-      );
-    } else {
-      this.userConnectedUpdate.append('image', this.UserConnected.Image);
-    }
-    this.userConnectedUpdate.append(
-      'quote',
-      JSON.stringify(this.UserConnected.quote as any)
-    );
+      this.userConnectedUpdate.append('image', this.imageFormGroup.controls.image.value);
+    } else {this.userConnectedUpdate.append('image', this.UserConnected.Image); }
+    this.userConnectedUpdate.append('quote', JSON.stringify(this.UserConnected.quote as any));
     this.userConnectedUpdate.append('role', this.UserConnected.role);
     if (this.UserConnected.Images) {
-      this.userConnectedUpdate.append(
-        'Images',
-        JSON.stringify(this.UserConnected.Images)
-      );
+      this.userConnectedUpdate.append('Images', JSON.stringify(this.UserConnected.Images));
     }
-    console.log(this.userConnectedUpdate);
   }
   edit(): void {
     this.counter += 1;
@@ -286,7 +261,7 @@ export class WallPageComponent implements OnInit {
       formData.append('uploads[]', files[i], files[i]['name']);
       if (i >= files.length) {this.loading(); }
     }
-    this.userService.updateImageCollection(formData, this.id).subscribe(response => {
+    this.userService.updateImageCollection(formData, this.id).subscribe((response) => {
         if (response.userData.success) {
           this.UserConnected.Images = response.userData.Images;
           this.totalImages = response.userData.Images.length;
@@ -296,8 +271,9 @@ export class WallPageComponent implements OnInit {
           );
         }
         this.stopLoading();
-      });
-  }
+      }, (error) => {this.responseMessageService.FailureMessage(error, 'Sorry');
+  });
+}
   afterError(): void {
     this.stopLoading();
     this.store.dispatch(new UI.HideTheWall());
@@ -360,5 +336,4 @@ export class WallPageComponent implements OnInit {
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
   }
-
 }
