@@ -4,8 +4,8 @@
     <!-- Desktop & Tablet menu -->
     <div class="col-sm-1 col-md-1 col-lg-1 left-nav"  *ngIf="!(mobile$ | async)">
       <h5 (click)="disableWall()"><img src="{{userConnected?.Image}}" class="menu-img"> {{userConnected?.firstname}} Profile</h5>
-      <h5 (click)="enableWall()">Wall</h5>
-      <h5 (click)="disconnect()">Disconnect </h5>
+      <h5><a [routerLink]="['/posts', id]">Wall</a></h5>
+      <h5 (click)="disconnect()">Disconnect</h5>
       <h5>New comics 2019</h5>
     </div>
     <!-- Mobile menu -->
@@ -16,34 +16,10 @@
       <button mat-menu-item><h5 (click)="disconnect()">Disconnect </h5></button>
       <button mat-menu-item><h5>New comics 2019</h5></button>
     </mat-menu>
+    <!-- End of mobile menu -->
     <div class="col-sm-10">
       <div class="main-page">
-        <!-- Wall section -->
-        <div *ngIf="wallAble$ | async">
-          <div class="wall-section">
-              <mat-card class="example-card">
-                  <mat-card-header>
-                    <div mat-card-avatar class="example-header-image">
-                        <img mat-card-image src="{{userConnected?.Image}}" alt="Photo of profile user">
-                    </div>
-                    <mat-card-title>Shiba Inu</mat-card-title>
-                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-                  </mat-card-header>
-                  <img mat-card-image src="{{userConnected?.Image}}" alt="Photo of a Shiba Inu">
-                  <mat-card-content>
-                    <p>
-                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                      bred for hunting.
-                    </p>
-                  </mat-card-content>
-                  <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                  </mat-card-actions>
-                </mat-card>
-          </div>
-        </div>
+
         <!-- Profile section includes full edit options -->
         <div *ngIf="(profileAble$ | async)">
           <mat-list>

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog, PageEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -20,11 +20,14 @@ import { UserService } from './../../services/user.service';
   styleUrls: ['./wall.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
+@Injectable({providedIn: 'root'})
 export class WallPageComponent implements OnInit {
 
   public userConnectedUpdate = new FormData();
-  private id: string;
+  public id: string;
   private counter: number;
+  public superHeroImage: string;
   public hide: boolean;
   public innerWidth: number;
   public imagePreview: string;
@@ -147,6 +150,9 @@ export class WallPageComponent implements OnInit {
             this.id = paramMap.get('id');
             this.userService.getCurrentUser(this.id).subscribe((responseConnected) => {
                 this.userConnected = responseConnected.message.userData;
+                this.superHeroImage = responseConnected.message.userData.quote.map(superHeroProfileImage => {
+                  return superHeroProfileImage.icon;
+                });
                 if (responseConnected.message.userImages) {
                   this.totalImages = responseConnected.message.userImages.length;
                 }

@@ -1,0 +1,119 @@
+/* Posts css */
+
+.posts-style {
+  overflow-x: hidden;
+  background-image: linear-gradient(to left, #003459, #003459, #ff3f4e);
+  font-family: "Shadows Into Light", cursive !important;
+  height: 100vh;
+}
+
+.posts-style .left-nav {
+  background-image: linear-gradient(#031d44, #04395e);
+  box-shadow: 3px 3px 3px cornflowerblue;
+  height: 100vh !important;
+}
+
+.posts-style .main-page {
+  padding: 25px;
+}
+
+.posts-style h5,
+a {
+  font-family: "Shadows Into Light", cursive;
+  font-size: 19px;
+  text-align: center;
+  padding-top: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+.posts-style .example-full-width {
+  width: 70% !important;
+}
+
+.posts-style .posts-section .wall-section {
+  height: 500px;
+  overflow-y: scroll;
+}
+.posts-style .posts-section #post-image {
+  padding: 20px;
+}
+.posts-style .posts-section #post-header-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.posts-style .example-header-image {
+  background-size: cover;
+}
+
+.posts-style .menu-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.posts-style .mat-option img {
+  height: 40px !important;
+  width: 40px !important;
+}
+
+.posts-style #space {
+  margin-top: 1.5%;
+}
+.posts-style .posts-section .mat-card p {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  /* white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;  */
+}
+
+.posts-style .posts-section .example-card {
+  max-width: 300px;
+  padding: 15px;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+.posts-style .posts-section .user-post .mat-card-title {
+  font-size: 30px;
+}
+.posts-style .posts-section .user-post.mat-card-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+}
+.posts-style .posts-section .mat-card {
+  font-family: "Shadows Into Light", cursive;
+  font-size: 18px;
+}
+.posts-style .posts-section .user-post .mat-card-actions {
+  text-align: center;
+}
+
+/* End of wall css */
+
+/* Scroll-bar style */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* End of scroll-bar */

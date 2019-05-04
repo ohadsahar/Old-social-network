@@ -12,13 +12,14 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DialogLoginComponent } from './shared/components/DialogLogin/dialoglogin.component';
 import { DialogDeleteComponent } from './shared/components/DialogDelete/dialog-delete.component';
+import {PostsComponent } from './core/components/posts/posts.component';
 import { WallPageComponent } from './core/components/wall/wall.component';
 import { AuthInterceptor } from './shared/components/DialogLogin/auth-interceptor.component';
 import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [AppComponent, HomePageComponent, DialogSignUpComponent,
-    DialogLoginComponent, WallPageComponent, DialogDeleteComponent],
+    DialogLoginComponent, WallPageComponent, DialogDeleteComponent, PostsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,6 +31,7 @@ import { AngularMaterialModule } from './angular-material.module';
     Ng4LoadingSpinnerModule.forRoot(),
     StoreModule.forRoot(Reducers)
   ],
+
   entryComponents: [DialogSignUpComponent, DialogLoginComponent, DialogDeleteComponent],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
