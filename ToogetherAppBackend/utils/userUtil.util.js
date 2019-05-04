@@ -79,7 +79,7 @@ async function getAllImagesOfConnectedUser(id) {
     throw new Error(`userUtil: getAllImagesOfConnectedUser - Error: ${error}`);
   }
 }
-async function UpdateCollection(req, id) {
+async function updateCollection(req, id) {
   let ArrayImg = [];
   let finalArrayOfImages = [];
   const imageCollection = await userSchema.findById({_id: id}).select("Images.imagename");
@@ -148,7 +148,7 @@ module.exports = {
   fetchAllUsers,
   updateUser,
   login,
-  UpdateCollection,
+  updateCollection,
   getImagesOnly,
   getAllImagesOfConnectedUser,
   getConnectedUserValues,

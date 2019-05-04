@@ -51,7 +51,7 @@ async function getImagesCollection(req, res) {
 }
 async function updateImagesCollectionOfUser(req, res) {
     try {
-        const newCollectionOfImages = await userUtil.UpdateCollection(req, req.params.id);
+        const newCollectionOfImages = await userUtil.updateCollection(req, req.params.id);
         res.status(200).json({userData: newCollectionOfImages.message,success: true})
     } catch (error) {
         res.status(400).json({userData: error,success: false})
