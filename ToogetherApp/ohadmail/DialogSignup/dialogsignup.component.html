@@ -1,0 +1,61 @@
+<div class="dialog-sign-up">
+<h2 mat-dialog-title>Signup</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-form" id="SignUpForm" (submit)="DoneSignup(SignUpForm)" #SignUpForm="ngForm" enctype="multipart/form-data">
+    <mat-form-field class="example-full-width">
+      <input matInput  type="email" name="email" #email="ngModel" ngModel  value="" required>
+      <mat-placeholder class="placeholder">Your email</mat-placeholder>
+      <mat-error *ngIf="email.invalid">Your email is not in the right format</mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput  minlength="8" name="password" #password="ngModel" ngModel  [type]="hide ? 'password' : 'text'" required>
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-placeholder class="placeholder">Your password</mat-placeholder>
+      <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input matInput minlength="2" type="text" name="firstname" #firstname="ngModel" ngModel required>
+        <mat-placeholder  class="placeholder">Your firstname</mat-placeholder>
+        <mat-error *ngIf="firstname.invalid">Your firstname is not in the right format</mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput minlength="2" type="text" name="lastname" #lastname="ngModel" ngModel required>
+          <mat-placeholder class="placeholder">Your Lastname</mat-placeholder>
+          <mat-error *ngIf="lastname.invalid">Your lastname is not in the right format</mat-error>
+        </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput  type="text" minlength="1" name="userhero" #userhero="ngModel" ngModel required>
+      <mat-placeholder class="placeholder">Your superhero</mat-placeholder>
+      <mat-error *ngIf="userhero.invalid">Your superhero is not in the right format</mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-select [(ngModel)]="selectedValue" name="quote">
+        <mat-option *ngFor="let quote of quotes" [value]="quote">
+         <img src="{{quote.icon}}" class="example-option-img"> {{quote.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div [formGroup]="imageFormGroup" class="image-upload">
+        <button
+        mat-stroked-button
+        id="image-button"
+        type="button"
+        (click)="filePicker.click()">
+        Upload picture
+      </button>
+      <input type="file" name="image" #filePicker (change)="onImagePicked($event)"
+        style="visibility: hidden"/>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+        <img [src]="imagePreview"/>
+      </div>
+    <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+  </div>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button  cdkFocusInitial>Submit</button>
+      </mat-dialog-actions>
+  </form>
+</mat-dialog-content>
+</div>

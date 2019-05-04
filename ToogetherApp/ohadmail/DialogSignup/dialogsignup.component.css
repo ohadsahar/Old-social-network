@@ -1,0 +1,182 @@
+ .mat-dialog-container {
+
+   background-color: #1D3557;
+   background-image: linear-gradient(#1D3557) !important;
+   border-radius: 5px 10px 5px 10px;
+   opacity: 0.9;
+ }
+
+ .dialog-sign-up .mat-dialog-title {
+
+   text-align: center;
+   font-weight: bold;
+   color: white;
+   font-family: 'Shadows Into Light', cursive;
+ }
+
+
+
+
+ .dialog-sign-up .example-container {
+   display: flex;
+   flex-direction: column;
+ }
+
+ .dialog-sign-up .example-container>* {
+   width: 100%;
+ }
+
+ .dialog-sign-up .example-right-align {
+   text-align: right;
+ }
+
+ .dialog-sign-up .mat-dialog-content {
+
+   overflow: hidden !important;
+ }
+
+ input.example-right-align::-webkit-outer-spin-button,
+ input.example-right-align::-webkit-inner-spin-button {
+   display: none;
+ }
+
+ .dialog-sign-up input.example-right-align {
+   -moz-appearance: textfield;
+ }
+
+ .dialog-sign-up .example-form {
+   min-width: 150px;
+   max-width: 500px;
+   width: 100%;
+ }
+
+ .dialog-sign-up .example-full-width {
+   width: 100%;
+ }
+
+ .dialog-sign-up .mat-button {
+
+   text-align: center;
+   font-weight: bold;
+   color: white;
+   font-family: 'Shadows Into Light', cursive;
+
+ }
+
+ .dialog-sign-up .placeholder {
+
+   opacity: 0.6;
+   color: white;
+   font-family: 'Shadows Into Light', cursive;
+   font-size: 16px;
+
+ }
+
+ .mat-error {
+
+   color: #f44336;
+   font-weight: bold;
+   font-size: 17px;
+   font-family: 'Open Sans Condensed', sans-serif;
+ }
+
+ #image-button {
+
+   color: white;
+ }
+
+ .dialog-sign-up .image-preview img {
+
+   margin-top: 2%;
+   width: 200px;
+   height: 150px !important;
+ }
+
+ .mat-option {
+
+   background-color: #1D3557;
+   font-family: 'Shadows Into Light', cursive;
+   color: white;
+ }
+
+ .mat-option-text {
+
+   font-size: 25px;
+ }
+
+ .mat-option:hover {
+
+   color: #1D3557 !important;
+   font-family: 'Shadows Into Light', cursive;
+ }
+
+ .mat-option img {
+
+   height: 40px !important;
+   width: 40px !important;
+ }
+
+ .dialog-sign-up .mat-dialog-content {
+
+   max-height: 100vh;
+ }
+
+ .image-upload {
+
+   display: -moz-grid;
+ }
+
+ ::ng-deep .dialog-sign-up .mat-form-field-placeholder .placeholder {
+
+   color: red !important;
+ }
+
+ .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+
+   color: white;
+ }
+
+ .mat-form-field-appearance-legacy .mat-form-field-infix {
+
+   margin-top: 3%;
+ }
+
+ .mat-snack-bar-container {
+   border-radius: 2px;
+   box-sizing: border-box;
+   display: block;
+   margin: 24px;
+   max-width: 568px;
+   min-width: 288px;
+   padding: 14px 24px;
+   transform: translateY(100%) translateY(24px);
+   background-color: transparent;
+ }
+
+ .mat-snack-bar-container span {
+
+
+   font-family: 'Open Sans Condensed', sans-serif;
+   font-size: 20px;
+ }
+
+
+
+ /*
+
+
+::ng-deep .dialog-sign-up .mat-focused .mat-form-field-placeholder{
+
+  color:red !important;
+}
+::ng-deep .dialog-sign-up .mat-form-field-underline .mat-form-field-ripple{
+
+  background-color:red !important;
+}
+
+::ng-deep .dialog-sign-up .mat-form-field-underline{
+
+  background-color:red !important;
+}
+
+*/
