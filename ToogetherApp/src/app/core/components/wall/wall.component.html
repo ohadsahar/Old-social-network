@@ -86,7 +86,6 @@
                   </mat-list-item>
                   <mat-divider *ngIf="mobile$ | async" ></mat-divider>
                   <mat-list-item *ngIf="!(editAble$ | async)">Your collection:</mat-list-item>
-
                   <div class="collection-of-images" *ngIf="!(editAble$ | async)">
                     <div class="row">
                       <div *ngFor="let image of UserConnected?.Images">
@@ -105,10 +104,8 @@
                       ngModel />
                     <mat-placeholder id="edit-placeholder">{{UserConnected?.email}}</mat-placeholder>
                     <mat-hint>Your email</mat-hint>
-
                     <mat-error *ngIf="email?.invalid">Your email is not in the right format</mat-error>
                   </mat-form-field>
-
                   <div class="space-line" *ngIf="editAble$ | async"></div>
                   <mat-divider *ngIf="mobile$ | async" ></mat-divider>
                   <mat-form-field class="example-full-width" *ngIf="editAble$ | async">
@@ -121,7 +118,6 @@
                     <mat-placeholder id="edit-placeholder">Password</mat-placeholder>
                     <mat-hint>Your password</mat-hint>
                     <mat-error *ngIf="password.invalid">Your password is not in the right format</mat-error>
-
                   </mat-form-field>
                 <div style="margin-top:3%" *ngIf="(mobile$ | async) && (editAble$ | async)"></div>
                 <mat-divider *ngIf="mobile$ | async" ></mat-divider>
@@ -157,7 +153,6 @@
                     </div>
                   </div>
                   <mat-divider *ngIf="(mobile$ | async) && (editAble$ | async)" ></mat-divider>
-
                   <div class="collection-edit-images">
                       <div class="edit-able-paginator-image"></div>
                       <h1 *ngIf="imagePreview !== '' && imagePreview">New picture:</h1>
@@ -176,12 +171,9 @@
                             </div>
                           </div>
                         </div>
-
                       </button>
                       <input id="cin" name="cin" type="file" #filePickerTwo (change)="fileChangeEvent($event)"
                         placeholder="Upload a file..." style="visibility: hidden" multiple />
-
-
                     </div>
                     <div class="col-sm-12">
                         <div class="edit-collection" (click)="dialogDeleteImages()">Edit collection</div>
@@ -193,11 +185,9 @@
                 <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!(editAble$ | async)" id="profile-image">
                   <img src="{{UserConnected?.Image}}" class="img-thumbnail profile-image">
                 </div>
-
               </div>
             </form>
           </mat-list>
-
           <mat-divider *ngIf="(mobile$ | async) && !(editAble$ | async)"></mat-divider>
           <div class="footer" *ngIf="!(editAble$ | async)">
               <div *ngFor="let quote of UserConnected?.quote" id="quote-superhero">

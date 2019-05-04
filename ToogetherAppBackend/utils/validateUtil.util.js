@@ -1,13 +1,13 @@
 const validator = require("validator");
 const bycrypt = require("bcryptjs");
 
-
 async function validateLoginInput(userData) {
   if (validator.isEmail(userData.email) && validator.isLength(userData.password, 8)) {
     userData.email = userData.email.toLowerCase();
     return {userData: userData};
   } else {
-    throw new Error(`validateUtil: validateLoginInput -  ${error}`);
+ 
+;    throw new Error(`validateUtil: validateLoginInput -  ${error}`);
   }
 }
 async function validateRegisterInput(userData) {
@@ -42,9 +42,6 @@ async function validateUpdateInput(userData) {
       throw new Error (`validateUtil: validateUpdateInput - ${error}`);
     }
 }
-
-
-
   module.exports = {
     validateLoginInput,
     validateUpdateInput,

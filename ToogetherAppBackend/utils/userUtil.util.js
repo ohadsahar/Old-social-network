@@ -38,12 +38,12 @@ async function login(userData) {
   const fetchedUser = await userSchema.findOne({ email: userData.email });
   if (bycrypt.compare(userData.password, fetchedUser.password)) {
     const token = jwt.sign(
-      { email: fetchedUser.email, id: fetchedUser._id },
-      "OHAD_SAHAR_SERIAL_KEY_NEVER_GONNA_GUESS_IT"
+      { email: fetchedUser.email, id: fetchedUser._id },"OHAD_SAHAR_SERIAL_KEY_NEVER_GONNA_GUESS_IT",
+      {expiresIn: "1h"}
     );
     const userData = {
         user: fetchedUser,
-        id: fetchedUser._id,  token: token, message: 'Login successful', success: true
+        id: fetchedUser._id,  token: token, expiresIn: 3600, message: 'Login successful', success: true
     }
     return {userData: userData}
   } 

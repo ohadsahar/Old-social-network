@@ -7,7 +7,6 @@ const User = mongoose.Schema({
     firstname: {type:String, required: true},
     lastname: {type: String, required: true},
     superhero: {type: String, required: true},
-    loggedin: {type: String},
     Image: {type: String, required: true},
     quote: [{
             name: {type: String},

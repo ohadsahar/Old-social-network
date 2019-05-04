@@ -6,6 +6,7 @@ import { ResponseMessagesService } from 'src/app/core/services/error.service';
 import { UserService } from 'src/app/core/services/user.service';
 import * as fromRoot from '../../../app.reducer';
 import * as UI from '../../actions/ui.actions';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 export interface Quote {
@@ -90,7 +91,7 @@ export class DialogSignUpComponent {
     image: new FormControl(null, { validators: [Validators.required] })
   });
 
-  constructor(private userService: UserService,
+  constructor(private authService: AuthService,
               private responseMessageService: ResponseMessagesService,
               private spinnerService: Ng4LoadingSpinnerService, private formBuilder: FormBuilder,
               private store: Store<fromRoot.State>) {
@@ -107,7 +108,7 @@ export class DialogSignUpComponent {
       this.spinnerService.show();
       this.store.dispatch(new UI.StartLoading());
       this.createUserObject(form);
-      this.userService.registerUser(this.userData).subscribe((response) => {
+      this.authService.registerUser(this.userData).subscribe((response) => {
         if (response.message.success) {
             this.responseMessageService.SuccessMessage('Hurray, you signed up successfully!', 'Yay!');
             form.resetForm();

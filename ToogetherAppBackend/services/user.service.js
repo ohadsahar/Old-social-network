@@ -24,11 +24,6 @@ async function login(userData) {
     const resultOfLogin = await userUtil.login(validateInput.userData);
     return {userData: resultOfLogin.userData};
 }
-async function changeStatus(id, action) {
-    const status = {loggedin: action}
-    const updateStatus = await userUtil.updateStatus(status, id);
-    return {success: updateStatus.success};
-}
 async function getConnectedUser(id) {
      
     const userConnectedValues = await userUtil.getConnectedUserValues(id);
@@ -41,7 +36,6 @@ module.exports = {
     get,
     update,
     login,
-    changeStatus,
     getImagesCollection,
     getConnectedUser
 }

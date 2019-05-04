@@ -23,6 +23,7 @@ import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-wall-page',
@@ -58,7 +59,6 @@ export class WallPageComponent implements OnInit {
   public MarvelCollection: any[] = [];
   public UserConnected: User;
   public ImagesArray: File[] = [];
-
   QuoteCtrl = new FormControl();
   selectedValue: Quote[];
   filesToUpload: Array<File> = [];
@@ -119,9 +119,9 @@ export class WallPageComponent implements OnInit {
     }
   ];
   constructor(
+    private authService: AuthService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private router: Router,
     private responseMessageService: ResponseMessagesService,
     private spinnerService: Ng4LoadingSpinnerService,
     private store: Store<fromRoot.State>,
@@ -141,55 +141,43 @@ export class WallPageComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.loadUpWall();
+   if (this.authService.getIsLogged()) {
+     this.loadUpWall();
+   }
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;
     this.phoneOrComputer(this.innerWidth);
   }
-  loadUpWall() {
+    loadUpWall() {
     this.loading();
     this.phoneOrComputer(this.innerWidth);
     this.disableWall();
     this.innerWidth = window.innerWidth;
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has('id')) {
-        this.id = paramMap.get('id');
-        this.userService.getCurrentUser(this.id).subscribe(
-          responseConnected => {
-            this.UserConnected = responseConnected.message.userData;
-            if (responseConnected.message.userImages) {
-              this.totalImages = responseConnected.message.userImages.length;
-            }
-            if (
-              (responseConnected.message.userData.loggedin as any) === 'true'
-            ) {
-              this.router.navigate(['Wall/' + this.id]);
-            } else {
-              this.router.navigate(['']);
-            }
-            this.userService
-              .getImagesViaPaginator(
-                this.imagesPerPage,
-                this.currentPage,
-                this.id
-              )
-              .subscribe(response => {
-                this.UserConnected.Images = response.message.Images;
-                this.stopLoading();
-              });
-          },
-          error => {
-            this.responseMessageService.FailureMessage(
-              'Sorry we have problem right now, try again later',
-              'Sorry'
+          if (paramMap.has('id')) {
+            this.id = paramMap.get('id');
+            this.userService.getCurrentUser(this.id).subscribe((responseConnected) => {
+                this.UserConnected = responseConnected.message.userData;
+                if (responseConnected.message.userImages) {
+                  this.totalImages = responseConnected.message.userImages.length;
+                }
+                this.userService.getImagesViaPaginator(this.imagesPerPage,this.currentPage, this.id)
+                  .subscribe(response => {
+                    this.UserConnected.Images = response.message.Images;
+                    this.stopLoading();
+                  });
+              },
+              (error) => {
+                this.responseMessageService.FailureMessage(error, 'Sorry');
+                this.afterError();
+              }
             );
-            this.afterError();
           }
-        );
-      }
-    });
+        });
+
+
   }
   dialogDeleteImages() {
     this.dialog.open(DialogDeleteComponent, {
@@ -235,14 +223,11 @@ export class WallPageComponent implements OnInit {
     }
   }
   createUserObjectForUpdate(): void {
-    console.log(this.UserConnected)
     this.userConnectedUpdate.append('email', this.UserConnected.email);
-    console.log(this.userConnectedUpdate);
     this.userConnectedUpdate.append('password', this.UserConnected.password);
     this.userConnectedUpdate.append('firstname', this.UserConnected.firstname);
     this.userConnectedUpdate.append('lastname', this.UserConnected.lastname);
     this.userConnectedUpdate.append('superhero', this.UserConnected.superhero);
-    this.userConnectedUpdate.append('loggedin', 'true');
     if (this.imageFormGroup.controls.image.value) {
       this.userConnectedUpdate.append(
         'image',
@@ -276,19 +261,7 @@ export class WallPageComponent implements OnInit {
   }
   disconnect(): void {
     this.loading();
-    this.userService.updateStatusLogged(this.id, false).subscribe(
-      () => {
-        this.stopLoading();
-        this.router.navigate(['']);
-      },
-      error => {
-        this.responseMessageService.FailureMessage(
-          'Yuston we have problem, try again later',
-          'Sorry'
-        );
-        this.afterError();
-      }
-    );
+    this.authService.logout();
   }
   onImagePicked(event: Event): void {
     const file = (event.target as HTMLInputElement).files[0];
@@ -340,7 +313,7 @@ export class WallPageComponent implements OnInit {
   }
   /* Validate functions */
   validateForm(form: NgForm): void {
-    if (form.value.email) {this.UserConnected.email = form.value.email;}
+    if (form.value.email) {this.UserConnected.email = form.value.email; }
     if (form.value.firstname) {this.UserConnected.firstname = form.value.firstname; }
     if (form.value.lastname) {this.UserConnected.lastname = form.value.lastname; }
     if (form.value.password) {this.UserConnected.password = form.value.password; }
@@ -387,4 +360,5 @@ export class WallPageComponent implements OnInit {
     this.wallAble$ = this.store.select(fromRoot.getIsWallAble);
     this.profileAble$ = this.store.select(fromRoot.getIsProfileAble);
   }
+
 }

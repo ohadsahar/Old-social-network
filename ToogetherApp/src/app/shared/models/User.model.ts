@@ -5,7 +5,6 @@ export interface User {
   firstname: string;
   lastname: string;
   superhero: string;
-  loggedin: boolean;
   Image: File;
   quote: [{
     name: string;

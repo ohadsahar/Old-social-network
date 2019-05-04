@@ -3,12 +3,12 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as fromRoot from '../../../app.reducer';
 import { ResponseMessagesService } from '../../../core/services/error.service';
 import * as UI from '../../actions/ui.actions';
 import { UserLogin } from '../../models/UserLogin.model';
-import { UserService } from './../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
@@ -18,6 +18,7 @@ import { UserService } from './../../../core/services/user.service';
   encapsulation: ViewEncapsulation.None
 })
 export class DialogLoginComponent {
+  public token: string;
   public hide: boolean;
   public Connected: boolean;
   public isLoading$: Observable<boolean>;
@@ -25,9 +26,11 @@ export class DialogLoginComponent {
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
   public id: string;
+  private authListenerSub: Subscription;
+  private userAuthorized: boolean;
   public data: UserLogin;
 
-  constructor(private userService: UserService, private router: Router,
+  constructor(private authService: AuthService, private router: Router,
               private responseMessageService: ResponseMessagesService,
               private store: Store<fromRoot.State>, private spinnerService: Ng4LoadingSpinnerService) {
     this.hide = true;
@@ -36,40 +39,20 @@ export class DialogLoginComponent {
 
   DoneLogin(form: NgForm) {
     this.data = {email: form.value.email, password: form.value.password};
-    if (form.invalid) {
-      return;
-    } else {
+    if (form.invalid) {return; } else {
       this.Connected = true;
       this.Loading();
-      this.userService.login(form.value).subscribe((response) => {
-          if (response.message.token) {
-            this.id = response.message.id;
-            this.userService.updateStatusLogged(response.message.id, true).subscribe(responseUpdate => {
-                if (responseUpdate) {
-                  this.Connected = true;
-                  this.responseMessageService.SuccessMessage('You have successfully logged in', 'yay');
-                  this.router.navigate(['Wall/' + this.id]);
-                }
-              });
-          } else {
-            this.responseMessageService.FailureMessage('This user is not authorized in our system', 'Sorry');
-          }
-        },
-        (error) => {
-          console.log(error);
-          this.responseMessageService.FailureMessage(error, 'Sorry');
-        }
-      );
+      this.authService.login(form.value);
     }
   }
 
   Loading() {
-
     this.spinnerService.show();
     this.store.dispatch(new UI.StartLoading());
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
 
-
-
+  getToken() {
+    return this.token;
+  }
 }

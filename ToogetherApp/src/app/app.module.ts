@@ -27,10 +27,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomePageComponent } from './core/components/homepage/homepage.component';
 import { DialogSignUpComponent } from './shared/components/DialogSignup/dialogsignup.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DialogLoginComponent } from './shared/components/DialogLogin/dialoglogin.component';
 import { DialogDeleteComponent } from './shared/components/DialogDelete/dialog-delete.component';
 import { WallPageComponent } from './core/components/wall/wall.component';
+import { AuthInterceptor } from './shared/components/DialogLogin/auth-interceptor.component';
 
 @NgModule({
   declarations: [AppComponent, HomePageComponent, DialogSignUpComponent,
@@ -64,7 +65,7 @@ import { WallPageComponent } from './core/components/wall/wall.component';
     StoreModule.forRoot(Reducers)
   ],
   entryComponents: [DialogSignUpComponent, DialogLoginComponent, DialogDeleteComponent],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
