@@ -24,19 +24,10 @@ async function attemptToLogin(req, res) {
         console.log('The function attemptToLogin() ended!');
     }
 }
-async function updateStatus(req, res) {
-    try {
-        const updateStatus = await userService.changeStatus(req.params.id, req.body.action);
-        res.status(200).json({message: updateStatus.success,success: true})
-    } catch (error) {
-        res.status(400).json({message: error,success: false})
-    } finally {
-        console.log('The function updateStatus() ended!');
-    }
-}
+
 
 router.post('/register', upload, register);
 router.post('/login', attemptToLogin);
-router.put('/:id', updateStatus);
+
 
 module.exports = router;

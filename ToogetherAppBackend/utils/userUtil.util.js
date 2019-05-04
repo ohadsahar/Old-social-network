@@ -17,6 +17,7 @@ async function registerUser(userData, req) {
     return {userData: user,success: true}
 } 
 async function fetchAllUsers() {
+  
     const fetchedUsers = await userSchema.find();
     if (fetchedUsers) {
         return {users: fetchedUsers,success: true}
@@ -25,16 +26,18 @@ async function fetchAllUsers() {
     }
 } 
 async function updateUser(userData, id, req) {
-      let newData;
-      if (req.file) {
-          newData = createObjectWithNewProfileImage(req,userData).user;
-      } else {
-          newData = createObjectWithoutProfileImage(userData).user;
-      }
-      await userSchema.updateOne({_id: id}, newData);
-      return {userData: newData, success: true};    
+ 
+    let newData;
+    if (req.file) {
+        newData = createObjectWithNewProfileImage(req,userData).user;
+    } else {
+        newData = createObjectWithoutProfileImage(userData).user;
+    }
+    await userSchema.updateOne({_id: id}, newData);
+    return {userData: newData, success: true};    
 } 
 async function login(userData) {
+
   const fetchedUser = await userSchema.findOne({ email: userData.email });
   if (bycrypt.compare(userData.password, fetchedUser.password)) {
     const token = jwt.sign(
@@ -47,9 +50,8 @@ async function login(userData) {
     }
     return {userData: userData}
   } 
-     
 }
-async function getImagesOnly(req, id) {
+async function getImagesOnly(req) {
 
   const pageSize =+ req.query.pagesize;
   const currentPage = req.query.page;
@@ -72,6 +74,7 @@ async function getConnectedUserValues(id) {
     }
 }
 async function getAllImagesOfConnectedUser(id) {
+
   const resultOfFetchedImages = await userSchema.findById({_id: id}).select("Images");
   if (resultOfFetchedImages) {
     return resultOfFetchedImages;
@@ -80,6 +83,7 @@ async function getAllImagesOfConnectedUser(id) {
   }
 }
 async function updateCollection(req, id) {
+
   let ArrayImg = [];
   let finalArrayOfImages = [];
   const imageCollection = await userSchema.findById({_id: id}).select("Images.imagename");
@@ -89,20 +93,13 @@ async function updateCollection(req, id) {
         ArrayImg.push({imagename: url + '/images/' + element.filename})
       });
       if (imageCollection.Images) {
-        finalArrayOfImages = [...ArrayImg, ...imageCollection.Images];  
-      
+          finalArrayOfImages = [...ArrayImg, ...imageCollection.Images];  
           await userSchema.findOneAndUpdate({_id: id}, {$set: {Images:finalArrayOfImages}}, {upsert: true });
-          const message = {
-            Images: finalArrayOfImages,
-            success: true
-          }
+          const message = {Images: finalArrayOfImages,success: true}
           return { message: message };
-    } else {
+      } else {
           await userSchema.findByIdAndUpdate({_id: id}, {Images: ArrayImg});
-          const message = {
-            Images: ArrayImg,
-            success: true
-          }
+          const message = {Images: ArrayImg,success: true}
           return { message: message };
          }
     } 

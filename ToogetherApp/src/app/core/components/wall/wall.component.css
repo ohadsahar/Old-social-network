@@ -97,9 +97,12 @@
   color:white;
   font-size: 16px;
   font-family: 'Shadows Into Light', cursive;
-  margin: auto;
-  display: block;
   cursor: pointer;
+  right: 0;
+  position: absolute;
+  bottom: 30px;
+  background-color: transparent;
+  border: none;
 }
 .title-image {
 
@@ -339,6 +342,21 @@ h4 {
 }
 
 @media only screen and (max-width: 600px) {
+
+  #submit-collection {
+
+    color:white;
+    font-size: 16px;
+    font-family: 'Shadows Into Light', cursive;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0px;
+    right: 30%;
+  }
+
+  .row {
+    padding: 15px;
+  }
 
   .wall-style .main-page {
 

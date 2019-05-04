@@ -3,24 +3,6 @@ import { NgModule } from '@angular/core';
 import { StoreModule} from '@ngrx/store';
 import { Reducers } from './app.reducer';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
-import {
-  MatMenuModule,
-  MatButtonModule,
-  MatCardModule,
-  MatDialogModule,
-  MatInputModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatSnackBarModule,
-  MatDividerModule,
-  MatListModule,
-  MatAutocompleteModule,
-  MatSelectModule,
-  MatProgressSpinnerModule,
-  MatPaginatorModule,
-  MatCheckboxModule
-} from '@angular/material';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +14,7 @@ import { DialogLoginComponent } from './shared/components/DialogLogin/dialoglogi
 import { DialogDeleteComponent } from './shared/components/DialogDelete/dialog-delete.component';
 import { WallPageComponent } from './core/components/wall/wall.component';
 import { AuthInterceptor } from './shared/components/DialogLogin/auth-interceptor.component';
+import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [AppComponent, HomePageComponent, DialogSignUpComponent,
@@ -41,26 +24,9 @@ import { AuthInterceptor } from './shared/components/DialogLogin/auth-intercepto
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    FormsModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatIconModule,
     HttpClientModule,
-    MatSnackBarModule,
-    MatDividerModule,
-    MatListModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSelectModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatCardModule,
+    FormsModule,
+    AngularMaterialModule,
     Ng4LoadingSpinnerModule.forRoot(),
     StoreModule.forRoot(Reducers)
   ],

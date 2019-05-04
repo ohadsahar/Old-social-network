@@ -8,6 +8,7 @@ const uploadMulti = config.configMulterMultiImages().upload;
 const authUtil = require('../middleware/validate-auth');
 
 async function getUsers(req, res) {
+
     try {
         const resultFetchedUsers = await userService.get();
         res.status(200).json({message: resultFetchedUsers,success: true})
@@ -21,14 +22,16 @@ async function updateUser(req, res) {
 
     try {
         const resultOfUpdateUser = await userService.update(req.body, req.params.id, req);
-        res.status(200).json({message: resultOfUpdateUser.userData,success: true})
+        res.status(200).json({message: resultOfUpdateUser,success: true})
     } catch (error) {
+        console.log(error);
         res.status(400).json({message: error,success: false})
     } finally {
         console.log('The function updateUser() ended!');
     }
 }
 async function getCurrentUser(req, res) {
+
     try {
         const resultOfConnectedUser = await userService.getConnectedUser(req.params.id);
         res.status(200).json({message: resultOfConnectedUser,success: true});
@@ -39,6 +42,7 @@ async function getCurrentUser(req, res) {
     }
 }
 async function getImagesCollection(req, res) {
+
     try {
         const resultOfImagesCollection = await userService.getImagesCollection(req);
         res.status(200).json({message: resultOfImagesCollection, success: true})
@@ -50,6 +54,7 @@ async function getImagesCollection(req, res) {
     }
 }
 async function updateImagesCollectionOfUser(req, res) {
+    
     try {
         const newCollectionOfImages = await userUtil.updateCollection(req, req.params.id);
         res.status(200).json({userData: newCollectionOfImages.message,success: true})

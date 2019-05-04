@@ -11,7 +11,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   updateUser(userData: FormData, id: string) {
-    return this.http.post<{message: ResultData}>(`${backendUrl}${id}`, userData);
+    return this.http.put<{message: ResultData}>(`${backendUrl}${id}`, userData);
   }
   getCurrentUser(id: string) {
     return this.http.get<{message: any}>(`${backendUrl}${id}`);
