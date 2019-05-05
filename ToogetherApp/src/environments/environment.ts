@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   backendUrl: 'http://localhost:3000/admin/users/',
   authUrl: 'http://localhost:3000/admin/auth/',
+  postUrl: 'http://localhost:3000/admin/post/'
 };
 
 /*

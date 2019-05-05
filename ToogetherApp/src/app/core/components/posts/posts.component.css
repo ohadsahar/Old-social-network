@@ -37,6 +37,8 @@ a {
 }
 .posts-style .posts-section #post-image {
   padding: 20px;
+  margin:auto;
+  display: block;
 }
 .posts-style .posts-section #post-header-image {
   width: 35px;
@@ -47,6 +49,13 @@ a {
   background-size: cover;
 }
 
+
+
+.mat-card-content>:last-child:not(.mat-card-footer), .mat-card>:last-child:not(.mat-card-footer) {
+    width:100%;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+}
 .posts-style .menu-img {
   width: 30px;
   height: 30px;
@@ -55,6 +64,12 @@ a {
 .posts-style .mat-option img {
   height: 40px !important;
   width: 40px !important;
+}
+
+.posts-style img {
+
+  width: 200px;
+  height: 200px;
 }
 
 .posts-style #space {
@@ -84,6 +99,11 @@ a {
 .posts-style .posts-section .user-post.mat-card-subtitle {
   font-size: 20px;
   font-weight: bold;
+}
+
+.posts-style .posts-section .mat-card-subtitle img {
+    width:25px !important;
+    height: 25px !important;
 }
 .posts-style .posts-section .mat-card {
   font-family: "Shadows Into Light", cursive;

@@ -38,12 +38,11 @@
                 <mat-card-subtitle><img src="{{superHeroImage}}"> {{userConnected?.superhero}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <p>
-                  Hey {{userConnected?.firstname}}, write something, you have not written for a long time ...
-                </p>
+                  <textarea type="text" placeholder="Hey {{userConnected?.firstname}},write something, you have not written for a long time ..."
+                   [(ngModel)]="postData.postinfo"></textarea>
               </mat-card-content>
               <mat-card-actions>
-                <button mat-raised-button color="primary">POST</button>
+                <button mat-raised-button color="primary" (click)="registerPost()">POST</button>
               </mat-card-actions>
             </mat-card>
           </div>

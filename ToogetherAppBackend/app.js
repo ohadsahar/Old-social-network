@@ -2,9 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const connection = require("./dev/dev");
-const cors = require('cors')
 const userRoute = require('./routes/user');
 const authRoute = require('./routes/auth');
+const postRoute = require('./routes/post');
 const app = express();
 
 connection.connectDB();
@@ -21,5 +21,6 @@ app.use((req, res, next) => {
 app.use("/images", express.static(path.join("assets/images")));
 app.use('/admin/auth', authRoute);
 app.use('/admin/users', userRoute);
+app.use('/admin/post', postRoute);
 
 module.exports = app;

@@ -10,6 +10,9 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { PostPublish } from 'src/app/shared/models/post-publish.model';
+import * as moment from 'moment';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-post',
@@ -19,6 +22,8 @@ import { AuthService } from '../../services/auth.service';
 
 export class PostsComponent implements OnInit {
 
+  public postData = new PostPublish(null , '', '');
+  public postForm = new FormData()
   public superHeroImage: string;
   private innerWidth: number;
   public totalImages: number;
@@ -33,6 +38,7 @@ export class PostsComponent implements OnInit {
   constructor(private userService: UserService, public wallComponent: WallPageComponent,
               private route: ActivatedRoute, private responseMessagesService: ResponseMessagesService,
               private spinnerService: Ng4LoadingSpinnerService, private authService: AuthService,
+              private postService: PostService,
               private store: Store<fromRoot.State>, private responseMessageService: ResponseMessagesService) {
                 this.currentPage = 1;
                 this.pageSizeOptions = [3, 5, 7];
@@ -75,7 +81,33 @@ export class PostsComponent implements OnInit {
             );
           }
         });
+  }
+
+  registerPost() {
+
+    this.postData.postdate = moment().format('MMMM Do YYYY, h:mm:ss a');
+    this.createObjectPost();
+    this.postService.register(this.postForm).subscribe(response => {
+
+      this.postForm = new FormData();
+    });
+  }
+
+  createObjectPost() {
+
+    this.postForm.append('firstname', this.userConnected.firstname);
+    this.postForm.append('lastname', this.userConnected.lastname);
+    this.postForm.append('icon', this.superHeroImage);
+    this.postForm.append('postimage', this.userConnected.Image);
+    this.postForm.append('postinfo', this.postData.postinfo);
+    this.postForm.append('postdate', this.postData.postdate);
+    this.postForm.append('numberoflikes', '0');
+    if (this.postData.postimage) {
+      this.postForm.append('image', this.postData.postimage);
+    } else {
+      this.postForm.append('image', null);
     }
+  }
 
   afterError(error, message: string): void {
 
