@@ -9,7 +9,6 @@ async function createPost(req,res) {
 
     try {
         const resultOfRegister = await postService.create(req.body);
-        console.log(resultOfRegister);
         res.status(200).json({
             message: resultOfRegister.createdPost,
             success: true

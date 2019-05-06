@@ -12,4 +12,8 @@ export class PostService {
   register(postData: FormData) {
     return this.http.post<{ post: Post }>(`${backendUrl}register`, postData);
   }
+
+  get() {
+    return this.http.get<{message: Post}>(`${backendUrl}`);
+  }
 }

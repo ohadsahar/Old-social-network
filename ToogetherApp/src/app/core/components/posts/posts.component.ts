@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { PostPublish } from 'src/app/shared/models/post-publish.model';
 import * as moment from 'moment';
 import { PostService } from '../../services/post.service';
+import { Post } from 'src/app/shared/models/post-data.model';
 
 @Component({
   selector: 'app-post',
@@ -23,7 +24,7 @@ import { PostService } from '../../services/post.service';
 export class PostsComponent implements OnInit {
 
   public postData = new PostPublish(null , '', '');
-  public postForm = new FormData()
+  public postForm = new FormData();
   public superHeroImage: string;
   private innerWidth: number;
   public totalImages: number;
@@ -34,6 +35,7 @@ export class PostsComponent implements OnInit {
   public userConnected: User;
   public isLoading$: Observable<boolean>;
   public mobile$: Observable<boolean>;
+  public posts: Post;
 
   constructor(private userService: UserService, public wallComponent: WallPageComponent,
               private route: ActivatedRoute, private responseMessagesService: ResponseMessagesService,
@@ -66,23 +68,16 @@ export class PostsComponent implements OnInit {
           if (paramMap.has('id')) {
             this.id = paramMap.get('id');
             this.userService.getCurrentUser(this.id).subscribe((responseConnected) => {
-                this.userConnected = responseConnected.message.userData;
-                this.superHeroImage = responseConnected.message.userData.quote.map(superHeroProfileImage => {
-                  return superHeroProfileImage.icon;
-                });
-                if (responseConnected.message.userImages) {
-                  this.totalImages = responseConnected.message.userImages.length;
-                }
+                this.setConnectedUser(responseConnected);
+                this.getPosts();
               },
               (error) => {
-                this.responseMessagesService.FailureMessage(error, 'Sorry');
                 this.afterError(error, 'Sorry');
               }
             );
           }
         });
   }
-
   registerPost() {
 
     this.postData.postdate = moment().format('MMMM Do YYYY, h:mm:ss a');
@@ -92,8 +87,25 @@ export class PostsComponent implements OnInit {
       this.postForm = new FormData();
     });
   }
+  setConnectedUser(responseConnected: any) {
 
-  createObjectPost() {
+    this.userConnected = responseConnected.message.userData;
+    this.superHeroImage = responseConnected.message.userData.quote.map(superHeroProfileImage => {
+      return superHeroProfileImage.icon;
+    });
+    if (responseConnected.message.userImages) {
+      this.totalImages = responseConnected.message.userImages.length;
+    }
+  }
+
+  getPosts() {
+
+    this.postService.get().subscribe(response => {
+        this.posts = response.message;
+    })
+
+  }
+  createObjectPost(): void {
 
     this.postForm.append('firstname', this.userConnected.firstname);
     this.postForm.append('lastname', this.userConnected.lastname);
@@ -108,7 +120,6 @@ export class PostsComponent implements OnInit {
       this.postForm.append('image', null);
     }
   }
-
   afterError(error, message: string): void {
 
     this.stopLoading();
