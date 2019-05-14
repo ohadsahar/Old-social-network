@@ -13,6 +13,7 @@ import { ResponseMessagesService } from '../../services/error.service';
 import { Quote } from './../../../shared/components/DialogSignup/dialogsignup.component';
 import { User } from './../../../shared/models/User.model';
 import { UserService } from './../../services/user.service';
+import { ModelQuote } from '../../../shared/models/quote.model';
 
 @Component({
   selector: 'app-wall-page',
@@ -40,6 +41,15 @@ export class WallPageComponent implements OnInit {
   public wallAble$: Observable<boolean>;
   public editAble$: Observable<boolean>;
   public mobile$: Observable<boolean>;
+
+  public editUser = {
+    firstname: '',
+    lastname: '',
+    password: '',
+    superhero: '',
+    email: ''
+  };
+
   imageFormGroup = new FormGroup({
     image: new FormControl(null, { validators: [Validators.required] })
   });
@@ -122,6 +132,8 @@ export class WallPageComponent implements OnInit {
     this.imagesPerPage = 3;
     this.hide = true;
     this.counter = 0;
+
+
     this.imageFormGroup = this.formBuilder.group({
       image: ''
     });
@@ -150,6 +162,7 @@ export class WallPageComponent implements OnInit {
             this.id = paramMap.get('id');
             this.userService.getCurrentUser(this.id).subscribe((responseConnected) => {
                 this.userConnected = responseConnected.message.userData;
+                this.assignValuesEditUser(responseConnected.message.userData);
                 this.superHeroImage = responseConnected.message.userData.quote.map(superHeroProfileImage => {
                   return superHeroProfileImage.icon;
                 });
@@ -189,29 +202,45 @@ export class WallPageComponent implements OnInit {
         this.userConnected.Images = response.message.Images;
       });
   }
-  updateUser(form: NgForm) {
 
-    if (form.invalid) {return;
-    } else {
-      this.validateForm(form);
+  assignValuesEditUser(user: User) {
+
+    this.editUser.firstname = user.firstname;
+    this.editUser.lastname = user.lastname;
+    this.editUser.password = user.password;
+    this.editUser.superhero = user.superhero;
+    this.editUser.email = user.email;
+
+  }
+
+  updateUser() {
+
+      this.validateForm();
       this.createUserObjectForUpdate();
       this.imagePreview = null;
       this.loading();
       this.counter = 0;
+      console.log(this.userConnectedUpdate);
       this.userService.updateUser(this.userConnectedUpdate, this.id).subscribe((response) => {
-          this.userConnected = response.message.userData;
-          this.disableWall();
-          this.cancelEdit();
-          this.stopLoading();
-          this.responseMessageService.SuccessMessage('Details updated successfully!', 'Yay!');
+        this.userConnected = response.message.userData;
+        this.disableWall();
+        this.cancelEdit();
+        this.stopLoading();
+        this.responseMessageService.SuccessMessage('Details updated successfully!', 'Yay!');
         }, (error) => {
-          this.afterError(error, 'sorry');
+          console.log(this.userConnected.quote);
+          this.afterError(JSON.stringify(error), 'sorry');
         }
       );
   }
-  }
+
   createUserObjectForUpdate(): void {
 
+    let quoteData: ModelQuote;
+    console.log(JSON.stringify(this.userConnected.quote.map(data =>  data.name )));
+    quoteData.name = this.userConnected.quote.map(data =>  data.name ) as any;
+    quoteData.icon = this.userConnected.quote.map(data => data.icon) as any;
+    console.log(quoteData);
     this.userConnectedUpdate.append('email', this.userConnected.email);
     this.userConnectedUpdate.append('password', this.userConnected.password);
     this.userConnectedUpdate.append('firstname', this.userConnected.firstname);
@@ -223,7 +252,7 @@ export class WallPageComponent implements OnInit {
     this.userConnectedUpdate.append('quote', JSON.stringify(this.userConnected.quote as any));
     this.userConnectedUpdate.append('role', this.userConnected.role);
     if (this.userConnected.Images) {
-      this.userConnectedUpdate.append('Images', JSON.stringify(this.userConnected.Images));
+    this.userConnectedUpdate.append('Images', JSON.stringify(this.userConnected.Images));
     }
   }
   edit(): void {
@@ -292,14 +321,17 @@ export class WallPageComponent implements OnInit {
     this.responseMessageService.FailureMessage(error, message);
   }
   /* Validate functions */
-  validateForm(form: NgForm): void {
+  validateForm(): void {
 
-    if (form.value.email) {this.userConnected.email = form.value.email; }
-    if (form.value.firstname) {this.userConnected.firstname = form.value.firstname; }
-    if (form.value.lastname) {this.userConnected.lastname = form.value.lastname; }
-    if (form.value.password) {this.userConnected.password = form.value.password; }
-    if (form.value.superhero) {this.userConnected.superhero = form.value.superhero; }
-    if (this.selectedValue) { this.userConnected.quote = [] as any; this.userConnected.quote.push(this.selectedValue as any); }
+    if (this.editUser.email) {this.userConnected.email = this.editUser.email; }
+    if (this.editUser.firstname) {this.userConnected.firstname = this.editUser.firstname; }
+    if (this.editUser.lastname) {this.userConnected.lastname = this.editUser.lastname; }
+    if (this.editUser.password) {this.userConnected.password = this.editUser.password; }
+    if (this.editUser.superhero) {this.userConnected.superhero = this.editUser.superhero; }
+    if (this.selectedValue) {
+      this.userConnected.quote.splice(0, 1);
+      this.userConnected.quote.push(this.selectedValue as any);
+     }
   }
   phoneOrComputer(innerWidth: number): void {
 

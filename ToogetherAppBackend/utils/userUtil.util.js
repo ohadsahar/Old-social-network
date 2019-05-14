@@ -29,12 +29,12 @@ async function updateUser(userData, id, req) {
  
     let newData;
     if (req.file) {
-        newData = createObjectWithNewProfileImage(req,userData).user;
+        newData = createObjectWithNewProfileImage(req,userData);
     } else {
-        newData = createObjectWithoutProfileImage(userData).user;
+        newData = createObjectWithoutProfileImage(userData);
     }
-    await userSchema.updateOne({_id: id}, newData);
-    return {userData: newData, success: true};    
+    await userSchema.updateOne({_id: id}, newData.user);
+    return {userData: newData.user, success: true};    
 } 
 async function login(userData) {
 

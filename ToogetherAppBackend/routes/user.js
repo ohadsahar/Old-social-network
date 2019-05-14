@@ -20,6 +20,9 @@ async function getUsers(req, res) {
 }
 async function updateUser(req, res) {
 
+    console.log(req.body.quote);
+    req.body.quote = JSON.parse(JSON.stringify(req.body.quote));
+    console.log(req.body.quote);
     try {
         const resultOfUpdateUser = await userService.update(req.body, req.params.id, req);
         res.status(200).json({message: resultOfUpdateUser,success: true})
